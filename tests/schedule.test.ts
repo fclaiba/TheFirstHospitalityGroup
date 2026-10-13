@@ -217,7 +217,7 @@ describe("swaps through the manager (ADR 0026)", () => {
     await w.as("maria.m");
     const r = await w.m<{ status: string; version: number }>("schedule:decideSwap", { swapId, approve: true });
     expect(r.status).toBe("approved");
-    const live = w.rows("shiftsPlanned").filter((s) => !s.removed && s.date >= nextWeek() && s.date <= addDays(nextWeek(), 1) && s.position === "server");
+    const live = w.rows("shiftsPlanned").filter((s) => !s.removed && (s.date as string) >= nextWeek() && (s.date as string) <= addDays(nextWeek(), 1) && s.position === "server");
     expect(live.find((s) => s.date === nextWeek() && s.userId === w.user("jade.w")._id)).toBeDefined();
     expect(live.find((s) => s.date === addDays(nextWeek(), 1) && s.userId === w.user("ana.p")._id)).toBeDefined();
     expect(live.find((s) => s.date === nextWeek() && s.userId === w.user("ana.p")._id)).toBeUndefined();
@@ -236,6 +236,23 @@ describe("swaps through the manager (ADR 0026)", () => {
     await w.as("jade.w");
     await w.m("schedule:answerSwap", { swapId, accept: false });
     expect(w.rows("swaps").find((s) => s._id === swapId)!.status).toBe("denied");
+  });
+
+  it("lists only colleagues of the venue enabled for the position, with their shifts to offer; only the shift's person may ask", async () => {
+    const { jadeShift } = await setup();
+    const anaShift = w.rows("shiftsPlanned").find((s) => s.userId === w.user("ana.p")._id && s.date === nextWeek() && !s.removed)!._id;
+    await w.as("ana.p");
+    const list = await w.q<Array<{ userId: string; name: string; shifts: Array<{ _id: string }> }>>("schedule:swapCandidates", { shiftId: anaShift });
+    const ids = list.map((c) => c.userId);
+    expect(ids).toContain(w.user("jade.w")._id);
+    expect(ids).toContain(w.user("carlos.g")._id); // runner enabled as server
+    expect(ids).not.toContain(w.user("kevin.d")._id); // busser, not enabled
+    expect(ids).not.toContain(w.user("ana.p")._id);
+    expect(ids).not.toContain(w.user("emma.t")._id); // another venue
+    expect(list.find((c) => c.userId === w.user("jade.w")._id)!.shifts.map((s) => s._id)).toContain(jadeShift);
+    expect(JSON.stringify(list)).not.toMatch(/username|email/);
+    await w.as("tom.b");
+    expect(await w.qcode("schedule:swapCandidates", { shiftId: anaShift })).toBe("NOT_FOUND");
   });
 
   it("a colleague not enabled for the position cannot take it (NOT_ENABLED)", async () => {

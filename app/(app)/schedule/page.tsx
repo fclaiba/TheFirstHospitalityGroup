@@ -1,12 +1,12 @@
 "use client";
 
 import { RequireAuth } from "@/components/app/require-auth";
-import { ScheduleScreen } from "@/components/schedule/schedule-screen";
+import { MyWeekScreen } from "@/components/schedule/my-week";
 
 export default function SchedulePage() {
   return (
-    <RequireAuth action="schedule.view">
-      <ScheduleScreen />
+    <RequireAuth action="schedule.own">
+      <MyWeekScreen />
     </RequireAuth>
   );
 }

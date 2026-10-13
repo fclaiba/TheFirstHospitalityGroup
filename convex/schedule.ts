@@ -80,11 +80,6 @@ async function eventsBetween(ctx: Ctx, venueId: Id<"venues">, from: string, to: 
     .collect();
 }
 
-function requireManagerOf(actor: Actor, venueId: Id<"venues">) {
-  if (!actorCan(actor, "schedule.manage")) throw appError("FORBIDDEN");
-  requireVenue(actor, venueId);
-}
-
 const nextVersion = (week: Week) => week.version + 1;
 
 /** A person must be assigned to the venue and enabled for the position (NOT_ENABLED). */
@@ -392,6 +387,38 @@ export const myAvailability = query({
       .withIndex("by_user", (q) => q.eq("userId", actor._id))
       .collect();
     return rows.map((a) => ({ weekday: a.weekday, from: a.from, to: a.to, available: a.available })).sort((a, b) => a.weekday - b.weekday || a.from.localeCompare(b.from));
+  },
+});
+
+/**
+ * Colleagues a person may name in a swap request (ADR 0026: the request goes to the manager; the system asks the
+ * colleague). Same venue, enabled for the shift's position, not the requester. Names only, plus their published shifts
+ * of that week so the requester can offer one in exchange.
+ */
+export const swapCandidates = query({
+  args: { shiftId: v.id("shiftsPlanned") },
+  handler: async (ctx, { shiftId }) => {
+    const actor = await requireCan(ctx, "schedule.own");
+    const s = await ctx.db.get(shiftId);
+    if (!s || s.userId !== actor._id) throw appError("NOT_FOUND");
+    requireVenue(actor, s.venueId);
+    const week = (await ctx.db.get(s.weekId))!;
+    const all = (await shiftsOf(ctx, week._id)).filter((x) => isLive(x, week) && !x.open);
+    const rows = await ctx.db
+      .query("assignments")
+      .withIndex("by_venue", (q) => q.eq("venueId", s.venueId))
+      .collect();
+    const out = [];
+    for (const r of rows) {
+      const u = await ctx.db.get(r.userId);
+      if (!u || !u.active || u.isDev || u._id === actor._id || !canWork(u, s.position)) continue;
+      const theirs = all
+        .filter((x) => x.userId === u._id && x.date >= nyDateKey(Date.now()) && canWork(actor, x.position))
+        .sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start))
+        .map((x) => ({ _id: x._id, date: x.date, start: x.start, end: x.end ?? null, untilClose: x.untilClose, position: x.position }));
+      out.push({ userId: u._id, name: u.name, shifts: theirs });
+    }
+    return out.sort((a, b) => a.name.localeCompare(b.name));
   },
 });
 
