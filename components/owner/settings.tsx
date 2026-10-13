@@ -7,7 +7,7 @@ import type { Doc, Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "@/lib/backend/hooks";
 import { useRun } from "@/lib/backend/run";
 import { useLocale } from "@/lib/i18n-client";
-import { ago } from "@/lib/format";
+import { ago, clock } from "@/lib/format";
 import { hasKey } from "@/lib/i18n";
 import { SERVICES } from "@/lib/domain/types";
 import type { Service } from "@/lib/domain/types";
@@ -63,7 +63,7 @@ export function OwnerSettings() {
                 onClick={() => setEditing(v)}
                 leading={<Storefront weight="bold" className="size-5" />}
                 title={v.name}
-                subtitle={v.services.map((s) => t("owner.settings.serviceRange", { service: t(`services.${s.key}`), start: s.startsAt, end: s.endsAt })).join(" · ")}
+                subtitle={v.services.map((s) => t("owner.settings.serviceRange", { service: t(`services.${s.key}`), start: clock(s.startsAt), end: clock(s.endsAt) })).join(" · ")}
                 trailing={
                   v.active ? null : (
                     <StatusChip tone="neutral" size="sm">
@@ -99,7 +99,7 @@ function VenueSheet({ venue, onClose }: { venue: Doc<"venues"> | null; onClose: 
   const [rows, setRows] = useState<ServiceRow[]>(
     SERVICES.map((key) => {
       const s = venue?.services.find((x) => x.key === key);
-      return { key, on: !!s, startsAt: s?.startsAt ?? (key === "lunch" ? "11:30" : key === "dinner" ? "17:00" : "23:00"), endsAt: s?.endsAt ?? (key === "lunch" ? "15:00" : key === "dinner" ? "23:00" : "26:00") };
+      return { key, on: !!s, startsAt: s?.startsAt ?? (key === "lunch" ? "11:30" : key === "dinner" ? "17:00" : "23:00"), endsAt: s?.endsAt ?? (key === "lunch" ? "15:00" : key === "dinner" ? "23:00" : "02:00") };
     }),
   );
   const [problem, setProblem] = useState<string | null>(null);

@@ -9,7 +9,7 @@ export const COMPANY = { name: "The First Hospitality Group", slug: "tfhg" };
 
 export const VENUES: Array<{ key: string; name: string; address: string; services: Array<{ key: Service; startsAt: string; endsAt: string }> }> = [
   { key: "v1", name: "The First Midtown", address: "Midtown, New York", services: [{ key: "lunch", startsAt: "11:30", endsAt: "15:00" }, { key: "dinner", startsAt: "17:00", endsAt: "23:00" }] },
-  { key: "v2", name: "The First Tribeca", address: "Tribeca, New York", services: [{ key: "dinner", startsAt: "17:30", endsAt: "23:30" }, { key: "late", startsAt: "23:30", endsAt: "26:00" }] },
+  { key: "v2", name: "The First Tribeca", address: "Tribeca, New York", services: [{ key: "dinner", startsAt: "17:30", endsAt: "23:30" }, { key: "late", startsAt: "23:30", endsAt: "02:00" }] },
   { key: "v3", name: "The First West Village", address: "West Village, New York", services: [{ key: "lunch", startsAt: "12:00", endsAt: "15:30" }, { key: "dinner", startsAt: "17:30", endsAt: "23:00" }] },
   { key: "v4", name: "The First Brooklyn", address: "Williamsburg, Brooklyn", services: [{ key: "dinner", startsAt: "17:00", endsAt: "23:00" }] },
 ];

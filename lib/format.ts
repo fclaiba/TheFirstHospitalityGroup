@@ -46,3 +46,9 @@ export function parseCents(raw: string): number | null {
   if (!/^\d+(\.\d{0,2})?$/.test(s)) return null;
   return Math.round(Number(s) * 100);
 }
+
+/** "26:00" (past midnight) → "02:00" for display. */
+export function clock(hhmm: string): string {
+  const [h, m] = hhmm.split(":");
+  return `${String(Number(h) % 24).padStart(2, "0")}:${m}`;
+}
