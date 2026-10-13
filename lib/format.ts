@@ -1,13 +1,9 @@
-// Display formatting. Times are New York (project rule 13); money is integer cents (project rule 7).
+// Display formatting. Times are New York (project rule 20). No money anywhere (ADR 0018).
 import { BUSINESS_TZ } from "./time";
 import type { Locale } from "./domain/types";
 import type { TFn } from "./i18n";
 
 const tag = (l: Locale) => (l === "es" ? "es-US" : "en-US");
-
-export function money(locale: Locale, cents: number): string {
-  return new Intl.NumberFormat(tag(locale), { style: "currency", currency: "USD", minimumFractionDigits: cents % 100 === 0 ? 0 : 2 }).format(cents / 100);
-}
 
 export function time(locale: Locale, ms: number): string {
   return new Intl.DateTimeFormat(tag(locale), { timeZone: BUSINESS_TZ, hour: "numeric", minute: "2-digit" }).format(ms);
@@ -35,16 +31,6 @@ export function ago(t: TFn, ms: number, now = Date.now()): string {
   if (s < 3600) return t("common.minutesAgo", { n: Math.round(s / 60) });
   if (s < 86400) return t("common.hoursAgo", { n: Math.round(s / 3600) });
   return t("common.daysAgo", { n: Math.round(s / 86400) });
-}
-
-/** Integer tenths as a bottle count: 37 → "3.7". */
-export const tenths = (n: number) => (n / 10).toFixed(1);
-
-/** Parses a typed dollar amount ("12", "12.5", "12,50") into integer cents; null when invalid. */
-export function parseCents(raw: string): number | null {
-  const s = raw.trim().replace(/[$\s]/g, "").replace(",", ".");
-  if (!/^\d+(\.\d{0,2})?$/.test(s)) return null;
-  return Math.round(Number(s) * 100);
 }
 
 /** "26:00" (past midnight) → "02:00" for display. */

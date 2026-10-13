@@ -132,8 +132,9 @@ export function eventCoverage(event: { _id: string; required: Array<{ position: 
 export function availableAt(av: Array<{ weekday: number; from: string; to: string; available: boolean }>, date: string, start: string): boolean {
   const wd = weekdayOf(date);
   const rows = av.filter((a) => a.weekday === wd);
-  if (!rows.length) return true;
-  return rows.some((a) => a.available && a.from <= start && start < a.to) || rows.every((a) => a.available);
+  if (rows.some((a) => !a.available && a.from <= start && start < a.to)) return false;
+  const windows = rows.filter((a) => a.available);
+  return !windows.length || windows.some((a) => a.from <= start && start < a.to);
 }
 
 /** Time off covering a date (approved only). */

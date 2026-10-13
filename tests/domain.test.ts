@@ -1,17 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { appliesOn, buildRun, canCheck, isComplete, isLate, itemsFor, nextItem, onTimeRate, runProgress } from "../lib/domain/tasks";
-import { needsAck, nextVersion, setFor, slugKey } from "../lib/domain/rules";
-import { AUTO_CLOSE_AFTER_MS, currentService, isLive, NOTIFY_AFTER_MS, serviceWindow, sweepAction, transition } from "../lib/domain/shift";
-import { atLeast, canDo } from "../lib/domain/levels";
+import { appliesOn, buildRun, canCheck, isComplete, isLate, itemsFor, nextItem, onTimeRate, runProgress, templateFor } from "../lib/domain/tasks";
+import { needsAck, nextVersion, setsFor, slugKey } from "../lib/domain/rules";
+import { AUTO_CLOSE_AFTER_MS, currentService, isLive, NOTIFY_AFTER_MS, runsOn, serviceWindow, sweepAction, transition } from "../lib/domain/shift";
 import { missingTranslations, pickLocalized } from "../lib/domain/i18n";
-import { addDays, nyDateKey, nyTimeOn, nyWallParts, parseDateKey, weekdayOf } from "../lib/time";
+import { addDays, formatNyTime, nyDateKey, nyTimeOn, nyWallParts, parseDateKey, weekdayOf } from "../lib/time";
+import { ago, clock, dateKeyLabel, dateLong, dateShort, time } from "../lib/format";
 import type { TemplateItem, VenueService } from "../lib/domain/types";
 
-// BLUEPRINT 15: every pure function in section 14 is tested (tasks, rules, shift, levels, i18n, time).
+// BLUEPRINT 15: every pure function in section 14 is tested (tasks, rules, shift, i18n, time, format).
 
 const item = (p: Partial<TemplateItem> = {}): TemplateItem => ({ label: { en: "x", es: "x" }, photoRequired: false, critical: false, ...p });
 
-describe("tasks", () => {
+describe("tasks (side work)", () => {
   it("measures progress, completion and the next item", () => {
     const run = { items: [{ done: true }, { done: false }, { done: false }] };
     expect(runProgress(run)).toEqual({ done: 1, total: 3, pct: 33 });
@@ -40,20 +40,27 @@ describe("tasks", () => {
     expect(appliesOn({ schedule: { kind: "weekly", weekdays: [1], services: [] } }, monday, "dinner")).toBe(true);
   });
 
-  it("filters items by level and section, and builds runs anchored to the phase", () => {
-    const items = [item(), item({ minLevel: "B" }), item({ minLevel: "A" }), item({ sectionId: "s1" })];
-    expect(itemsFor(items, { level: "C" })).toEqual([0]);
-    expect(itemsFor(items, { level: "B", sectionId: "s1" })).toEqual([0, 1, 3]);
-    expect(itemsFor(items, { level: "A", sectionId: "s2" })).toEqual([0, 1, 2]);
+  it("matches templates to the position worked and the person's sections", () => {
+    expect(templateFor({ positions: ["server", "captain"] }, { position: "server" })).toBe(true);
+    expect(templateFor({ positions: ["server"] }, { position: "busser" })).toBe(false);
+    expect(templateFor({ positions: ["server"], sectionId: "a" }, { position: "server" })).toBe(false);
+    expect(templateFor({ positions: ["server"], sectionId: "a" }, { position: "server", sectionIds: ["b"] })).toBe(false);
+    expect(templateFor({ positions: ["server"], sectionId: "a" }, { position: "server", sectionIds: ["b", "a"] })).toBe(true);
+  });
+
+  it("builds runs with every item, anchored to the phase", () => {
+    const items = [item(), item({ estimatedMin: 10 }), item({ photoRequired: true })];
+    expect(itemsFor(items)).toEqual([0, 1, 2]);
     const shift = { startsAt: 1_000_000, endsAt: 2_000_000 };
-    const open = buildRun({ _id: "t", phase: "open", version: 3, items, dueOffsetMin: -10 }, shift, { level: "B" })!;
+    const open = buildRun({ _id: "t", phase: "open", version: 3, items, dueOffsetMin: -10 }, shift)!;
     expect(open.dueAt).toBe(1_000_000 - 600_000);
-    expect(open.itemIndexes).toEqual([0, 1]);
-    expect(open.items).toEqual([{ done: false }, { done: false }]);
+    expect(open.itemIndexes).toEqual([0, 1, 2]);
+    expect(open.items).toEqual([{ done: false }, { done: false }, { done: false }]);
     expect(open.templateVersion).toBe(3);
-    const close = buildRun({ _id: "t", phase: "close", version: 1, items, dueOffsetMin: 60 }, shift, {})!;
+    expect(open.templateId).toBe("t");
+    const close = buildRun({ _id: "t", phase: "close", version: 1, items, dueOffsetMin: 60 }, shift)!;
     expect(close.dueAt).toBe(2_000_000 + 3_600_000);
-    expect(buildRun({ _id: "t", phase: "open", version: 1, items: [item({ minLevel: "A" })], dueOffsetMin: 0 }, shift, { level: "C" })).toBeNull();
+    expect(buildRun({ _id: "t", phase: "open", version: 1, items: [], dueOffsetMin: 0 }, shift)).toBeNull();
   });
 
   it("asks for a photo before ticking an evidence item", () => {
@@ -63,10 +70,11 @@ describe("tasks", () => {
     expect(canCheck(run, 1, item({ photoRequired: true }), true)).toBeNull();
     expect(canCheck(run, 0, item({ photoRequired: true }), false)).toBeNull();
     expect(canCheck(run, 5, item(), true)).toBe("NOT_FOUND");
+    expect(canCheck(run, -1, item(), true)).toBe("NOT_FOUND");
     expect(canCheck(run, 0, undefined, true)).toBe("NOT_FOUND");
   });
 
-  it("computes the on-time rate of due runs", () => {
+  it("computes the internal on-time rate of due runs", () => {
     const now = 1000;
     expect(onTimeRate([], now)).toBeNull();
     expect(onTimeRate([{ items: [], dueAt: 2000 }], now)).toBeNull();
@@ -80,25 +88,34 @@ describe("tasks", () => {
   });
 });
 
-describe("rules", () => {
+describe("rules (company, venue and position scopes)", () => {
   const sets = [
-    { _id: "c", role: "server" as const, version: 2 },
-    { _id: "v", role: "server" as const, version: 3, venueId: "v1" },
-    { _id: "k", role: "kitchen" as const, version: 1 },
+    { _id: "c", scope: "company" as const, version: 1 },
+    { _id: "v1s", scope: "venue" as const, venueId: "v1", version: 1 },
+    { _id: "ps", scope: "position" as const, position: "server" as const, version: 1 },
+    { _id: "psv", scope: "position" as const, position: "server" as const, venueId: "v1", version: 2 },
+    { _id: "pc", scope: "position" as const, position: "captain" as const, version: 1 },
   ];
-  it("prefers the venue set over the company set", () => {
-    expect(setFor(sets, "server", "v1")?._id).toBe("v");
-    expect(setFor(sets, "server", "v2")?._id).toBe("c");
-    expect(setFor(sets, "server", undefined)?._id).toBe("c");
-    expect(setFor(sets, "busser", "v1")).toBeNull();
+
+  it("collects the company set, the venue set and the set of every position the person works", () => {
+    expect(setsFor(sets, ["server", "captain"], "v1").map((s) => s._id)).toEqual(["c", "v1s", "psv", "pc"]);
+    expect(setsFor(sets, ["server"], "v2").map((s) => s._id)).toEqual(["c", "ps"]);
+    expect(setsFor(sets, ["server"], undefined).map((s) => s._id)).toEqual(["c", "ps"]);
+    expect(setsFor(sets, ["busser"], "v2").map((s) => s._id)).toEqual(["c"]);
+    expect(setsFor([], ["server"], "v1")).toEqual([]);
+    // The same set is never listed twice.
+    expect(setsFor(sets, ["server", "server"], "v1").map((s) => s._id)).toEqual(["c", "v1s", "psv"]);
   });
+
   it("needs an acknowledgment of the current version", () => {
+    const set = { _id: "c", scope: "company" as const, version: 2 };
     expect(needsAck(null, [])).toBe(false);
-    expect(needsAck(sets[0]!, [])).toBe(true);
-    expect(needsAck(sets[0]!, [{ setId: "c", version: 1 }])).toBe(true);
-    expect(needsAck(sets[0]!, [{ setId: "c", version: 2 }])).toBe(false);
-    expect(needsAck(sets[0]!, [{ setId: "v", version: 9 }])).toBe(true);
+    expect(needsAck(set, [])).toBe(true);
+    expect(needsAck(set, [{ setId: "c", version: 1 }])).toBe(true);
+    expect(needsAck(set, [{ setId: "c", version: 2 }])).toBe(false);
+    expect(needsAck(set, [{ setId: "v", version: 9 }])).toBe(true);
   });
+
   it("versions and keys", () => {
     expect(nextVersion(null)).toBe(1);
     expect(nextVersion({ version: 4 })).toBe(5);
@@ -124,9 +141,9 @@ describe("shift lifecycle", () => {
   });
 
   const services: VenueService[] = [
-    { key: "lunch", startsAt: "11:30", endsAt: "15:00" },
-    { key: "dinner", startsAt: "17:00", endsAt: "23:00" },
-    { key: "late", startsAt: "23:30", endsAt: "02:00" },
+    { key: "lunch", weekdays: [2, 3, 4, 5], startsAt: "11:30", endsAt: "15:00", preShiftMin: 30 },
+    { key: "dinner", weekdays: [], startsAt: "17:00", endsAt: "23:00", preShiftMin: 30 },
+    { key: "late", weekdays: [3], startsAt: "23:30", endsAt: "02:00", preShiftMin: 15 },
   ];
 
   it("computes service windows in New York time, across midnight and DST", () => {
@@ -140,12 +157,24 @@ describe("shift lifecycle", () => {
     expect(serviceWindow(services.slice(0, 1), "2026-07-01", "dinner")).toBeNull();
   });
 
-  it("finds the running or next service", () => {
-    const day = "2026-07-01";
-    const lunch = serviceWindow(services, day, "lunch")!;
-    expect(currentService(services, day, lunch.startsAt - 3600_000)).toBe("lunch");
-    expect(currentService(services, day, lunch.endsAt + 60_000)).toBe("dinner");
-    expect(currentService(services.slice(0, 2), day, serviceWindow(services, day, "dinner")!.endsAt + 1)).toBeNull();
+  it("knows which services run on a weekday (empty list means every day)", () => {
+    const monday = "2026-10-12";
+    expect(runsOn(services[0]!, monday)).toBe(false);
+    expect(runsOn(services[0]!, "2026-10-13")).toBe(true);
+    expect(runsOn(services[1]!, monday)).toBe(true);
+  });
+
+  it("finds the running or next service among those that run that day", () => {
+    const wednesday = "2026-07-01";
+    const lunch = serviceWindow(services, wednesday, "lunch")!;
+    expect(currentService(services, wednesday, lunch.startsAt - 3600_000)).toBe("lunch");
+    expect(currentService(services, wednesday, lunch.endsAt + 60_000)).toBe("dinner");
+    const dinnerEnd = serviceWindow(services, wednesday, "dinner")!.endsAt;
+    expect(currentService(services, wednesday, dinnerEnd + 1)).toBe("late");
+    expect(currentService(services.slice(0, 2), wednesday, dinnerEnd + 1)).toBeNull();
+    // Monday: no lunch, so the morning points to dinner.
+    const monday = "2026-10-12";
+    expect(currentService(services, monday, nyTimeOn(monday, "09:00"))).toBe("dinner");
   });
 
   it("sweeps forgotten shifts: notify at +4 h once, auto-close at +8 h", () => {
@@ -155,19 +184,6 @@ describe("shift lifecycle", () => {
     expect(sweepAction({ status: "closing", endsAt: end, sweepNotifiedAt: 1 }, end + NOTIFY_AFTER_MS)).toBeNull();
     expect(sweepAction({ status: "closing", endsAt: end, sweepNotifiedAt: 1 }, end + AUTO_CLOSE_AFTER_MS)).toBe("auto_close");
     expect(sweepAction({ status: "closed", endsAt: end }, end + AUTO_CLOSE_AFTER_MS)).toBeNull();
-  });
-});
-
-describe("levels", () => {
-  it("orders C < B < A and gates actions", () => {
-    expect(atLeast("A", "B")).toBe(true);
-    expect(atLeast("C", "B")).toBe(false);
-    expect(atLeast(undefined, "B")).toBe(false);
-    expect(atLeast("C", undefined)).toBe(true);
-    expect(canDo("B", "comp_request")).toBe(true);
-    expect(canDo("C", "comp_request")).toBe(false);
-    expect(canDo("B", "section_lead")).toBe(false);
-    expect(canDo("A", "section_lead")).toBe(true);
   });
 });
 
@@ -197,5 +213,30 @@ describe("New York time", () => {
     expect(nyWallParts(Date.UTC(2026, 6, 1, 4, 30)).hour).toBe(0);
     expect(new Date(nyTimeOn("2026-07-01", "25:30")).toISOString()).toBe("2026-07-02T05:30:00.000Z");
     expect(() => nyTimeOn("2026-07-01", "noon")).toThrow();
+    expect(formatNyTime(Date.UTC(2026, 6, 1, 21, 0))).toMatch(/^5:00\sPM$/u);
+  });
+});
+
+describe("display formatting (no money)", () => {
+  const at = Date.UTC(2026, 6, 1, 21, 0); // 5 pm in New York
+  it("formats times and dates in New York in both languages", () => {
+    expect(time("en", at)).toMatch(/^5:00\sPM$/u);
+    expect(time("es", at)).toMatch(/5:00/);
+    expect(dateShort("en", at)).toContain("Jul");
+    expect(dateLong("en", at)).toContain("July");
+    expect(dateKeyLabel("en", "2026-07-01")).toContain("Jul 1");
+    expect(dateKeyLabel("en", "2026-07-01", true)).toContain("Wednesday");
+    expect(dateKeyLabel("es", "2026-07-01").toLowerCase()).toContain("jul");
+  });
+  it("words elapsed time and shows past-midnight clock times", () => {
+    const t = (k: string, v?: Record<string, string | number>) => `${k}${v ? `:${v.n}` : ""}`;
+    const now = 10_000_000;
+    expect(ago(t, now - 10_000, now)).toBe("common.now");
+    expect(ago(t, now - 5 * 60_000, now)).toBe("common.minutesAgo:5");
+    expect(ago(t, now - 3 * 3600_000, now)).toBe("common.hoursAgo:3");
+    expect(ago(t, now - 2 * 86_400_000, now)).toBe("common.daysAgo:2");
+    expect(ago(t, now + 5000, now)).toBe("common.now");
+    expect(clock("26:00")).toBe("02:00");
+    expect(clock("17:30")).toBe("17:30");
   });
 });

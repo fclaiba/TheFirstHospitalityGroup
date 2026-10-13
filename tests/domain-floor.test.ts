@@ -1,149 +1,162 @@
 import { describe, expect, it } from "vitest";
-import {
-  ESCALATE_AFTER_MS,
-  canDecide,
-  canRequest,
-  escalationDue,
-  escalationRecipients,
-  initialStatus,
-  isApproval,
-  isOpenStatus,
-  routeRequest,
-  transition,
-} from "../lib/domain/requests";
+import { ESCALATE_AFTER_MS, escalationDue, escalationRecipients, isOpenStatus, routeRequest, transition } from "../lib/domain/requests";
 import type { RosterEntry } from "../lib/domain/requests";
-import { NOTE_MAX, kitchenNeeds, noteProblem, purgeDue } from "../lib/domain/tableNotes";
+import { NOTE_MAX, NOTE_RETENTION_DAYS, expoNeeds, noteProblem, purgeDue } from "../lib/domain/tableNotes";
+import { planProblem, seatCount, seatLabel, sectionOf, tableOf, whoIsWhere } from "../lib/domain/floor";
+import type { Plan } from "../lib/domain/floor";
+import { is86, pendingAcks, quizPassed, sameAllergens } from "../lib/domain/menu";
+
+// Floor, requests, table notes and menu rules (ADR 0013, 0016, 0021, 0022).
 
 const roster: RosterEntry[] = [
-  { userId: "server", role: "server", sectionIds: ["B"], onDuty: true },
-  { userId: "runnerB", role: "runner", sectionIds: ["B"], onDuty: true },
-  { userId: "busserB", role: "busser", sectionIds: ["B"], onDuty: true },
-  { userId: "runnerA", role: "runner", sectionIds: ["A"], onDuty: true },
-  { userId: "busserMuted", role: "busser", sectionIds: ["A"], onDuty: true, muted: true },
-  { userId: "busserOff", role: "busser", sectionIds: ["B"], onDuty: false },
-  { userId: "captain", role: "captain", sectionIds: ["C"], onDuty: true },
-  { userId: "manager", role: "manager", sectionIds: [], onDuty: true },
+  { userId: "ana", position: "server", sectionIds: ["b"], onDuty: true },
+  { userId: "carlos", position: "runner", sectionIds: ["b"], onDuty: true },
+  { userId: "pedro", position: "busser", sectionIds: ["b"], onDuty: true, muted: true },
+  { userId: "nina", position: "runner", sectionIds: ["a"], onDuty: true },
+  { userId: "kevin", position: "busser", sectionIds: ["a"], onDuty: false },
+  { userId: "luis", position: "captain", sectionIds: ["c"], onDuty: true },
+  { userId: "maria", position: "floor_manager", sectionIds: [], onDuty: true },
 ];
 
 describe("routeRequest", () => {
-  it("sends water and clear to the section's runners and bussers on duty", () => {
-    expect(routeRequest("water", "B", roster, "server")).toEqual(["runnerB", "busserB"]);
-    expect(routeRequest("clear", "A", roster, "server")).toEqual(["runnerA"]);
+  it("sends water and clear to support of the section, skipping muted and off-duty people", () => {
+    expect(routeRequest("water", "b", roster, "ana")).toEqual(["carlos"]);
+    expect(routeRequest("clear", "a", roster, "ana")).toEqual(["nina"]);
   });
-  it("falls back to every unmuted receiver when the section has none or is unknown", () => {
-    expect(routeRequest("water", "C", roster, "server")).toEqual(["runnerB", "busserB", "runnerA"]);
-    expect(routeRequest("water", undefined, roster, "server")).toEqual(["runnerB", "busserB", "runnerA"]);
+  it("falls back to every receiver when the section has none or none is set", () => {
+    expect(routeRequest("water", "c", roster, "ana")).toEqual(["carlos", "nina"]);
+    expect(routeRequest("water", undefined, roster, "ana")).toEqual(["carlos", "nina"]);
   });
-  it("never routes to the requester", () => {
-    expect(routeRequest("water", "B", roster, "runnerB")).toEqual(["busserB"]);
-    expect(routeRequest("help", undefined, roster, "captain")).toEqual(["manager"]);
-  });
-  it("sends help to captains and managers and approvals to managers", () => {
-    expect(routeRequest("help", "B", roster, "server")).toEqual(["captain", "manager"]);
-    expect(routeRequest("comp", "B", roster, "server")).toEqual(["manager"]);
-    expect(routeRequest("void", "B", roster, "manager")).toEqual([]);
+  it("sends help to leads and managers on duty, never back to the requester", () => {
+    expect(routeRequest("help", "b", roster, "ana")).toEqual(["luis", "maria"]);
+    expect(routeRequest("help", undefined, roster, "luis")).toEqual(["maria"]);
   });
 });
 
 describe("escalation", () => {
-  it("widens water to the venue's receivers and the manager, help to the leads", () => {
-    expect(escalationRecipients("water", roster, "server")).toEqual(["runnerB", "busserB", "runnerA", "busserMuted", "manager"]);
-    expect(escalationRecipients("help", roster, "server")).toEqual(["captain", "manager"]);
+  it("widens to every receiver and the managers on duty", () => {
+    expect(escalationRecipients("water", roster, "ana")).toEqual(["carlos", "pedro", "nina", "maria"]);
+    expect(escalationRecipients("help", roster, "ana")).toEqual(["luis", "maria"]);
   });
-  it("is due at 90 s for an open, unescalated service request only", () => {
+  it("is due after 90 s for open requests only, once", () => {
     const at = 1_000_000;
-    const base = { status: "open" as const, kind: "water" as const, at };
-    expect(escalationDue(base, at + ESCALATE_AFTER_MS - 1)).toBe(false);
-    expect(escalationDue(base, at + ESCALATE_AFTER_MS)).toBe(true);
-    expect(escalationDue({ ...base, escalatedAt: at + 1 }, at + 200_000)).toBe(false);
-    expect(escalationDue({ ...base, status: "claimed" }, at + 200_000)).toBe(false);
-    expect(escalationDue({ ...base, kind: "comp", status: "pending" }, at + 200_000)).toBe(false);
+    expect(escalationDue({ status: "open", at }, at + ESCALATE_AFTER_MS - 1)).toBe(false);
+    expect(escalationDue({ status: "open", at }, at + ESCALATE_AFTER_MS)).toBe(true);
+    expect(escalationDue({ status: "open", at, escalatedAt: at + 1 }, at + ESCALATE_AFTER_MS)).toBe(false);
+    expect(escalationDue({ status: "claimed", at }, at + ESCALATE_AFTER_MS)).toBe(false);
   });
 });
 
 describe("request lifecycle", () => {
-  it("starts service requests open and approvals pending", () => {
-    expect(initialStatus("water")).toBe("open");
-    expect(initialStatus("help")).toBe("open");
-    expect(initialStatus("void")).toBe("pending");
-    expect(isApproval("comp")).toBe(true);
-    expect(isApproval("clear")).toBe(false);
-  });
-  it("allows only the documented transitions", () => {
+  it("claims, finishes and cancels; a second claim is closed", () => {
     expect(transition("open", "claim")).toBe("claimed");
     expect(transition("claimed", "claim")).toBe("REQUEST_CLOSED");
-    expect(transition("open", "done")).toBe("done");
     expect(transition("claimed", "done")).toBe("done");
-    expect(transition("done", "done")).toBe("REQUEST_CLOSED");
-    expect(transition("pending", "approve")).toBe("approved");
-    expect(transition("pending", "deny")).toBe("denied");
-    expect(transition("approved", "deny")).toBe("REQUEST_CLOSED");
-    expect(transition("pending", "cancel")).toBe("canceled");
-    expect(transition("denied", "cancel")).toBe("REQUEST_CLOSED");
-  });
-  it("knows which statuses are still open", () => {
-    expect(["open", "claimed", "pending"].every((s) => isOpenStatus(s as never))).toBe(true);
-    expect(["done", "canceled", "approved", "denied"].some((s) => isOpenStatus(s as never))).toBe(false);
+    expect(transition("open", "done")).toBe("done");
+    expect(transition("open", "cancel")).toBe("canceled");
+    expect(transition("done", "cancel")).toBe("REQUEST_CLOSED");
+    expect(isOpenStatus("open")).toBe(true);
+    expect(isOpenStatus("claimed")).toBe(true);
+    expect(isOpenStatus("done")).toBe(false);
+    expect(isOpenStatus("canceled")).toBe(false);
   });
 });
 
-describe("canRequest", () => {
-  it("opens help to every role", () => {
-    for (const role of ["busser", "kitchen", "server", "manager"] as const) expect(canRequest(role, "C", "help")).toBeNull();
-  });
-  it("limits water and clear to service roles", () => {
-    expect(canRequest("server", "C", "water")).toBeNull();
-    expect(canRequest("busser", "B", "water")).toBe("FORBIDDEN");
-    expect(canRequest("kitchen", "A", "clear")).toBe("FORBIDDEN");
-  });
-  it("needs level B for a comp, not for a void, and no level for managers", () => {
-    expect(canRequest("server", "C", "comp")).toBe("LEVEL_FORBIDDEN");
-    expect(canRequest("server", undefined, "comp")).toBe("LEVEL_FORBIDDEN");
-    expect(canRequest("server", "B", "comp")).toBeNull();
-    expect(canRequest("server", "C", "void")).toBeNull();
-    expect(canRequest("manager", "C", "comp")).toBeNull();
-    expect(canRequest("runner", "A", "void")).toBe("FORBIDDEN");
-  });
-});
-
-describe("canDecide", () => {
-  const req = { createdBy: "server", kind: "comp" as const };
-  it("refuses self-approval first", () => {
-    expect(canDecide({ id: "server", role: "manager" }, req, { captainApprovesComps: true })).toBe("SELF_APPROVAL");
-  });
-  it("lets managers and owners decide, captains only with the setting", () => {
-    expect(canDecide({ id: "m", role: "manager" }, req, { captainApprovesComps: false })).toBeNull();
-    expect(canDecide({ id: "o", role: "owner" }, req, { captainApprovesComps: false })).toBeNull();
-    expect(canDecide({ id: "c", role: "captain" }, req, { captainApprovesComps: false })).toBe("FORBIDDEN");
-    expect(canDecide({ id: "c", role: "captain" }, req, { captainApprovesComps: true })).toBeNull();
-    expect(canDecide({ id: "s", role: "server" }, req, { captainApprovesComps: true })).toBe("FORBIDDEN");
-  });
-  it("has nothing to decide on a service request", () => {
-    expect(canDecide({ id: "m", role: "manager" }, { createdBy: "server", kind: "water" }, { captainApprovesComps: false })).toBe("FORBIDDEN");
-  });
-});
-
-describe("table notes", () => {
-  it("accepts a short note and refuses empty or long ones", () => {
-    expect(noteProblem("Anniversary, candle on dessert")).toBeNull();
+describe("table notes (never a guest database)", () => {
+  it("rejects empty, long, contact details, and allergies without a seat", () => {
     expect(noteProblem("   ")).toBe("EMPTY");
-    expect(noteProblem("x".repeat(NOTE_MAX))).toBeNull();
     expect(noteProblem("x".repeat(NOTE_MAX + 1))).toBe("TOO_LONG");
+    expect(noteProblem("Call her at 212 555 0199")).toBe("CONTACT_DETAILS");
+    expect(noteProblem("guest@example.com likes window seats")).toBe("CONTACT_DETAILS");
+    expect(noteProblem("Shellfish", "allergy")).toBe("SEAT_REQUIRED");
+    expect(noteProblem("Shellfish", "allergy", 0)).toBe("SEAT_REQUIRED");
+    expect(noteProblem("Shellfish", "allergy", 1.5)).toBe("SEAT_REQUIRED");
+    expect(noteProblem("Shellfish", "allergy", 2)).toBeNull();
+    expect(noteProblem("Regular, table 22", "vip")).toBeNull();
+    expect(noteProblem("Anniversary")).toBeNull();
   });
-  it("refuses emails and phone numbers in any common format", () => {
-    expect(noteProblem("write to ana@example.com")).toBe("CONTACT_DETAILS");
-    expect(noteProblem("(212) 555-0199")).toBe("CONTACT_DETAILS");
-    expect(noteProblem("call 2125550199")).toBe("CONTACT_DETAILS");
-    expect(noteProblem("party of 12 at 8:30")).toBeNull();
+  it("sends allergies to the expo and purges after 30 days archived", () => {
+    expect(expoNeeds({ kind: "allergy" })).toBe(true);
+    expect(expoNeeds({ kind: "vip" })).toBe(false);
+    const day = 24 * 3600_000;
+    expect(purgeDue({}, 10 ** 12)).toBe(false);
+    expect(purgeDue({ archivedAt: 0 }, NOTE_RETENTION_DAYS * day)).toBe(false);
+    expect(purgeDue({ archivedAt: 0 }, NOTE_RETENTION_DAYS * day + 1)).toBe(true);
   });
-  it("sends only allergies to the kitchen", () => {
-    expect(kitchenNeeds({ kind: "allergy" })).toBe(true);
-    expect(kitchenNeeds({ kind: "vip" })).toBe(false);
+});
+
+describe("floor plan (ADR 0021)", () => {
+  const plan: Plan = {
+    sections: [
+      { id: "a", name: "A", tables: [{ number: "10", seats: 2, x: 10, y: 10 }, { number: "11", seats: 4, x: 20, y: 10 }] },
+      { id: "bar", name: "Bar", tables: [{ number: "B1", seats: 2, x: 90, y: 10 }] },
+    ],
+  };
+  it("finds tables, sections and seats", () => {
+    expect(seatLabel("24", 2)).toEqual({ table: "24", seat: 2 });
+    expect(seatLabel("24")).toEqual({ table: "24", seat: null });
+    expect(sectionOf("B1", plan)?.id).toBe("bar");
+    expect(sectionOf("99", plan)).toBeNull();
+    expect(tableOf("11", plan)?.seats).toBe(4);
+    expect(tableOf("99", plan)).toBeNull();
+    expect(seatCount(plan)).toBe(8);
   });
-  it("purges archived notes after 30 days only", () => {
-    const now = 100 * 24 * 3600_000;
-    expect(purgeDue({}, now)).toBe(false);
-    expect(purgeDue({ archivedAt: now - 29 * 24 * 3600_000 }, now)).toBe(false);
-    expect(purgeDue({ archivedAt: now - 31 * 24 * 3600_000 }, now)).toBe(true);
+  it("says who is where", () => {
+    const users = [
+      { _id: "u1", name: "Tom" },
+      { _id: "u2", name: "Nina" },
+      { _id: "u3", name: "Luis" },
+    ];
+    expect(whoIsWhere([{ sectionId: "a", userIds: ["u1", "u2"], leadId: "u3" }, { sectionId: "bar", userIds: ["u9"] }], users)).toEqual({
+      a: { lead: "Luis", people: ["Tom", "Nina"] },
+      bar: { lead: null, people: [""] },
+    });
+    expect(whoIsWhere([{ sectionId: "a", userIds: [], leadId: "u9" }], users)).toEqual({ a: { lead: null, people: [] } });
+  });
+  it("validates plans", () => {
+    expect(planProblem(plan)).toBeNull();
+    expect(planProblem({ sections: [plan.sections[0]!, { ...plan.sections[0]!, tables: [] }] })).toBe("DUPLICATE_SECTION");
+    expect(planProblem({ sections: [plan.sections[0]!, { id: "b", name: "B", tables: [{ number: "10", seats: 2, x: 0, y: 0 }] }] })).toBe("DUPLICATE_TABLE");
+    expect(planProblem({ sections: [{ id: "a", name: "A", tables: [{ number: "1", seats: 0, x: 0, y: 0 }] }] })).toBe("SEATS");
+    expect(planProblem({ sections: [{ id: "a", name: "A", tables: [{ number: "1", seats: 21, x: 0, y: 0 }] }] })).toBe("SEATS");
+  });
+});
+
+describe("menu confirmations and 86s (ADR 0021, 0022)", () => {
+  const items = [
+    { _id: "cod", kind: "food" as const, version: 2, active: true },
+    { _id: "tartare", kind: "food" as const, version: 1, active: true },
+    { _id: "martini", kind: "drink" as const, version: 1, active: true },
+    { _id: "barolo", kind: "wine" as const, version: 1, active: true, status: "published" as const },
+    { _id: "old", kind: "food" as const, version: 1, active: false },
+    { _id: "proposal", kind: "drink" as const, version: 1, active: true, status: "proposed" as const },
+  ];
+  const acks = [
+    { itemId: "cod", version: 1 },
+    { itemId: "tartare", version: 1 },
+    { itemId: "barolo", version: 1 },
+    { itemId: "barolo", version: 0 },
+  ];
+  it("asks each position only for new or changed items it serves", () => {
+    expect(pendingAcks(items, acks, "server").map((i) => i._id)).toEqual(["cod", "martini"]);
+    expect(pendingAcks(items, acks, "bartender").map((i) => i._id)).toEqual(["cod", "martini"]);
+    expect(pendingAcks(items, acks, "line_cook").map((i) => i._id)).toEqual(["cod"]);
+    expect(pendingAcks(items, acks, "prep_cook")).toEqual([]);
+    expect(pendingAcks(items, acks, "gm")).toEqual([]);
+    expect(pendingAcks(items, [], "expo").map((i) => i._id)).toEqual(["cod", "tartare", "martini", "barolo"]);
+  });
+  it("marks 86s until cleared", () => {
+    expect(is86("souffle", [{ itemId: "souffle" }])).toBe(true);
+    expect(is86("souffle", [{ itemId: "souffle", clearedAt: 5 }])).toBe(false);
+    expect(is86("cod", [{ itemId: "souffle" }])).toBe(false);
+  });
+  it("passes the quiz at 80 % and compares allergens as sets", () => {
+    expect(quizPassed(8, 10)).toBe(true);
+    expect(quizPassed(7, 10)).toBe(false);
+    expect(quizPassed(0, 0)).toBe(false);
+    expect(sameAllergens(["milk", "eggs"], ["eggs", "milk", "milk"])).toBe(true);
+    expect(sameAllergens(["milk"], ["milk", "eggs"])).toBe(false);
+    expect(sameAllergens(["milk"], ["eggs"])).toBe(false);
+    expect(sameAllergens([], [])).toBe(true);
   });
 });
