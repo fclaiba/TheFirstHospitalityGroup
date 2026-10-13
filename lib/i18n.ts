@@ -40,8 +40,18 @@ export function hasKey(locale: Locale, key: string): boolean {
 
 export type TFn = (key: string, vars?: Record<string, string | number>) => string;
 
+/** Singular form: when `count` (or `n`) is 1 and a `<key>_one` string exists, it is used ("1 person in Review"). */
+function pick(locale: Locale, key: string, vars?: Record<string, string | number>): string | undefined {
+  const n = vars?.count ?? vars?.n;
+  if (n === 1) {
+    const one = lookup(DICTS[locale], `${key}_one`) ?? lookup(DICTS[DEFAULT_LOCALE], `${key}_one`);
+    if (one !== undefined) return one;
+  }
+  return lookup(DICTS[locale], key) ?? lookup(DICTS[DEFAULT_LOCALE], key);
+}
+
 export function translate(locale: Locale, key: string, vars?: Record<string, string | number>): string {
-  const value = lookup(DICTS[locale], key) ?? lookup(DICTS[DEFAULT_LOCALE], key);
+  const value = pick(locale, key, vars);
   if (value === undefined) {
     if (process.env.NODE_ENV !== "production") throw new Error(`Missing copy key: ${key}`);
     return key;
@@ -55,14 +65,6 @@ export function makeT(locale: Locale): TFn {
 }
 
 /** Locale-aware formatting. Times are always New York (project rule 13). */
-export function formatMoney(locale: Locale, cents: number): string {
-  return new Intl.NumberFormat(locale === "es" ? "es-US" : "en-US", {
-    style: "currency",
-    currency: "USD",
-    minimumFractionDigits: cents % 100 === 0 ? 0 : 2,
-  }).format(cents / 100);
-}
-
 export function formatDateTime(locale: Locale, ms: number, opts: Intl.DateTimeFormatOptions): string {
   return new Intl.DateTimeFormat(locale === "es" ? "es-US" : "en-US", { timeZone: "America/New_York", ...opts }).format(ms);
 }

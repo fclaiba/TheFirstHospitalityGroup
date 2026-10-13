@@ -126,7 +126,7 @@
     },
     "menuChanged": {
       "title": "Cambio en la carta",
-      "body": "{count} platos son nuevos o cambiaron. Confírmalos antes de tu turno."
+      "body": "Hay platos nuevos o con cambios. Confírmalos antes de tu turno."
     },
     "menuProposed": {
       "title": "Propuesta para la carta",

@@ -101,7 +101,7 @@ export function EventBlock({ event, showCoverage, onEdit, className }: { event: 
           {event.coverage.map((c) => (
             <li key={c.position}>
               <StatusChip tone={c.staffed ? "ok" : "attention"} size="sm">
-                {t("schedule.events.coverage", { position: t(`positions.${c.position}`), filled: c.filled, required: c.required })}
+                {t("schedule.events.coverage", { position: t(`positions.${c.position}`), filled: c.filled, required: c.required })}, {t(c.staffed ? "states.staffed" : "states.short")}
               </StatusChip>
             </li>
           ))}

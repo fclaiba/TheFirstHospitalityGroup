@@ -126,7 +126,7 @@
     },
     "menuChanged": {
       "title": "Menu change",
-      "body": "{count} items are new or changed. Confirm them before your shift."
+      "body": "New or changed items are waiting. Confirm them before your shift."
     },
     "menuProposed": {
       "title": "Menu proposal",

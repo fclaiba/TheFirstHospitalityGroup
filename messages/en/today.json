@@ -6,7 +6,7 @@
     "confirmTitle": "Waiting for your confirmation",
     "confirmSchedule": "Your schedule for the week of {week}",
     "confirmScheduleBody": "Open it and tap I saw it.",
-    "confirmMenu": "{count} menu changes",
+    "confirmMenu": "Menu changes to confirm",
     "confirmMenuBody": "Read them and confirm before your shift.",
     "confirmRules": "New house rules",
     "confirmRulesBody": "Read and confirm them before your shift.",

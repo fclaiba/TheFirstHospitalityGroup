@@ -224,7 +224,17 @@
     "sideWorkLate": "{count} side work lists running late",
     "proposalsWaiting": "{count} warning proposals waiting more than 24 hours",
     "sideWorkOverLimit": "{count} tipped shifts over the side-work limit",
-    "none": "Nothing needs attention."
+    "none": "Nothing needs attention.",
+    "closeMissing_one": "1 close missing",
+    "autoClosed_one": "1 shift closed automatically, to review",
+    "confirmationsLate_one": "1 person has not confirmed the schedule after 24 hours",
+    "confirmationsPending_one": "1 person has not confirmed the schedule",
+    "shortagesOut_one": "1 bar item out",
+    "shortagesLow_one": "1 bar item low",
+    "peopleInReview_one": "1 person in Review",
+    "sideWorkLate_one": "1 side work list running late",
+    "proposalsWaiting_one": "1 warning proposal waiting more than 24 hours",
+    "sideWorkOverLimit_one": "1 tipped shift over the side-work limit"
   },
   "confirm": {
     "recorded": "Your confirmation is recorded with the time.",

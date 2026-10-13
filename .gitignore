@@ -14,5 +14,6 @@ graphify-out/
 .tokensave/
 .claude/
 ref/
+ref2/
 *.tsbuildinfo
 next-env.d.ts

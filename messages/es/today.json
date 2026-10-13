@@ -6,7 +6,7 @@
     "confirmTitle": "Esperan tu confirmación",
     "confirmSchedule": "Tu horario de la semana del {week}",
     "confirmScheduleBody": "Ábrelo y toca Lo vi.",
-    "confirmMenu": "{count} cambios en la carta",
+    "confirmMenu": "Cambios en la carta para confirmar",
     "confirmMenuBody": "Léelos y confírmalos antes de tu turno.",
     "confirmRules": "Reglas nuevas de la casa",
     "confirmRulesBody": "Léelas y confírmalas antes de tu turno.",

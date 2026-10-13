@@ -7,6 +7,7 @@ prototype/index.html
 *.ico
 *.woff2
 ref/
+ref2/
 test-results/
 playwright-report/
 coverage/

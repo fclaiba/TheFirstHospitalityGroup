@@ -224,7 +224,17 @@
     "sideWorkLate": "{count} listas de trabajo atrasadas",
     "proposalsWaiting": "{count} propuestas de advertencia esperan más de 24 horas",
     "sideWorkOverLimit": "{count} turnos con propina pasados del límite de trabajo extra",
-    "none": "No hay nada pendiente."
+    "none": "No hay nada pendiente.",
+    "closeMissing_one": "Falta 1 cierre",
+    "autoClosed_one": "1 turno se cerró solo, para revisar",
+    "confirmationsLate_one": "1 persona no confirmó el horario después de 24 horas",
+    "confirmationsPending_one": "1 persona no confirmó el horario",
+    "shortagesOut_one": "1 producto de barra agotado",
+    "shortagesLow_one": "1 producto de barra con poco",
+    "peopleInReview_one": "1 persona en Revisión",
+    "sideWorkLate_one": "1 lista de trabajo atrasada",
+    "proposalsWaiting_one": "1 propuesta de advertencia espera más de 24 horas",
+    "sideWorkOverLimit_one": "1 turno con propina pasado del límite de trabajo extra"
   },
   "confirm": {
     "recorded": "Tu confirmación queda registrada con la hora.",

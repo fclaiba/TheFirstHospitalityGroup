@@ -16,3 +16,10 @@ export async function expectAccessible(page: Page) {
   const bad = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
   expect(bad.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).slice(0, 3).join(", ")}`)).toEqual([]);
 }
+
+/** States, not scores (ADR 0018, 0027): no money and no percentages in the page content of a staff route. */
+export async function expectNoScores(page: Page) {
+  const text = await page.locator("main").innerText();
+  expect(text, "money sign on a staff screen").not.toMatch(/\$\s?\d|USD/);
+  expect(text, "percentage on a staff screen").not.toMatch(/\d\s?%/);
+}

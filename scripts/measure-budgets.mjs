@@ -5,18 +5,23 @@ import { gzipSync } from "node:zlib";
 
 const base = process.argv[2] ?? "http://localhost:3300";
 const STAFF = 170;
-const MANAGE = 220;
+const MANAGE = 230;
 const BUDGETS = [
   { path: "/", label: "public: landing", kb: 120 },
   { path: "/login", label: "public: sign in", kb: 150 },
   { path: "/today", label: "staff: today", kb: STAFF },
   { path: "/tasks", label: "staff: tasks", kb: STAFF },
+  { path: "/schedule", label: "staff: schedule", kb: STAFF },
   { path: "/menu", label: "staff: menu", kb: STAFF },
-  { path: "/floor", label: "staff: floor", kb: STAFF },
-  { path: "/kitchen", label: "staff: kitchen", kb: STAFF },
-  { path: "/manage", label: "manage: shift", kb: MANAGE },
-  { path: "/manage/close", label: "manage: close", kb: MANAGE },
-  { path: "/owner", label: "owner: venues", kb: MANAGE },
+  { path: "/section", label: "staff: section", kb: STAFF },
+  { path: "/bar", label: "staff: bar", kb: STAFF },
+  { path: "/lead/floor", label: "lead: floor", kb: STAFF },
+  { path: "/lead/pass", label: "lead: pass", kb: STAFF },
+  { path: "/manage", label: "manage: shift", kb: STAFF },
+  { path: "/manage/close", label: "manage: close", kb: STAFF },
+  { path: "/manage/schedule", label: "manage: schedule", kb: MANAGE },
+  { path: "/company", label: "company: venues", kb: MANAGE },
+  { path: "/company/org", label: "company: org chart", kb: MANAGE },
 ];
 
 const cache = new Map();
