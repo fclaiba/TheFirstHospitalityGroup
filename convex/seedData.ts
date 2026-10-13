@@ -136,7 +136,6 @@ export const FLOOR_PLANS: Record<string, Array<{ id: string; name: string; table
   v4: [{ id: "a", name: "A", tables: row(1, 6, 4, 45) }],
 };
 
-const FOH: Position[] = ["polisher", "busser", "runner", "server", "captain", "host", "maitre_d", "expo"];
 const BAR: Position[] = ["barback", "bartender", "head_bartender"];
 const KITCHEN: Position[] = ["dishwasher", "prep_cook", "line_cook", "sous_chef"];
 
