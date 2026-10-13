@@ -218,6 +218,12 @@
     "peopleInReview": "{count} people in Review",
     "sideWorkLate": "{count} side work lists running late",
     "proposalsWaiting": "{count} warning proposals waiting more than 24 hours",
-    "sideWorkOverLimit": "{count} tipped shifts over the side-work limit"
+    "sideWorkOverLimit": "{count} tipped shifts over the side-work limit",
+    "none": "Nothing needs attention."
+  },
+  "confirm": {
+    "recorded": "Your confirmation is recorded with the time.",
+    "sawIt": "I saw it",
+    "confirmed": "Confirmed"
   }
 }

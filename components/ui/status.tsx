@@ -3,7 +3,8 @@
 import type { ReactNode } from "react";
 import { CheckCircle, Info, Warning, WarningCircle, WarningOctagon } from "@phosphor-icons/react";
 import { cn } from "@/lib/cn";
-import type { Level } from "@/lib/domain/types";
+import { useT } from "@/lib/i18n-client";
+import type { Area, Position } from "@/lib/domain/types";
 
 // Status never by colour alone (BLUEPRINT 6.5): every chip is an icon plus a word.
 export type Tone = "ok" | "info" | "attention" | "follow" | "review" | "neutral" | "brand";
@@ -45,14 +46,55 @@ export function StatusChip({ tone, children, icon, className, size = "md" }: { t
   );
 }
 
-export const STATE_TONE = { up_to_date: "ok", attention: "attention", follow_up: "follow", review: "review" } as const;
+/** Every state word of the product (ADR 0027) and its tone. Words, never scores. */
+export const STATE_TONE = {
+  up_to_date: "ok",
+  attention: "attention",
+  follow_up: "follow",
+  review: "review",
+  confirmed: "ok",
+  pending: "attention",
+  late: "review",
+  on_track: "ok",
+  needs_attention: "attention",
+  action_required: "review",
+  staffed: "ok",
+  short: "attention",
+  over_limit: "follow",
+  within_limit: "ok",
+  low: "attention",
+  out: "review",
+  restocked: "ok",
+  ordered: "info",
+  passed: "ok",
+  not_yet: "neutral",
+} as const satisfies Record<string, Tone>;
 
-export function LevelBadge({ level, label }: { level: Level; label: string }) {
+export type StateKey = keyof typeof STATE_TONE;
+
+/** A state chip with its translated word (states.<key>). */
+export function StateChip({ state, size, className }: { state: StateKey; size?: "sm" | "md"; className?: string }) {
+  const t = useT();
   return (
-    <span aria-label={label} title={label} className="inline-flex size-7 shrink-0 items-center justify-center rounded-check border border-line-strong font-mono text-small font-semibold text-ink">
-      {level}
+    <StatusChip tone={STATE_TONE[state]} size={size} className={className}>
+      {t(`states.${state}`)}
+    </StatusChip>
+  );
+}
+
+/** A position name, with the venue's local name when it has one (captain vs head waiter, BLUEPRINT 2.1). */
+export function PositionBadge({ position, localName, className }: { position: Position; localName?: string; className?: string }) {
+  const t = useT();
+  return (
+    <span className={cn("inline-flex min-h-6 items-center rounded-pill border border-line px-2 text-caption font-semibold whitespace-nowrap text-ink-muted", className)}>
+      {localName ?? t(`positions.${position}`)}
     </span>
   );
+}
+
+export function AreaBadge({ area, className }: { area: Area; className?: string }) {
+  const t = useT();
+  return <span className={cn("inline-flex min-h-6 items-center rounded-pill bg-surface px-2 text-caption font-semibold whitespace-nowrap text-ink-muted", className)}>{t(`areas.${area}`)}</span>;
 }
 
 export function ProgressBar({ value, label, className, tone = "brand" }: { value: number; label: string; className?: string; tone?: "brand" | "ok" }) {

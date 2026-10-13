@@ -218,6 +218,12 @@
     "peopleInReview": "{count} personas en Revisión",
     "sideWorkLate": "{count} listas de trabajo atrasadas",
     "proposalsWaiting": "{count} propuestas de advertencia esperan más de 24 horas",
-    "sideWorkOverLimit": "{count} turnos con propina pasados del límite de trabajo extra"
+    "sideWorkOverLimit": "{count} turnos con propina pasados del límite de trabajo extra",
+    "none": "No hay nada pendiente."
+  },
+  "confirm": {
+    "recorded": "Tu confirmación queda registrada con la hora.",
+    "sawIt": "Lo vi",
+    "confirmed": "Confirmado"
   }
 }
