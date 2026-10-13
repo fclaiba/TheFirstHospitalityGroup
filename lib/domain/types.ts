@@ -1,4 +1,5 @@
 // Shared domain types (BLUEPRINT 14). Imported by Convex, the preview engine and the UI.
+// No money anywhere (ADR 0018): no prices, sales, costs, pay or tip amounts.
 
 export type Locale = "en" | "es";
 export const LOCALES: Locale[] = ["en", "es"];
@@ -6,13 +7,41 @@ export const LOCALES: Locale[] = ["en", "es"];
 /** Content written in both languages (ADR 0004). */
 export type Localized = { en: string; es: string };
 
-export const STAFF_ROLES = ["server", "runner", "busser", "bartender", "barback", "kitchen", "captain"] as const;
-export const ROLES = [...STAFF_ROLES, "manager", "owner", "dev"] as const;
-export type Role = (typeof ROLES)[number];
-export type StaffRole = (typeof STAFF_ROLES)[number];
+/** Seven areas (BLUEPRINT 2.1, ADR 0020). Layers decide permissions; areas decide content. */
+export const AREAS = ["floor", "reception", "pass", "bar", "kitchen", "venue_management", "corporate"] as const;
+export type Area = (typeof AREAS)[number];
 
-export const LEVELS = ["A", "B", "C"] as const;
-export type Level = (typeof LEVELS)[number];
+/** Layers, lowest to highest. */
+export const LAYERS = ["support", "service", "lead", "manager", "corporate"] as const;
+export type Layer = (typeof LAYERS)[number];
+
+/** Every position, bottom to top within each area (BLUEPRINT 2.1). `dev` exists only outside production. */
+export const POSITIONS = [
+  "polisher",
+  "busser",
+  "runner",
+  "server",
+  "captain",
+  "host",
+  "maitre_d",
+  "expo",
+  "barback",
+  "bartender",
+  "head_bartender",
+  "sommelier",
+  "dishwasher",
+  "prep_cook",
+  "line_cook",
+  "sous_chef",
+  "chef_de_cuisine",
+  "floor_manager",
+  "agm",
+  "gm",
+  "director",
+  "owner",
+  "dev",
+] as const;
+export type Position = (typeof POSITIONS)[number];
 
 export const PHASES = ["open", "mid", "close"] as const;
 export type Phase = (typeof PHASES)[number];
@@ -29,38 +58,62 @@ export type ShiftStatus = (typeof SHIFT_STATUSES)[number];
 export const WARNING_STATES = ["up_to_date", "attention", "follow_up", "review"] as const;
 export type WarningState = (typeof WARNING_STATES)[number];
 
-export const REQUEST_KINDS = ["water", "clear", "help", "void", "comp"] as const;
+/** Confirmation state of a person for a published item (ADR 0022, 0027). */
+export const CONFIRM_STATES = ["confirmed", "pending", "late"] as const;
+export type ConfirmState = (typeof CONFIRM_STATES)[number];
+
+/** Overall state of a venue (ADR 0027). */
+export const VENUE_STATES = ["on_track", "needs_attention", "action_required"] as const;
+export type VenueState = (typeof VENUE_STATES)[number];
+
+/** Requests are water, clear and help only (ADR 0013 amended by 0018). */
+export const REQUEST_KINDS = ["water", "clear", "help"] as const;
 export type RequestKind = (typeof REQUEST_KINDS)[number];
 
-export const REQUEST_STATUSES = ["open", "claimed", "done", "canceled", "pending", "approved", "denied"] as const;
+export const REQUEST_STATUSES = ["open", "claimed", "done", "canceled"] as const;
 export type RequestStatus = (typeof REQUEST_STATUSES)[number];
 
-export const VOID_REASONS = ["wrong_item", "quality", "guest_left", "courtesy", "other"] as const;
-export type VoidReason = (typeof VOID_REASONS)[number];
-
-export const NOTE_KINDS = ["allergy", "vip", "occasion", "preference", "other"] as const;
+export const NOTE_KINDS = ["allergy", "vip", "occasion", "preference"] as const;
 export type NoteKind = (typeof NOTE_KINDS)[number];
 
 export const ALLERGENS = ["gluten", "crustaceans", "eggs", "fish", "peanuts", "soy", "milk", "tree_nuts", "celery", "mustard", "sesame", "sulphites", "lupin", "molluscs"] as const;
 export type Allergen = (typeof ALLERGENS)[number];
 
-export const MENU_CATEGORIES = ["starters", "mains", "sides", "desserts", "cocktails", "wine", "spirits", "beer", "zero_proof"] as const;
+export const MENU_KINDS = ["food", "drink", "wine"] as const;
+export type MenuKind = (typeof MENU_KINDS)[number];
+
+export const MENU_CATEGORIES = ["starters", "mains", "sides", "desserts", "tasting", "cocktails", "spirits", "beer", "zero_proof", "wine_sparkling", "wine_white", "wine_red", "wine_dessert"] as const;
 export type MenuCategory = (typeof MENU_CATEGORIES)[number];
 
 export const THEMES = ["system", "light", "dark"] as const;
 export type Theme = (typeof THEMES)[number];
 
-export const ADJUSTMENT_KINDS = ["bonus", "award", "correction"] as const;
-export type AdjustmentKind = (typeof ADJUSTMENT_KINDS)[number];
+export const EVENT_KINDS = ["private_dinner", "buyout", "tasting", "holiday", "other"] as const;
+export type EventKind = (typeof EVENT_KINDS)[number];
 
-export const ADJUSTMENT_STATUSES = ["proposed", "on", "rejected", "exported"] as const;
-export type AdjustmentStatus = (typeof ADJUSTMENT_STATUSES)[number];
+export const ATTENDANCE = ["on_time", "late", "no_show"] as const;
+export type Attendance = (typeof ATTENDANCE)[number];
 
-export const PAY_TYPES = ["hourly", "salaried"] as const;
-export type PayType = (typeof PAY_TYPES)[number];
+export const SHORTAGE_LEVELS = ["low", "out"] as const;
+export type ShortageLevel = (typeof SHORTAGE_LEVELS)[number];
 
-export const STOCK_MOVE_TYPES = ["purchase", "count_adjust", "waste", "comp", "transfer_in", "transfer_out", "adjustment"] as const;
-export type StockMoveType = (typeof STOCK_MOVE_TYPES)[number];
+export const SHORTAGE_STATUSES = ["open", "restocked", "ordered"] as const;
+export type ShortageStatus = (typeof SHORTAGE_STATUSES)[number];
+
+export const BAR_ITEM_KINDS = ["bottle", "juice", "soda", "ice", "garnish", "other"] as const;
+export type BarItemKind = (typeof BAR_ITEM_KINDS)[number];
+
+export const SWAP_STATUSES = ["asked", "accepted", "approved", "denied", "canceled"] as const;
+export type SwapStatus = (typeof SWAP_STATUSES)[number];
+
+export const DECISIONS = ["pending", "approved", "denied"] as const;
+export type Decision = (typeof DECISIONS)[number];
+
+export const RULE_SCOPES = ["company", "venue", "position"] as const;
+export type RuleScope = (typeof RULE_SCOPES)[number];
+
+export const CLEANING = ["done", "partial", "not_done"] as const;
+export type Cleaning = (typeof CLEANING)[number];
 
 export type Thresholds = {
   attentionMinor: number;
@@ -70,7 +123,10 @@ export type Thresholds = {
   windowDays: number;
 };
 
-export type NotifyPrefs = { messages: boolean; warnings: boolean; tasks: boolean; requests: boolean };
+/** Side-work limit for tipped positions (NY: 2 hours or 20 % of the shift, BLUEPRINT 2.6). */
+export type SideWorkLimit = { maxMinutes: number; maxPct: number };
+
+export type NotifyPrefs = { schedule: boolean; messages: boolean; warnings: boolean; tasks: boolean; requests: boolean };
 
 export type Schedule = { kind: "every_shift" } | { kind: "weekly"; weekdays: number[]; services?: Service[] };
 
@@ -78,10 +134,10 @@ export type TemplateItem = {
   label: Localized;
   photoRequired: boolean;
   critical: boolean;
-  minLevel?: Level;
-  sectionId?: string;
+  estimatedMin?: number;
 };
 
 export type RunItem = { done: boolean; at?: number; photoId?: string; by?: string };
 
-export type VenueService = { key: Service; startsAt: string; endsAt: string };
+/** A venue service: weekdays it runs (0 = Sunday), hours, and minutes of pre-shift before it. */
+export type VenueService = { key: Service; weekdays: number[]; startsAt: string; endsAt: string; preShiftMin: number };

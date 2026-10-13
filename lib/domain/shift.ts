@@ -1,5 +1,5 @@
 // Shift lifecycle (ADR 0008): scheduled → open → closing → closed. Times in New York (project rule 13).
-import { nyTimeOn } from "../time";
+import { nyTimeOn, weekdayOf } from "../time";
 import type { Service, ShiftStatus, VenueService } from "./types";
 
 export type ShiftAction = "open" | "start_closing" | "close" | "auto_close";
@@ -23,7 +23,7 @@ export const NOTIFY_AFTER_MS = 4 * 3600_000;
 export const AUTO_CLOSE_AFTER_MS = 8 * 3600_000;
 
 /** Start and end of a service on a NY date. An end earlier than the start rolls to the next day. */
-export function serviceWindow(services: VenueService[], date: string, service: Service): { startsAt: number; endsAt: number } | null {
+export function serviceWindow(services: Array<Pick<VenueService, "key" | "startsAt" | "endsAt">>, date: string, service: Service): { startsAt: number; endsAt: number } | null {
   const s = services.find((x) => x.key === service);
   if (!s) return null;
   const startsAt = nyTimeOn(date, s.startsAt);
@@ -40,10 +40,13 @@ export function sweepAction(shift: { status: ShiftStatus; endsAt: number; sweepN
   return null;
 }
 
+/** Whether a service runs on a NY date (services are configured per weekday, BLUEPRINT 2.7). */
+export const runsOn = (s: Pick<VenueService, "weekdays">, date: string) => !s.weekdays?.length || s.weekdays.includes(weekdayOf(date));
+
 /** The service that is running now or comes next on a NY date. */
 export function currentService(services: VenueService[], date: string, now: number): Service | null {
   let best: { key: Service; startsAt: number } | null = null;
-  for (const s of services) {
+  for (const s of services.filter((x) => runsOn(x, date))) {
     const w = serviceWindow(services, date, s.key)!;
     if (now < w.endsAt && (!best || w.startsAt < best.startsAt)) best = { key: s.key, startsAt: w.startsAt };
   }

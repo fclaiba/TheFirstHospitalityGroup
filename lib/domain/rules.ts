@@ -1,13 +1,24 @@
-// Rule sets per role, versioned (BLUEPRINT 2.2). A person confirms a new version before their next run starts.
-import type { Role } from "./types";
+// Rule sets, versioned (BLUEPRINT 2.6): company, venue and position scopes. A person confirms each new version before
+// their next shift. The rules that apply to a person are the company set, their venue's set, and the set of every
+// position they may work (venue set for a position wins over the company one).
+import type { Position, RuleScope } from "./types";
 
-export type SetLike = { _id: string; role: Role; version: number; venueId?: string };
+export type SetLike = { _id: string; scope: RuleScope; version: number; venueId?: string; position?: Position };
 export type AckLike = { setId: string; version: number };
 
-/** The rule set that applies to a role at a venue: the venue's own set wins over the company set. */
-export function setFor<T extends SetLike>(sets: T[], role: Role, venueId: string | undefined): T | null {
-  const forRole = sets.filter((s) => s.role === role);
-  return forRole.find((s) => venueId && s.venueId === venueId) ?? forRole.find((s) => !s.venueId) ?? null;
+/** The sets that apply to a person at a venue. */
+export function setsFor<T extends SetLike>(sets: T[], positions: Position[], venueId: string | undefined): T[] {
+  const out: T[] = [];
+  const company = sets.find((s) => s.scope === "company");
+  if (company) out.push(company);
+  const venue = venueId ? sets.find((s) => s.scope === "venue" && s.venueId === venueId) : undefined;
+  if (venue) out.push(venue);
+  for (const p of positions) {
+    const forPos = sets.filter((s) => s.scope === "position" && s.position === p);
+    const pick = forPos.find((s) => venueId && s.venueId === venueId) ?? forPos.find((s) => !s.venueId);
+    if (pick && !out.includes(pick)) out.push(pick);
+  }
+  return out;
 }
 
 export function needsAck(set: SetLike | null, acks: AckLike[]): boolean {

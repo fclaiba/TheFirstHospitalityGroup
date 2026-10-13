@@ -1,13 +1,14 @@
 // Notification queue (ADR 0006). Mutations enqueue `outbound` rows in the same transaction; notify.deliver sends them.
-// Delivery is push.deliver. Bodies never carry the content of a warning (project rule 9): callers pass a topic and a generic, translated line.
+// Delivery is push.deliver. Bodies never carry the content of a warning (project rule 12): callers pass a topic and a generic, translated line.
 import type { Id } from "../_generated/dataModel";
 import type { MutationCtx } from "../_generated/server";
 import { internal } from "../_generated/api";
 import { makeT } from "../../lib/i18n";
 
-export type Topic = "message" | "warning" | "task_late" | "request" | "help" | "approval" | "shift" | "pay" | "note";
+export type Topic = "schedule" | "message" | "warning" | "task_late" | "request" | "help" | "approval" | "shift" | "note" | "menu" | "shortage" | "escalation";
 
-const PREF: Record<Topic, "messages" | "warnings" | "tasks" | "requests" | null> = {
+const PREF: Record<Topic, "schedule" | "messages" | "warnings" | "tasks" | "requests" | null> = {
+  schedule: "schedule",
   message: "messages",
   warning: "warnings",
   task_late: "tasks",
@@ -15,8 +16,10 @@ const PREF: Record<Topic, "messages" | "warnings" | "tasks" | "requests" | null>
   help: null, // help always goes out
   approval: null,
   shift: null,
-  pay: null,
   note: "requests",
+  menu: "messages",
+  shortage: "requests",
+  escalation: null,
 };
 
 /**

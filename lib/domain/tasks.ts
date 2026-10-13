@@ -1,7 +1,6 @@
 // Checklists (BLUEPRINT 2.2, ADR 0015).
 import { weekdayOf } from "../time";
-import { atLeast } from "./levels";
-import type { Level, Phase, RunItem, Schedule, Service, TemplateItem } from "./types";
+import type { Phase, Position, RunItem, Schedule, Service, TemplateItem } from "./types";
 
 export type RunLike = { items: RunItem[]; dueAt: number; completedAt?: number; excused?: { by: string; reason: string } };
 
@@ -33,25 +32,22 @@ export function appliesOn(template: { schedule: Schedule }, date: string, servic
   return !s.services?.length || s.services.includes(service);
 }
 
-/** Items of a template that apply to one person: minimum level and section filters. Keeps the template index. */
-export function itemsFor(items: TemplateItem[], person: { level?: Level; sectionId?: string }): number[] {
-  const out: number[] = [];
-  items.forEach((it, i) => {
-    if (!atLeast(person.level, it.minLevel)) return;
-    if (it.sectionId && it.sectionId !== person.sectionId) return;
-    out.push(i);
-  });
-  return out;
+/** Whether a template applies to a person: one of its positions is the one they work, and its section (if any) is theirs. */
+export function templateFor(template: { positions: Position[]; sectionId?: string }, person: { position: Position; sectionIds?: string[] }): boolean {
+  if (!template.positions.includes(person.position)) return false;
+  return !template.sectionId || !!person.sectionIds?.includes(template.sectionId);
 }
+
+/** Indexes of every item of a template (kept so a run can map back to the template after edits). */
+export const itemsFor = (items: TemplateItem[]): number[] => items.map((_, i) => i);
 
 export type BuiltRun = { phase: Phase; templateId: string; templateVersion: number; itemIndexes: number[]; items: RunItem[]; dueAt: number };
 
 export function buildRun(
   template: { _id: string; phase: Phase; version: number; items: TemplateItem[]; dueOffsetMin: number },
   shift: { startsAt: number; endsAt: number },
-  person: { level?: Level; sectionId?: string },
 ): BuiltRun | null {
-  const itemIndexes = itemsFor(template.items, person);
+  const itemIndexes = itemsFor(template.items);
   if (!itemIndexes.length) return null;
   const anchor = template.phase === "close" ? shift.endsAt : shift.startsAt;
   return {
@@ -70,7 +66,7 @@ export function canCheck(run: { items: RunItem[] }, index: number, item: Templat
   return null;
 }
 
-/** On-time rate of finished runs: runs completed before due (or excused) over runs due. */
+/** On-time rate of finished runs (internal success metric only, never shown on a staff screen, ADR 0027). */
 export function onTimeRate(runs: RunLike[], now: number): number | null {
   const due = runs.filter((r) => r.dueAt <= now || r.completedAt !== undefined);
   if (!due.length) return null;

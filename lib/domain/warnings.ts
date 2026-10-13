@@ -1,5 +1,6 @@
-// Warnings and performance states (ADR 0007, BLUEPRINT 2.4).
-import type { Severity, Thresholds, WarningState } from "./types";
+// Warnings and performance states (ADR 0007, 0026, 0027; BLUEPRINT 2.6). Area leads propose, managers issue.
+import { isAtLeast } from "./positions";
+import type { Position, Severity, Thresholds, WarningState } from "./types";
 
 export const WARNING_WINDOW_DAYS = 30;
 export const VOID_WINDOW_MS = 24 * 3600_000;
@@ -25,8 +26,12 @@ export function warningState(warnings: WarningLike[], now: number, t: Thresholds
   return "up_to_date";
 }
 
-export function canVoid(w: { at: number; voidedAt?: number }, actorRole: string, now: number): "TOO_LATE" | "FORBIDDEN" | null {
-  if (!["manager", "owner", "dev"].includes(actorRole)) return "FORBIDDEN";
+/** Proposals waiting longer than this escalate to the GM (ADR 0026). */
+export const PROPOSAL_ESCALATE_MS = 24 * 3600_000;
+export const proposalStale = (p: { status: string; at: number; escalatedAt?: number }, now: number) => p.status === "open" && !p.escalatedAt && now - p.at > PROPOSAL_ESCALATE_MS;
+
+export function canVoid(w: { at: number; voidedAt?: number }, actor: Position, now: number): "TOO_LATE" | "FORBIDDEN" | null {
+  if (!isAtLeast(actor, "manager")) return "FORBIDDEN";
   if (w.voidedAt) return "FORBIDDEN";
   if (now - w.at > VOID_WINDOW_MS) return "TOO_LATE";
   return null;
