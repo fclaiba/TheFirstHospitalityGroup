@@ -8,7 +8,7 @@ import { useLocale } from "@/lib/i18n-client";
 import { pickLocalized } from "@/lib/domain/i18n";
 import { money } from "@/lib/format";
 import type { Locale, Localized } from "@/lib/domain/types";
-import { TFHGMark } from "@/components/ui/brand";
+import { LionMark } from "@/components/ui/brand";
 import { StatusChip } from "@/components/ui/status";
 
 export type MenuItemView = {
@@ -102,7 +102,7 @@ export function MenuPhoto({ url, alt, className, priority }: { url: string | nul
   if (!url || failed) {
     return (
       <div className={cn("flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 bg-surface", className)} role="img" aria-label={t("menu.noPhoto")}>
-        <TFHGMark className="size-10 text-olive-200" />
+        <LionMark className="size-10 text-martini-200" />
       </div>
     );
   }

@@ -1,12 +1,48 @@
-// TFHG monogram and THE FIRST wordmark (docs/brand/logos), outlined paths filled with currentColor so the colour
-// comes from a token class (olive, ink or white only, BRAND.md 2.3). Generated from mark-ink.svg and wordmark.svg.
+// The lion and the THE FIRST wordmark (ADR 0025, docs/brand/logos). One solid mass filled with currentColor, so the
+// colour comes from a token class (martini, ink or white only, BRAND.md); the three mane curves, the eye and the
+// whisker marks are cut out with a mask, so they read as true negative space on any background. Below 32 px the
+// simplified mark (one mane curve, the eye) is used, as in mark-min.svg. Generated from mark-martini.svg.
+import { useId } from "react";
 import type { SVGProps } from "react";
 
-export function TFHGMark({ title, ...props }: SVGProps<SVGSVGElement> & { title?: string }) {
+const HEAD =
+  "M336 100 C330 74 314 54 292 44 C276 38 264 40 254 46 C220 34 172 34 132 50 C152 62 162 74 164 88 C124 80 84 94 56 124 C90 128 104 140 110 152 C72 162 44 194 34 236 C66 230 86 238 94 250 C60 274 48 310 52 350 C78 334 100 334 114 340 C98 372 100 410 118 442 C134 418 154 410 172 408 C178 440 198 468 228 486 C236 458 254 444 274 438 C290 462 316 478 348 484 C340 452 346 424 360 404 C374 384 392 368 410 358 C424 350 432 340 434 326 C438 312 446 302 452 292 C460 280 464 266 464 254 C474 250 482 240 480 226 C478 214 468 206 456 200 L376 136 C362 124 348 112 336 100 Z";
+const MANE = "M306 92 C270 136 256 190 264 244 C272 296 304 336 356 364 M246 108 C214 150 202 198 208 248 C214 296 240 334 284 364 M188 140 C162 178 152 222 158 268 C162 306 182 338 214 364";
+const EYE = "M366 168 C380 154 402 152 420 160 C408 174 384 180 366 168 Z";
+
+/** The lion head in profile. `min` draws the simplified version for small sizes (favicon, under 32 px). */
+export function LionMark({ title, min = false, ...props }: SVGProps<SVGSVGElement> & { title?: string; min?: boolean }) {
+  const mask = `lion-${useId().replace(/[^a-zA-Z0-9-]/g, "")}`;
   return (
-    <svg viewBox="0 0 64 64" fill="currentColor" role={title ? "img" : undefined} aria-hidden={title ? undefined : true} {...props}>
+    <svg viewBox="0 0 512 512" fill="currentColor" role={title ? "img" : undefined} aria-hidden={title ? undefined : true} {...props}>
       {title ? <title>{title}</title> : null}
-      <path d="M19.87 28.34V8.34H12.57V4.0H31.91V8.34H24.64V28.34Z M35.80 28.34V4.0H51.42V8.34H40.57V14.19H49.61V18.53H40.57V28.34Z M6.80 60.0V35.61H11.56V45.35H22.83V35.65H27.6V60.0H22.83V49.73H11.56V60.0Z M46.17 60.41Q42.45 60.41 39.58 58.8Q36.71 57.18 35.07 54.34Q33.44 51.51 33.44 47.82Q33.44 44.13 35.07 41.30Q36.71 38.46 39.58 36.85Q42.45 35.23 46.17 35.23Q48.40 35.23 50.27 35.89Q52.15 36.55 53.6 37.72Q55.04 38.88 56.01 40.38L52.12 42.81Q51.53 41.87 50.57 41.14Q49.61 40.41 48.46 40.0Q47.32 39.58 46.17 39.58Q43.87 39.58 42.10 40.64Q40.33 41.70 39.32 43.54Q38.31 45.39 38.31 47.82Q38.31 50.22 39.30 52.10Q40.29 53.98 42.10 55.04Q43.91 56.10 46.27 56.10Q48.05 56.10 49.44 55.42Q50.83 54.74 51.66 53.53Q52.50 52.31 52.60 50.67H46.97V46.95H57.2V49.91Q57.13 53.25 55.70 55.6Q54.27 57.94 51.80 59.18Q49.33 60.41 46.17 60.41Z" />
+      <defs>
+        <mask id={mask} maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
+          <rect width="512" height="512" fill="white" />
+          <g fill="none" stroke="black" strokeLinecap="round">
+            {min ? (
+              <path d="M306 92 C270 136 256 190 264 244 C272 296 304 336 356 364" strokeWidth="15" />
+            ) : (
+              <>
+                <path d={MANE} strokeWidth="9" />
+                <path d="M360 142 C378 134 400 134 420 142" strokeWidth="7" />
+                <path d="M290 58 C306 66 318 82 322 100" strokeWidth="7" />
+                <path d="M456 300 C438 308 418 310 400 306" strokeWidth="7" />
+                <path d="M470 240 C464 248 458 252 450 254" strokeWidth="5" />
+              </>
+            )}
+          </g>
+          <path d={EYE} fill="black" />
+          {min ? null : (
+            <g fill="black">
+              <circle cx="432" cy="272" r="4.5" />
+              <circle cx="416" cy="280" r="4.5" />
+              <circle cx="434" cy="288" r="4" />
+            </g>
+          )}
+        </mask>
+      </defs>
+      <path d={HEAD} mask={`url(#${mask})`} />
     </svg>
   );
 }

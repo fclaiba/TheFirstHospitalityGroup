@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TFHGMark } from "@/components/ui/brand";
+import { LionMark } from "@/components/ui/brand";
 import { getT } from "@/lib/i18n-server";
 
 const DOCS = ["terms", "privacy"] as const;
@@ -13,7 +13,7 @@ export default async function Legal({ params }: PageProps<"/legal/[doc]">) {
   return (
     <main id="main" className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col gap-6 px-6 pt-[calc(1.5rem+var(--safe-top))] pb-16">
       <Link href="/" aria-label={t("brand.company")} className="w-fit text-brand">
-        <TFHGMark className="size-10" />
+        <LionMark className="size-10 text-brand" />
       </Link>
       <nav className="flex gap-4 text-small font-semibold">
         {DOCS.map((d) => (

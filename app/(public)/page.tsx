@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowRight, Checks, ForkKnife, HandWaving } from "@phosphor-icons/react/dist/ssr";
-import { TFHGMark, Wordmark } from "@/components/ui/brand";
+import { LionMark, Wordmark } from "@/components/ui/brand";
 import { InstallLink } from "@/components/app/install";
 import { LangSwitch } from "@/components/app/lang-switch";
 import { getT } from "@/lib/i18n-server";
@@ -19,7 +19,7 @@ export default async function Landing() {
   return (
     <main id="main" className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-6 pt-[calc(1.5rem+var(--safe-top))] pb-[calc(1.5rem+var(--safe-bottom))]">
       <div className="flex items-center justify-between">
-        <TFHGMark className="size-11 text-brand" title={t("brand.company")} />
+        <LionMark className="size-11 text-brand" title={t("brand.company")} />
         <LangSwitch />
       </div>
       <div className="flex flex-1 flex-col justify-center gap-8 py-12">

@@ -27,7 +27,7 @@ import { useT } from "@/lib/i18n-client";
 import { HREF, tabsFor } from "@/lib/nav";
 import type { NavKey } from "@/lib/nav";
 import type { Role } from "@/lib/domain/types";
-import { TFHGMark } from "@/components/ui/brand";
+import { LionMark } from "@/components/ui/brand";
 import { useMe, useVenue } from "@/hooks/use-app";
 import { useQuery } from "@/lib/backend/hooks";
 import { api } from "@/convex/_generated/api";
@@ -113,7 +113,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="material sticky top-0 z-30 border-b border-line/70 pt-(--safe-top) no-print">
         <div className="mx-auto flex h-14 w-full max-w-3xl items-center gap-2 px-3">
           <Link href={HREF[tabs[0]!]} aria-label={t("brand.name")} className="pressable flex size-target items-center justify-center rounded-control text-brand">
-            <TFHGMark className="size-8" />
+            <LionMark className="size-8 text-brand" min />
           </Link>
           {venues.length > 1 ? (
             <button

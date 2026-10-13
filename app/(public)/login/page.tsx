@@ -4,7 +4,7 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeSlash, SignIn } from "@phosphor-icons/react";
-import { TFHGMark } from "@/components/ui/brand";
+import { LionMark } from "@/components/ui/brand";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { InlineError } from "@/components/ui/states";
@@ -44,7 +44,7 @@ function LoginForm() {
     <main id="main" className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-6 pt-[calc(1rem+var(--safe-top))] pb-[calc(2rem+var(--safe-bottom))]">
       <div className="flex items-center justify-between">
         <Link href="/" aria-label={t("brand.company")} className="pressable flex size-target items-center justify-center rounded-control text-brand">
-          <TFHGMark className="size-10" />
+          <LionMark className="size-10 text-brand" />
         </Link>
         <LangSwitch />
       </div>

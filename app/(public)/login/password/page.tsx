@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LockKey } from "@phosphor-icons/react";
-import { TFHGMark } from "@/components/ui/brand";
+import { LionMark } from "@/components/ui/brand";
 import { Button } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { InlineError } from "@/components/ui/states";
@@ -39,7 +39,7 @@ export default function ChoosePassword() {
 
   return (
     <main id="main" className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-6 pt-[calc(1.5rem+var(--safe-top))] pb-[calc(2rem+var(--safe-bottom))]">
-      <TFHGMark className="size-10 text-brand" />
+      <LionMark className="size-10 text-brand" />
       <div className="flex flex-col gap-2 pt-10 pb-8">
         <h1 className="text-title font-bold text-ink">{t("password.title")}</h1>
         <p className="text-body text-ink-muted">{t("password.body")}</p>

@@ -3,5 +3,5 @@ export const PREFS_COOKIE = "tf_prefs";
 
 export function parsePrefs(raw: string | undefined): { largeText: boolean; theme: "system" | "light" | "dark" } {
   const [large, theme] = (raw ?? "").split(".");
-  return { largeText: large === "1", theme: theme === "light" || theme === "dark" ? theme : "system" };
+  return { largeText: large === "1", theme: theme === "system" || theme === "dark" ? theme : "light" };
 }

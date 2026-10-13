@@ -2,7 +2,7 @@
 
 /*
  * The First Hospitality Group design tokens (ADR 0009). Single source: docs/brand/tokens.css. Keep both in sync;
- * tests/tokens.test.ts rejects literals in app/ and components/. White canvas, ink text, olive for the brand and the
+ * tests/tokens.test.ts rejects literals in app/ and components/. White canvas, ink text, martini for the brand and the
  * single primary action, status colours for meaning only.
  */
 @theme {
@@ -20,17 +20,17 @@
   --color-ink-subtle: #6b6f68;
   --color-on-ink: #ffffff;
 
-  --color-olive-50: #f3f5ec;
-  --color-olive-100: #e8ecdc;
-  --color-olive-200: #c9d1ae;
-  --color-olive-300: #9aaa62;
-  --color-olive-500: #5c6b2f;
-  --color-olive-600: #4a5726;
-  --color-olive-800: #2e3618;
-  --color-olive-900: #1d2410;
-  --color-brand: #5c6b2f;
-  --color-brand-pressed: #4a5726;
-  --color-brand-soft: #e8ecdc;
+  --color-martini-50: #eef2e8;
+  --color-martini-100: #e3ebdb;
+  --color-martini-200: #c8d6ba;
+  --color-martini-300: #9db88a;
+  --color-martini-500: #4a6b3e;
+  --color-martini-600: #36522f;
+  --color-martini-800: #2e4729;
+  --color-martini-900: #1e2e1b;
+  --color-brand: #4a6b3e;
+  --color-brand-pressed: #36522f;
+  --color-brand-soft: #e3ebdb;
   --color-on-brand: #ffffff;
   --color-focus: #2f5b8f;
 
@@ -116,7 +116,7 @@
 }
 :root[data-large-text="true"] { --text-scale: 1.18; }
 
-/* Dark: for night service in dim rooms. Same roles, olive lifted to stay AA (BRAND.md 3). */
+/* Dark: optional setting for dim dining rooms; light is the default and the brand's face (ADR 0025). */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --color-canvas: #0f110e;
@@ -128,8 +128,8 @@
     --color-ink-muted: #b6bbae;
     --color-ink-subtle: #a2a79a;
     --color-on-ink: #111311;
-    --color-brand: #9aaa62;
-    --color-brand-pressed: #c9d1ae;
+    --color-brand: #9db88a;
+    --color-brand-pressed: #c8d6ba;
     --color-brand-soft: #262d17;
     --color-on-brand: #111311;
     --color-focus: #8fb4e3;
@@ -153,8 +153,8 @@
   --color-ink-muted: #b6bbae;
   --color-ink-subtle: #a2a79a;
   --color-on-ink: #111311;
-  --color-brand: #9aaa62;
-  --color-brand-pressed: #c9d1ae;
+  --color-brand: #9db88a;
+  --color-brand-pressed: #c8d6ba;
   --color-brand-soft: #262d17;
   --color-on-brand: #111311;
   --color-focus: #8fb4e3;
@@ -185,7 +185,7 @@ body {
   line-height: 1.5;
   overscroll-behavior: none;
 }
-::selection { background: var(--color-olive-200); color: var(--color-olive-900); }
+::selection { background: var(--color-martini-200); color: var(--color-martini-900); }
 
 input, textarea, select { font-size: max(16px, var(--text-control)); }
 button, a, [role="button"], label[for], summary { touch-action: manipulation; }
