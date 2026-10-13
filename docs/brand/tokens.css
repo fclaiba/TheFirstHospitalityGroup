@@ -1,0 +1,135 @@
+/*
+ * The First Hospitality Group — design tokens (ADR 0009)
+ * Layout concept: mobile-first operational app, one task per screen, white canvas,
+ * ink text, olive reserved for the brand and the single primary action.
+ * Single source of truth: copy into app/globals.css (@theme). tests/tokens.test.ts
+ * rejects any hex, rgb() or arbitrary size outside this file.
+ * Contrast (WCAG 2.2): checked in docs/brand/BRAND.md, section 3.
+ */
+
+:root {
+  /* Neutrals: white main, ink secondary (green-biased so it sits with the olive) */
+  --color-canvas: #ffffff;        /* page background */
+  --color-surface: #f6f7f3;       /* grouped areas, input fill */
+  --color-surface-raised: #ffffff;/* sheets, cards that must lift */
+  --color-line: #e3e6dc;          /* hairlines, dividers */
+  --color-line-strong: #858a7f;   /* input and control borders, 3.5:1 on white (WCAG 1.4.11) */
+  --color-ink: #111311;           /* primary text, nav, secondary buttons */
+  --color-ink-muted: #5e625b;     /* secondary text, 6.2:1 on white */
+  --color-ink-subtle: #6b6f68;    /* captions, 5.1:1 on white (never below AA) */
+  --color-on-ink: #ffffff;
+
+  /* Brand: olive. Primary action, active tab, brand moments. Never a status. */
+  --color-olive-50: #f3f5ec;
+  --color-olive-100: #e8ecdc;
+  --color-olive-200: #c9d1ae;
+  --color-olive-300: #9aaa62;
+  --color-olive-500: #5c6b2f;     /* brand, 5.8:1 with white text */
+  --color-olive-600: #4a5726;     /* pressed, 7.8:1 with white text */
+  --color-olive-800: #2e3618;
+  --color-olive-900: #1d2410;
+  --color-brand: var(--color-olive-500);
+  --color-brand-pressed: var(--color-olive-600);
+  --color-on-brand: #ffffff;
+  --color-focus: #2f5b8f;         /* focus ring: blue so it never reads as brand or status */
+
+  /* Status: meaning only, never decoration (warnings, tasks, stock) */
+  --color-ok-fg: #1f5f46;     --color-ok-bg: #e3f1ea;      /* done, up to date */
+  --color-info-fg: #2f5b8f;   --color-info-bg: #e5edf6;    /* message, neutral notice */
+  --color-attention-fg: #7a4a04; --color-attention-bg: #fef3c7; /* warning state: Attention */
+  --color-follow-fg: #9a3b0b; --color-follow-bg: #fde8d7;  /* warning state: Follow-up */
+  --color-review-fg: #912018; --color-review-bg: #fee4e2;  /* warning state: Review */
+  --color-danger: #b42318;                                  /* destructive actions */
+
+  /* Type */
+  --font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif; /* wordmark, venue names, owner headlines only */
+  --font-sans: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif; /* all UI */
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace; /* codes, quantities in tables */
+
+  /* Type scale (px). Body is 17 for a 12 to 65 audience; "Large text" setting multiplies by 1.18 */
+  --text-caption: 13px;
+  --text-small: 15px;
+  --text-body: 17px;
+  --text-control: 17px;   /* inputs and buttons, never below 16 (iOS zoom) */
+  --text-lead: 19px;
+  --text-title-sm: 21px;
+  --text-title: 26px;
+  --text-figure: 34px;
+  --text-display: clamp(34px, 6vw, 52px);
+  --leading-tight: 1.15;
+  --leading-body: 1.5;
+  --tracking-label: 0.06em;
+  --tracking-wordmark: 0.10em;
+  --text-scale: 1;        /* set to 1.18 by the Large text preference */
+
+  /* Shape: one soft scale */
+  --radius-check: 6px;
+  --radius-input: 10px;
+  --radius-control: 12px;
+  --radius-card: 16px;
+  --radius-sheet: 24px;
+  --radius-pill: 999px;
+
+  /* Touch */
+  --size-target: 48px;    /* minimum tap target */
+  --size-target-lg: 56px; /* primary actions, checklist rows */
+
+  /* Elevation, tinted to the ink, never pure black */
+  --shadow-edge: 0 1px 0 rgba(17, 19, 17, 0.06);
+  --shadow-card: 0 1px 2px rgba(17, 19, 17, 0.06), 0 4px 12px rgba(17, 19, 17, 0.05);
+  --shadow-sheet: 0 -8px 32px rgba(17, 19, 17, 0.12);
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  color-scheme: light;
+}
+
+/* Dark: for night service in dim rooms. Same roles, olive lifted to stay AA. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-canvas: #0f110e;
+    --color-surface: #171a15;
+    --color-surface-raised: #1d211b;
+    --color-line: #2a2f26;
+    --color-line-strong: #636a5d;
+    --color-ink: #f2f3ee;
+    --color-ink-muted: #b6bbae;
+    --color-ink-subtle: #a2a79a;
+    --color-on-ink: #111311;
+    --color-brand: var(--color-olive-300);
+    --color-brand-pressed: var(--color-olive-200);
+    --color-on-brand: #111311;
+    --color-focus: #8fb4e3;
+    --color-ok-fg: #8fd1b3;   --color-ok-bg: #16281f;
+    --color-info-fg: #9dbfe6; --color-info-bg: #15202d;
+    --color-attention-fg: #f5cf6b; --color-attention-bg: #2b2208;
+    --color-follow-fg: #f6a774; --color-follow-bg: #2e1709;
+    --color-review-fg: #f69c94; --color-review-bg: #301110;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --color-canvas: #0f110e;
+  --color-surface: #171a15;
+  --color-surface-raised: #1d211b;
+  --color-line: #2a2f26;
+  --color-line-strong: #636a5d;
+  --color-ink: #f2f3ee;
+  --color-ink-muted: #b6bbae;
+  --color-ink-subtle: #a2a79a;
+  --color-on-ink: #111311;
+  --color-brand: var(--color-olive-300);
+  --color-brand-pressed: var(--color-olive-200);
+  --color-on-brand: #111311;
+  --color-focus: #8fb4e3;
+  --color-ok-fg: #8fd1b3;   --color-ok-bg: #16281f;
+  --color-info-fg: #9dbfe6; --color-info-bg: #15202d;
+  --color-attention-fg: #f5cf6b; --color-attention-bg: #2b2208;
+  --color-follow-fg: #f6a774; --color-follow-bg: #2e1709;
+  --color-review-fg: #f69c94; --color-review-bg: #301110;
+  color-scheme: dark;
+}

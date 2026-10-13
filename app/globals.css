@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+/*
+ * The First Hospitality Group design tokens (ADR 0009). Single source: docs/brand/tokens.css. Keep both in sync;
+ * tests/tokens.test.ts rejects literals in app/ and components/. White canvas, ink text, olive for the brand and the
+ * single primary action, status colours for meaning only.
+ */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --color-canvas: #ffffff;
+  --color-surface: #f6f7f3;
+  --color-surface-raised: #ffffff;
+  --color-line: #e3e6dc;
+  --color-line-strong: #858a7f;
+  --color-ink: #111311;
+  --color-ink-muted: #5e625b;
+  --color-ink-subtle: #6b6f68;
+  --color-on-ink: #ffffff;
+
+  --color-olive-50: #f3f5ec;
+  --color-olive-100: #e8ecdc;
+  --color-olive-200: #c9d1ae;
+  --color-olive-300: #9aaa62;
+  --color-olive-500: #5c6b2f;
+  --color-olive-600: #4a5726;
+  --color-olive-800: #2e3618;
+  --color-olive-900: #1d2410;
+  --color-brand: #5c6b2f;
+  --color-brand-pressed: #4a5726;
+  --color-brand-soft: #e8ecdc;
+  --color-on-brand: #ffffff;
+  --color-focus: #2f5b8f;
+
+  --color-ok-fg: #1f5f46;
+  --color-ok-bg: #e3f1ea;
+  --color-info-fg: #2f5b8f;
+  --color-info-bg: #e5edf6;
+  --color-attention-fg: #7a4a04;
+  --color-attention-bg: #fef3c7;
+  --color-follow-fg: #9a3b0b;
+  --color-follow-bg: #fde8d7;
+  --color-review-fg: #912018;
+  --color-review-bg: #fee4e2;
+  --color-danger: #b42318;
+  --color-scrim: #111311;
+
+  --font-sans: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Type scale (px), multiplied by --text-scale (Large text = 1.18). Tailwind's default sizes are replaced. */
+  --text-*: initial;
+  --text-caption: calc(13px * var(--text-scale));
+  --text-caption--line-height: 1.35;
+  --text-small: calc(15px * var(--text-scale));
+  --text-small--line-height: 1.45;
+  --text-body: calc(17px * var(--text-scale));
+  --text-body--line-height: 1.5;
+  --text-control: calc(17px * var(--text-scale));
+  --text-control--line-height: 1.3;
+  --text-lead: calc(19px * var(--text-scale));
+  --text-lead--line-height: 1.4;
+  --text-title-sm: calc(21px * var(--text-scale));
+  --text-title-sm--line-height: 1.25;
+  --text-title-sm--letter-spacing: -0.01em;
+  --text-title: calc(26px * var(--text-scale));
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.015em;
+  --text-figure: calc(34px * var(--text-scale));
+  --text-figure--line-height: 1.05;
+  --text-figure--letter-spacing: -0.02em;
+  --text-display: clamp(34px, 6vw, 52px);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.025em;
+
+  --tracking-label: 0.06em;
+  --tracking-wordmark: 0.1em;
+
+  --radius-check: 6px;
+  --radius-input: 10px;
+  --radius-control: 12px;
+  --radius-card: 16px;
+  --radius-sheet: 24px;
+  --radius-pill: 999px;
+
+  --spacing-target: 48px;
+  --spacing-target-lg: 56px;
+
+  --shadow-edge: 0 1px 0 rgba(17, 19, 17, 0.06);
+  --shadow-card: 0 1px 2px rgba(17, 19, 17, 0.06), 0 4px 12px rgba(17, 19, 17, 0.05);
+  --shadow-sheet: 0 -8px 32px rgba(17, 19, 17, 0.12);
+  --shadow-float: 0 6px 20px rgba(17, 19, 17, 0.18), 0 1px 3px rgba(17, 19, 17, 0.12);
+
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("./fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+
+:root {
+  --text-scale: 1;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --nav-height: 64px;
+  --material: rgba(255, 255, 255, 0.82);
+  color-scheme: light;
+}
+:root[data-large-text="true"] { --text-scale: 1.18; }
+
+/* Dark: for night service in dim rooms. Same roles, olive lifted to stay AA (BRAND.md 3). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-canvas: #0f110e;
+    --color-surface: #171a15;
+    --color-surface-raised: #1d211b;
+    --color-line: #2a2f26;
+    --color-line-strong: #636a5d;
+    --color-ink: #f2f3ee;
+    --color-ink-muted: #b6bbae;
+    --color-ink-subtle: #a2a79a;
+    --color-on-ink: #111311;
+    --color-brand: #9aaa62;
+    --color-brand-pressed: #c9d1ae;
+    --color-brand-soft: #262d17;
+    --color-on-brand: #111311;
+    --color-focus: #8fb4e3;
+    --color-ok-fg: #8fd1b3; --color-ok-bg: #16281f;
+    --color-info-fg: #9dbfe6; --color-info-bg: #15202d;
+    --color-attention-fg: #f5cf6b; --color-attention-bg: #2b2208;
+    --color-follow-fg: #f6a774; --color-follow-bg: #2e1709;
+    --color-review-fg: #f69c94; --color-review-bg: #301110;
+    --color-danger: #f69c94;
+    --material: rgba(15, 17, 14, 0.8);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --color-canvas: #0f110e;
+  --color-surface: #171a15;
+  --color-surface-raised: #1d211b;
+  --color-line: #2a2f26;
+  --color-line-strong: #636a5d;
+  --color-ink: #f2f3ee;
+  --color-ink-muted: #b6bbae;
+  --color-ink-subtle: #a2a79a;
+  --color-on-ink: #111311;
+  --color-brand: #9aaa62;
+  --color-brand-pressed: #c9d1ae;
+  --color-brand-soft: #262d17;
+  --color-on-brand: #111311;
+  --color-focus: #8fb4e3;
+  --color-ok-fg: #8fd1b3; --color-ok-bg: #16281f;
+  --color-info-fg: #9dbfe6; --color-info-bg: #15202d;
+  --color-attention-fg: #f5cf6b; --color-attention-bg: #2b2208;
+  --color-follow-fg: #f6a774; --color-follow-bg: #2e1709;
+  --color-review-fg: #f69c94; --color-review-bg: #301110;
+  --color-danger: #f69c94;
+  --material: rgba(15, 17, 14, 0.8);
+  color-scheme: dark;
+}
+
+/* Mobile-native baseline (BLUEPRINT 4.4). */
+html {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+body {
+  background: var(--color-canvas);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  overscroll-behavior: none;
+}
+::selection { background: var(--color-olive-200); color: var(--color-olive-900); }
+
+input, textarea, select { font-size: max(16px, var(--text-control)); }
+button, a, [role="button"], label[for], summary { touch-action: manipulation; }
+button, [role="button"], [role="tab"], .no-select { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; border-radius: 4px; }
+
+@layer base {
+  h1, h2, h3 { text-wrap-style: balance; }
+  p { text-wrap-style: pretty; }
+}
+
+.app-shell { min-height: 100dvh; }
+.tabular { font-variant-numeric: tabular-nums; }
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scroll-contain { overscroll-behavior: contain; }
+
+/* Translucent chrome: the header and the tab bar are materials content scrolls under (apple-design 12). */
+.material {
+  background: var(--material);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .material { background: var(--color-canvas); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Press feedback on pointer-down, never on release (mobile-native 5). */
+.pressable { transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out), opacity var(--duration-fast); }
+.pressable:active { transform: scale(0.97); }
+.pressable-row:active { background-color: var(--color-surface); }
+
+/* Select caret. A data URI cannot read CSS variables; the stroke is --color-ink-muted. */
+.select-caret {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M4 6l4 4 4-4' fill='none' stroke='%235e625b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+}
+
+/* Skeleton */
+@keyframes tf-shimmer { from { background-position: -240px 0; } to { background-position: 240px 0; } }
+.skeleton {
+  background: linear-gradient(90deg, var(--color-surface) 0%, var(--color-line) 50%, var(--color-surface) 100%);
+  background-size: 480px 100%;
+  animation: tf-shimmer 1.4s linear infinite;
+  border-radius: var(--radius-input);
+}
+
+/* The check fill (BLUEPRINT 4.2): 120 ms tick, then the row settles. */
+@keyframes tf-check { from { stroke-dashoffset: 18; } to { stroke-dashoffset: 0; } }
+@keyframes tf-pop { 0% { transform: scale(0.85); } 60% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.check-tick { stroke-dasharray: 18; animation: tf-check var(--duration-fast) var(--ease-out) both; }
+.check-pop { animation: tf-pop var(--duration-base) var(--ease-out) both; }
+
+@keyframes tf-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.rise { animation: tf-rise var(--duration-slow) var(--ease-out) both; }
+@keyframes tf-fade { from { opacity: 0; } to { opacity: 1; } }
+.fade-in { animation: tf-fade var(--duration-base) var(--ease-out) both; }
+
+/* A live request rings once when it arrives (help gets the stronger pulse). */
+@keyframes tf-ring { 0% { box-shadow: 0 0 0 0 var(--color-review-bg); } 100% { box-shadow: 0 0 0 14px transparent; } }
+.ring-once { animation: tf-ring 900ms var(--ease-out) 2; }
+
+.progress-fill { transition: width var(--duration-slow) var(--ease-spring); }
+
+@media (hover: hover) and (pointer: fine) {
+  /* every :hover rule lives here */
+  .hover-surface:hover { background-color: var(--color-surface); }
+  .hover-ink:hover { color: var(--color-ink); }
+  .btn-primary:hover { background-color: var(--color-brand-pressed); }
+  .btn-secondary:hover { background-color: var(--color-surface); }
+  .hover-line:hover { border-color: var(--color-line-strong); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  .pressable:active { transform: none; }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  html, body { background: #fff; color: #000; }
+}

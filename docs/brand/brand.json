@@ -1,0 +1,40 @@
+{
+  "name": "The First Hospitality Group",
+  "short_name": "The First",
+  "monogram": "TFHG",
+  "version": "1.0",
+  "updated": "2026-10-13",
+  "color": {
+    "canvas": "#FFFFFF",
+    "surface": "#F6F7F3",
+    "line": "#E3E6DC",
+    "lineStrong": "#858A7F",
+    "ink": "#111311",
+    "inkMuted": "#5E625B",
+    "inkSubtle": "#6B6F68",
+    "brand": "#5C6B2F",
+    "brandPressed": "#4A5726",
+    "olive": { "50": "#F3F5EC", "100": "#E8ECDC", "200": "#C9D1AE", "300": "#9AAA62", "500": "#5C6B2F", "600": "#4A5726", "800": "#2E3618", "900": "#1D2410" },
+    "focus": "#2F5B8F",
+    "status": {
+      "ok": { "fg": "#1F5F46", "bg": "#E3F1EA" },
+      "info": { "fg": "#2F5B8F", "bg": "#E5EDF6" },
+      "attention": { "fg": "#7A4A04", "bg": "#FEF3C7" },
+      "followUp": { "fg": "#9A3B0B", "bg": "#FDE8D7" },
+      "review": { "fg": "#912018", "bg": "#FEE4E2" },
+      "danger": "#B42318"
+    },
+    "dark": {
+      "canvas": "#0F110E", "surface": "#171A15", "ink": "#F2F3EE", "inkMuted": "#B6BBAE", "brand": "#9AAA62", "onBrand": "#111311"
+    }
+  },
+  "type": {
+    "sans": "Figtree",
+    "mono": "IBM Plex Mono",
+    "scale": { "caption": 13, "small": 15, "body": 17, "control": 17, "lead": 19, "titleSm": 21, "title": 26, "figure": 34 },
+    "largeTextMultiplier": 1.18
+  },
+  "radius": { "check": 6, "input": 10, "control": 12, "card": 16, "sheet": 24 },
+  "touch": { "target": 48, "targetLarge": 56 },
+  "motion": { "fast": 120, "base": 200, "slow": 320, "ease": "cubic-bezier(0.2, 0.8, 0.2, 1)" }
+}

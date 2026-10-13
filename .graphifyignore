@@ -1,0 +1,8 @@
+node_modules/
+.next/
+public/vendor/
+docs/brand/_src/fonts/
+prototype/index.html
+*.png
+*.ico
+*.woff2

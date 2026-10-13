@@ -1,0 +1,18 @@
+node_modules/
+.next/
+.vercel/
+.env*.local
+.env
+!.env.example
+coverage/
+playwright-report/
+test-results/
+graphify-out/
+.DS_Store
+
+# Local tooling and the original blueprint drop (copied into docs/)
+.tokensave/
+.claude/
+ref/
+*.tsbuildinfo
+next-env.d.ts
