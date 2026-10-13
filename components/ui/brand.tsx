@@ -10,8 +10,8 @@ const HEAD =
 const MANE = "M306 92 C270 136 256 190 264 244 C272 296 304 336 356 364 M246 108 C214 150 202 198 208 248 C214 296 240 334 284 364 M188 140 C162 178 152 222 158 268 C162 306 182 338 214 364";
 const EYE = "M366 168 C380 154 402 152 420 160 C408 174 384 180 366 168 Z";
 
-/** The lion head in profile. `min` draws the simplified version for small sizes (favicon, under 32 px). */
-export function LionMark({ title, min = false, ...props }: SVGProps<SVGSVGElement> & { title?: string; min?: boolean }) {
+/** The lion head in profile. `simple` draws the simplified version for small sizes (favicon, under 32 px). */
+export function LionMark({ title, simple = false, ...props }: Omit<SVGProps<SVGSVGElement>, "min"> & { title?: string; simple?: boolean }) {
   const mask = `lion-${useId().replace(/[^a-zA-Z0-9-]/g, "")}`;
   return (
     <svg viewBox="0 0 512 512" fill="currentColor" role={title ? "img" : undefined} aria-hidden={title ? undefined : true} {...props}>
@@ -20,7 +20,7 @@ export function LionMark({ title, min = false, ...props }: SVGProps<SVGSVGElemen
         <mask id={mask} maskUnits="userSpaceOnUse" x="0" y="0" width="512" height="512">
           <rect width="512" height="512" fill="white" />
           <g fill="none" stroke="black" strokeLinecap="round">
-            {min ? (
+            {simple ? (
               <path d="M306 92 C270 136 256 190 264 244 C272 296 304 336 356 364" strokeWidth="15" />
             ) : (
               <>
@@ -33,7 +33,7 @@ export function LionMark({ title, min = false, ...props }: SVGProps<SVGSVGElemen
             )}
           </g>
           <path d={EYE} fill="black" />
-          {min ? null : (
+          {simple ? null : (
             <g fill="black">
               <circle cx="432" cy="272" r="4.5" />
               <circle cx="416" cy="280" r="4.5" />

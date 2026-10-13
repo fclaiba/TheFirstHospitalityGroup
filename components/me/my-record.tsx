@@ -6,13 +6,13 @@ import { api } from "@/convex/_generated/api";
 import { useQuery } from "@/lib/backend/hooks";
 import { useLocale } from "@/lib/i18n-client";
 import { Section } from "@/components/ui/layout";
-import { StatusChip } from "@/components/ui/status";
+import { StateChip } from "@/components/ui/status";
 import { EmptyState, ScreenSkeleton } from "@/components/ui/states";
 import { TextButton } from "@/components/ui/button";
-import { STATE_TONES, WarningCard } from "@/components/warnings/warning-card";
+import { WarningCard } from "@/components/warnings/warning-card";
 import type { WarningState } from "@/lib/domain/types";
 
-/** My record (BLUEPRINT 2.2, 8.4): my state, the notes waiting for me first, then everything stored about me. */
+/** My record (BLUEPRINT 2.6, 8.4): my state in words, the notes waiting for me first, then everything stored about me. Private to me and my leaders. */
 export function MyRecord() {
   const { t } = useLocale();
   const data = useQuery(api.warnings.mine, {});
@@ -23,10 +23,10 @@ export function MyRecord() {
   const others = data.items.filter((w) => !pending.includes(w));
   const shown = all ? others : others.filter((w) => w.counts);
   return (
-    <Section id="record" title={t("me.record")} action={<StatusChip tone={STATE_TONES[state]}>{t(`states.${state}`)}</StatusChip>}>
-      <p className="px-1 text-small text-ink-muted">{t(`me.stateHelp.${state}`, { days: data.windowDays })}</p>
+    <Section id="record" title={t("mine.record")} action={<StateChip state={state} />}>
+      <p className="px-1 text-small text-ink-muted">{t(`mine.stateHelp.${state}`, { days: data.windowDays })}</p>
       {data.items.length === 0 ? (
-        <EmptyState icon={<Sparkle weight="bold" />} title={t("me.recordEmptyTitle")} body={t("me.recordEmptyBody")} />
+        <EmptyState icon={<Sparkle weight="bold" />} title={t("mine.recordEmptyTitle")} body={t("mine.recordEmptyBody")} />
       ) : (
         <ul className="flex flex-col gap-3">
           {[...pending, ...shown].map((w) => (
@@ -38,7 +38,7 @@ export function MyRecord() {
       )}
       {others.some((w) => !w.counts) ? (
         <TextButton onClick={() => setAll((v) => !v)} className="self-start">
-          {all ? t("me.hideOld") : t("me.showOld")}
+          {all ? t("mine.hideOld") : t("mine.showOld")}
         </TextButton>
       ) : null}
     </Section>

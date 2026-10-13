@@ -110,7 +110,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="material sticky top-0 z-30 border-b border-line/70 pt-(--safe-top) no-print">
         <div className="mx-auto flex h-14 w-full max-w-3xl items-center gap-2 px-3">
           <Link href={HREF[tabs[0]!]} aria-label={t("brand.name")} className="pressable flex size-target items-center justify-center rounded-control text-brand">
-            <LionMark className="size-8 text-brand" min />
+            <LionMark className="size-8 text-brand" simple />
           </Link>
           {venues.length > 1 ? (
             <button

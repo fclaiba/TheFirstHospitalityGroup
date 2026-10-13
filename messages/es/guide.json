@@ -2,61 +2,208 @@
   "guide": {
     "title": "Guía",
     "subtitle": "Cómo funciona cada pantalla, en pocas líneas.",
-    "forYou": "Para tu rol",
+    "forYou": "Para tu puesto",
     "everything": "Todas las pantallas",
     "showAll": "Ver todas las pantallas",
     "showMine": "Ver solo mis pantallas",
-    "levelsTitle": "Formación por nivel",
-    "levelsBody": "Tu nivel define lo que puedes hacer. Tu manager te sube de nivel cuando estás listo.",
-    "yourLevel": "Tu nivel",
     "help": "Ayuda",
     "helpFor": "Ayuda para esta pantalla",
-    "stillStuck": "¿Sigues con dudas? Manda un pedido de Ayuda durante el turno o pregúntale a tu capitán o manager.",
+    "stillStuck": "¿Sigues con dudas? Manda un pedido de Ayuda durante el turno o pregúntale a tu líder o manager.",
     "contents": "Contenido",
     "section": {
-      "today": { "title": "Hoy", "body": "Tu inicio del turno. El botón grande es lo próximo que tienes que hacer. También ves el avance de tu checklist, los mensajes nuevos, si tienes una nota pendiente y las notas del manager para hoy." },
-      "tasks": { "title": "Tareas", "body": "Tus checklists de apertura y cierre. Toca una fila para marcarla. El ícono de cámara indica que primero necesita una foto: del trabajo, nunca de clientes. Las tareas se abren cuando el manager abre el turno." },
-      "menu": { "title": "Carta", "body": "Cada plato y bebida con foto, ingredientes y alérgenos. Busca con cualquier palabra. No disponible hoy significa que la cocina se quedó sin stock. Toca Ver en inglés o español para leerlo en el otro idioma." },
-      "floor": { "title": "Salón", "body": "Tu sección y sus mesas de hoy, con las notas de cada mesa. Los pedidos de tu sección aparecen aquí primero." },
-      "requests": { "title": "Pedidos", "body": "El botón redondo pide agua, levantar una mesa, ayuda, una anulación o una invitación en dos toques: qué y en qué mesa. Cuando alguien toca Voy, lo ves. Si nadie lo toma en 90 segundos, le llega a todo el equipo." },
-      "notes": { "title": "Notas de mesa", "body": "Agrega una nota corta a una mesa: alergia, VIP, ocasión o preferencia. Nunca escribas teléfonos ni emails. Las notas de alergia van a la cocina y ves cuando las confirman." },
-      "kitchen": { "title": "Tablero de alergias", "body": "Cocina: todas las notas de alergia de hoy, por mesa. Léela y toca Confirmar antes de que salga el plato." },
-      "inventory": { "title": "Conteo de barra", "body": "Cuenta cada botella al abrir y al cerrar, en décimos: 0.7 son siete décimos de botella. Toca más y menos o escribe el número. La pantalla queda encendida mientras cuentas." },
-      "messages": { "title": "Mensajes", "body": "Novedades de tu manager o del dueño. Cuando el mensaje lo pide, toca Lo leí para que sepan que te llegó." },
-      "rules": { "title": "Reglas de la casa", "body": "Las reglas de tu rol. Cuando cambian, léelas y confírmalas antes de que empiece tu próximo checklist." },
-      "warnings": { "title": "Notas de tu manager", "body": "Una nota siempre se refiere a una regla de la casa y dice cómo hacerlo bien. Confirma que la leíste y, si quieres, agrega tu versión. Las notas dejan de contar a los 30 días." },
-      "schedule": { "title": "Horarios", "body": "Tus próximos turnos y los eventos del local, como cenas privadas y degustaciones, con notas para tu rol." },
-      "me": { "title": "Yo", "body": "Idioma, texto grande, tema, notificaciones y tu contraseña. Aquí también está tu registro de notas. Cierra sesión en todos lados si perdiste un teléfono." },
-      "manage": { "title": "Control del turno", "body": "Managers: abre el turno, mira el avance de cada persona en vivo, justifica un checklist con un motivo y empieza el cierre." },
-      "close": { "title": "Informe de cierre", "body": "Managers: escribe cubiertos, ventas netas, invitaciones y anulaciones del cierre del POS, agrega incidentes y notas, y envíalo. El resumen marca faltantes de barra y diferencias de invitaciones." },
-      "team": { "title": "Equipo", "body": "Managers: las notas de cada persona, su estado, la puntualidad y los mensajes leídos, más la mejor racha sin notas." },
-      "owner": { "title": "Locales", "body": "Dueños: los cuatro locales en una pantalla, el estado de hoy, el último cierre, los faltantes y quién necesita revisión." },
-      "pay": { "title": "Pagos", "body": "Capitanes y managers proponen un bono o premio; la persona de arriba lo activa. Ves tu propia tarifa y los bonos aprobados. El pago nunca se reduce por una nota o un error." }
+      "today": {
+        "title": "Hoy",
+        "body": "Tu inicio del turno. Primero aparece lo que espera tu confirmación: tu horario, cambios en la carta, reglas nuevas o una nota de tu manager. Después tu turno, tu sección, las notas del pre-shift, los 86 y tu próximo trabajo."
+      },
+      "schedule": {
+        "title": "Horario",
+        "body": "Tu semana, con los dobles como dos bloques y los eventos en los que trabajas. Cuando se publica o cambia el horario, ábrelo y toca Lo vi. Pide días libres, marca tu disponibilidad, pídele a tu manager un cambio nombrando a un compañero o toma un turno disponible."
+      },
+      "tasks": {
+        "title": "Trabajo del turno",
+        "body": "Tu trabajo de apertura, servicio y cierre. Toca una fila para marcarla. Un ícono de cámara significa que primero necesita una foto: del trabajo, nunca de clientes. El trabajo se abre cuando el manager abre el turno."
+      },
+      "menu": {
+        "title": "Carta",
+        "body": "Cada plato, trago y vino con foto, ingredientes, alérgenos y maridaje. Sin precios. 86 significa agotado en este servicio. Los platos nuevos o cambiados te piden tocar Lo vi antes de tu turno."
+      },
+      "section": {
+        "title": "Mi sección",
+        "body": "Tu sección en el plano del salón de hoy, sus mesas y asientos, las notas de mesa y los pedidos para ti."
+      },
+      "requests": {
+        "title": "Pedidos",
+        "body": "El botón redondo pide agua, levantar una mesa o ayuda en dos toques: qué y en qué mesa. Va al puesto que se ocupa, nunca a un amigo. Si nadie lo toma en 90 segundos, se amplía a todo el equipo y al manager."
+      },
+      "notes": {
+        "title": "Notas de mesa",
+        "body": "Agrega una nota corta a una mesa: alergia con el asiento, VIP, ocasión o preferencia. Nunca escribas teléfonos ni emails. Las alergias van al expo y ves cuando las confirma."
+      },
+      "bar": {
+        "title": "Faltantes de barra",
+        "body": "Bartender y barback son responsables de toda botella que se acaba. Marca un producto como Poca o Agotada apenas lo veas; el jefe de barra o el manager lo marca como Repuesta o Pedida."
+      },
+      "pass": {
+        "title": "Pase",
+        "body": "La vista del expo: alergias para confirmar con mesa y asiento, los 86 y el plano con asientos. Sin comanda, no sale plato."
+      },
+      "preshift": {
+        "title": "Pre-shift",
+        "body": "Los líderes y managers escriben las notas del pre-shift y marcan los 86. Le llegan a todos los que trabajan y vencen al cierre."
+      },
+      "floor": {
+        "title": "Mapa del salón",
+        "body": "Líderes: asignen las secciones del día y vean quién está dónde, las notas de mesa y los pedidos abiertos en el mapa en vivo."
+      },
+      "messages": {
+        "title": "Avisos",
+        "body": "Novedades de tus managers, en un solo sentido. Cuando un aviso lo pide, toca Lo vi para que sepan que te llegó. No hay respuestas ni chats."
+      },
+      "rules": {
+        "title": "Reglas de la casa",
+        "body": "Las reglas de la empresa, de tu local y de tu puesto. Cuando cambian, léelas y toca Lo vi antes de tu próximo turno."
+      },
+      "warnings": {
+        "title": "Notas de tu manager",
+        "body": "Una nota siempre apunta a una regla de la casa y dice cómo hacerlo bien. Confirma que la viste y, si quieres, cuenta tu versión: va al manager, nunca a tus compañeros. Las notas dejan de contar a los 30 días."
+      },
+      "propose": {
+        "title": "Proponer una advertencia",
+        "body": "Los líderes de área proponen una advertencia para su propio equipo: la persona, la regla, leve o grave y qué pasó. El manager de turno la emite o la descarta; después de 24 horas pasa al gerente general."
+      },
+      "me": {
+        "title": "Yo",
+        "body": "Tus notas y tu estado, tu puesto y tu escalera de carrera, idioma, letra grande, tema y notificaciones, contraseña y cerrar sesión."
+      },
+      "manage": {
+        "title": "Control del turno",
+        "body": "Abre el turno, sigue el trabajo por persona y área, asigna secciones y empieza el cierre. Todo queda registrado."
+      },
+      "manageSchedule": {
+        "title": "Armar el horario",
+        "body": "Arma la semana por área, cubre los eventos y publica. Todos los que trabajan reciben el aviso y confirman; un cambio después de publicar avisa solo a los afectados. Decide cambios, turnos disponibles y días libres."
+      },
+      "issue": {
+        "title": "Emitir advertencias",
+        "body": "Los managers emiten las propuestas de los líderes o emiten directamente. Siempre ligadas a una regla; el contenido nunca aparece en las notificaciones. Se anulan dentro de las 24 horas con un motivo."
+      },
+      "close": {
+        "title": "El cierre",
+        "body": "Incidentes, asistencia, trabajo pendiente, faltantes abiertos, 86, limpieza y notas para el próximo turno. Sin dinero. Enviarlo bloquea el turno."
+      },
+      "team": {
+        "title": "Equipo",
+        "body": "Tu gente por área, con su estado en palabras y sus puestos. Los ascensos se proponen aquí."
+      },
+      "venue": {
+        "title": "Estado del local",
+        "body": "En orden, Requiere atención o Acción necesaria, con los motivos en palabras y los nombres detrás."
+      },
+      "company": {
+        "title": "Empresa",
+        "body": "Los cuatro locales, cada uno con un estado general y sus motivos, el organigrama y la configuración de la empresa."
+      }
     },
-    "level": {
-      "C": {
-        "title": "Nivel C, en formación",
-        "i1": "Aprende los números de mesa y tu sección.",
-        "i2": "Conoce de memoria cada alérgeno de la carta.",
-        "i3": "Termina tus checklists a tiempo durante dos semanas.",
-        "i4": "Pregúntale a tu capitán antes de cualquier invitación.",
-        "i5": "Acompaña a un nivel A en el line-up."
+    "trainingTitle": "Entrenamiento por puesto",
+    "trainingBody": "Lo que tienes que dominar en tu puesto y en el próximo paso de tu escalera. Tus líderes lo revisan contigo.",
+    "yourPosition": "Tu puesto",
+    "nextPosition": "Próximo paso",
+    "training": {
+      "polisher": {
+        "i1": "Pulir copas por el tallo, nunca por el borde",
+        "i2": "Reponer cada estación antes del servicio",
+        "i3": "Doblar servilletas según el estándar de la casa",
+        "i4": "Leer tu horario y confirmarlo"
       },
-      "B": {
-        "title": "Nivel B, formado",
-        "i1": "Atiende tu sección solo con el salón lleno.",
-        "i2": "Pide invitaciones y anulaciones con el motivo correcto.",
-        "i3": "Recomienda un vino para cada principal.",
-        "i4": "Ayuda a un nivel C en su primera semana.",
-        "i5": "Sin notas en los últimos 30 días."
+      "busser": {
+        "i1": "Rearmar una mesa en menos de dos minutos",
+        "i2": "Agua y pan sin que lo pidan",
+        "i3": "Levantar entre platos por la derecha",
+        "i4": "Responder los pedidos de Agua y Levantar"
       },
-      "A": {
-        "title": "Nivel A, líder",
-        "i1": "Lidera una sección con sus runners y ayudantes.",
-        "i2": "Haz el line-up cuando el capitán no está.",
-        "i3": "Resuelve un reclamo de un cliente de principio a fin.",
-        "i4": "Forma a las personas nuevas en el salón.",
-        "i5": "Mantén los checklists de tu sección al 100 por ciento."
+      "runner": {
+        "i1": "Aprender cada número de mesa y asiento",
+        "i2": "Sin comanda, no sale plato",
+        "i3": "Nombrar cada plato y sus alérgenos en la mesa",
+        "i4": "Leer los 86 antes del servicio"
+      },
+      "server": {
+        "i1": "Aprobar el quiz de la carta",
+        "i2": "Anotar toda alergia con el asiento",
+        "i3": "Guiar al cliente por comida, tragos y vinos",
+        "i4": "Confirmar los cambios de la carta antes de tu turno"
+      },
+      "captain": {
+        "i1": "Asignar secciones y dar el pre-shift",
+        "i2": "Leer el mapa en vivo y responder la ayuda",
+        "i3": "Entrenar al personal nuevo de tu zona",
+        "i4": "Proponer advertencias por el sistema, nunca en chats"
+      },
+      "host": {
+        "i1": "Sentar según las secciones del día",
+        "i2": "Leer las notas de VIP y ocasiones",
+        "i3": "Mantener el libro al día",
+        "i4": "Entregar el libro al terminar"
+      },
+      "maitre_d": {
+        "i1": "Revisar las secciones con los capitanes",
+        "i2": "Recorrer todo el salón cada hora",
+        "i3": "Informar al host sobre los VIP",
+        "i4": "Escribir notas para el cierre"
+      },
+      "expo": {
+        "i1": "Leer cada comanda antes de que salga el plato",
+        "i2": "Confirmar las alergias por mesa y asiento",
+        "i3": "Publicar los 86 apenas la línea los avisa",
+        "i4": "Cantar los tiempos a la línea con claridad"
+      },
+      "barback": {
+        "i1": "Mantener hielo, cristalería y garnituras",
+        "i2": "Marcar las botellas como Poca antes de que se acaben",
+        "i3": "Reponer las botellas en orden",
+        "i4": "Cerrar el trabajo de barra con fotos"
+      },
+      "bartender": {
+        "i1": "Conocer cada trago de la carta",
+        "i2": "Pedir identificación antes de servir alcohol",
+        "i3": "Marcar faltantes como Poca o Agotada",
+        "i4": "Confirmar los cambios de la carta de tragos"
+      },
+      "head_bartender": {
+        "i1": "Resolver faltantes: Repuesta o Pedida",
+        "i2": "Proponer cambios en la carta de tragos",
+        "i3": "Liderar el trabajo de barra",
+        "i4": "Proponer advertencias de barra por el sistema"
+      },
+      "sommelier": {
+        "i1": "Conocer la carta de vinos y sus maridajes",
+        "i2": "Proponer cambios en la carta de vinos",
+        "i3": "Informar los maridajes a los meseros en el pre-shift",
+        "i4": "Pedir identificación antes de servir alcohol"
+      },
+      "dishwasher": {
+        "i1": "Usar el lavavajillas con seguridad",
+        "i2": "Mantener los pisos secos",
+        "i3": "Sacar basura y reciclaje al cierre",
+        "i4": "Leer tu horario y confirmarlo"
+      },
+      "prep_cook": {
+        "i1": "Terminar la lista de prep del día",
+        "i2": "Etiquetar y fechar cada recipiente",
+        "i3": "Seguir la carpeta de alérgenos",
+        "i4": "Mantener tu estación limpia"
+      },
+      "line_cook": {
+        "i1": "Registrar las temperaturas de las heladeras al abrir",
+        "i2": "Avisar los 86 al sous chef",
+        "i3": "Leer las alergias antes de marchar",
+        "i4": "Cerrar tu estación limpia"
+      },
+      "sous_chef": {
+        "i1": "Dirigir la línea durante el servicio",
+        "i2": "Revisar el prep antes del servicio",
+        "i3": "Escribir notas de cocina para el cierre",
+        "i4": "Proponer advertencias de cocina por el sistema"
       }
     }
   }

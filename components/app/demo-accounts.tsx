@@ -9,18 +9,20 @@ import { reseed } from "@/lib/demo/store";
 import { useT } from "@/lib/i18n-client";
 import { toast } from "@/lib/toast";
 import { Spinner, TextButton } from "@/components/ui/button";
-import { LevelBadge } from "@/components/ui/status";
-import type { Level } from "@/lib/domain/types";
+import { PositionBadge } from "@/components/ui/status";
+import { AREAS } from "@/lib/domain/types";
+import { areaOf } from "@/lib/domain/positions";
 
-/** Preview only (ADR 0010): sign in as any demo person, one tap, to walk the owner through every role. */
+/** Preview only (ADR 0010): sign in as any demo person, one tap, to walk the owner through every position, by area. */
 export function DemoAccounts({ onSignedIn }: { onSignedIn: () => void }) {
   const t = useT();
   const [busy, setBusy] = useState<string | null>(null);
+  const midtown = PEOPLE.filter((p) => p.venues[0] === "v1" || p.venues.length === 0);
   const groups = [
-    { title: t("roles.owner"), people: PEOPLE.filter((p) => p.role === "owner") },
-    { title: VENUES[0]!.name, people: PEOPLE.filter((p) => p.venues[0] === "v1") },
-    { title: t("nav.owner"), people: PEOPLE.filter((p) => p.role !== "owner" && p.venues[0] !== "v1") },
-  ];
+    ...AREAS.map((area) => ({ key: area, title: t(`areas.${area}`), people: midtown.filter((p) => areaOf(p.position) === area) })),
+    { key: "others", title: t("login.demoOtherVenues"), people: PEOPLE.filter((p) => p.venues[0] && p.venues[0] !== "v1") },
+  ].filter((g) => g.people.length);
+
   const pick = async (username: string) => {
     setBusy(username);
     const r = await signIn(username, DEMO_PASSWORD);
@@ -37,7 +39,7 @@ export function DemoAccounts({ onSignedIn }: { onSignedIn: () => void }) {
         <p className="text-small text-ink-muted">{t("login.demoBody", { password: DEMO_PASSWORD })}</p>
       </div>
       {groups.map((g) => (
-        <div key={g.title} className="flex flex-col gap-2">
+        <div key={g.key} className="flex flex-col gap-2">
           <h3 className="px-1 text-small font-semibold tracking-label text-ink-muted uppercase">{g.title}</h3>
           <ul className="overflow-hidden rounded-card border border-line [&>li+li]:border-t [&>li+li]:border-line">
             {g.people.map((p) => (
@@ -48,12 +50,11 @@ export function DemoAccounts({ onSignedIn }: { onSignedIn: () => void }) {
                   disabled={!!busy}
                   className="pressable-row hover-surface flex min-h-target-lg w-full items-center gap-3 px-4 py-2 text-left disabled:opacity-60"
                 >
-                  <LevelBadge level={p.level as Level} label={t(`levels.${p.level}`)} />
-                  <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="truncate text-body font-semibold text-ink">{p.name}</span>
-                    <span className="truncate text-small text-ink-muted">
-                      {t(`roles.${p.role}`)}
-                      {p.venues[0] && g.title === t("nav.owner") ? `, ${VENUES.find((v) => v.key === p.venues[0])?.name}` : ""}
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      <PositionBadge position={p.position} />
+                      {g.key === "others" ? <span className="truncate text-small text-ink-muted">{VENUES.find((v) => v.key === p.venues[0])?.name}</span> : null}
                     </span>
                   </span>
                   {busy === p.username ? <Spinner className="text-brand" /> : <span className="font-mono text-caption text-ink-subtle">{p.username}</span>}

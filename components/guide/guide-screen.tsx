@@ -2,51 +2,77 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Lifebuoy } from "@phosphor-icons/react";
+import { CheckSquare, Lifebuoy } from "@phosphor-icons/react";
 import { useMe } from "@/hooks/use-app";
 import { useT } from "@/lib/i18n-client";
 import { cn } from "@/lib/cn";
-import type { Level, Role } from "@/lib/domain/types";
-import { LEVELS } from "@/lib/domain/types";
+import { can } from "@/lib/domain/permissions";
+import type { Action } from "@/lib/domain/permissions";
+import { isAtLeast, nextOnLadder } from "@/lib/domain/positions";
+import type { Position } from "@/lib/domain/types";
 import { Button } from "@/components/ui/button";
 import { Card, PageHeader, Section } from "@/components/ui/layout";
-import { LevelBadge, StatusChip } from "@/components/ui/status";
+import { PositionBadge } from "@/components/ui/status";
 
-const STAFF: Role[] = ["server", "runner", "busser", "bartender", "barback", "kitchen", "captain"];
-const FLOOR: Role[] = ["server", "runner", "busser", "bartender", "barback", "captain"];
-
-/** Which screens each role uses (BLUEPRINT 6.1). Managers and owners see every section. */
-export const GUIDE_SECTIONS: Array<{ key: string; roles: Role[] }> = [
-  { key: "today", roles: [...STAFF, "manager"] },
-  { key: "tasks", roles: [...STAFF, "manager"] },
-  { key: "menu", roles: ["server", "runner", "bartender", "barback", "kitchen", "captain", "manager"] },
-  { key: "floor", roles: FLOOR },
-  { key: "requests", roles: [...STAFF, "manager"] },
-  { key: "notes", roles: ["server", "captain", "manager"] },
-  { key: "kitchen", roles: ["kitchen"] },
-  { key: "inventory", roles: ["bartender", "barback", "manager"] },
-  { key: "messages", roles: [...STAFF, "manager"] },
-  { key: "rules", roles: [...STAFF, "manager"] },
-  { key: "warnings", roles: [...STAFF, "manager"] },
-  { key: "schedule", roles: [...STAFF, "manager"] },
-  { key: "me", roles: [...STAFF, "manager", "owner"] },
-  { key: "manage", roles: ["manager", "captain"] },
-  { key: "close", roles: ["manager"] },
-  { key: "team", roles: ["manager", "owner"] },
-  { key: "owner", roles: ["owner"] },
-  { key: "pay", roles: [...STAFF, "manager", "owner"] },
+/** Which screens a position uses (BLUEPRINT 6.1): a section shows when the position can do its action. */
+export const GUIDE_SECTIONS: Array<{ key: string; action: Action }> = [
+  { key: "today", action: "today.view" },
+  { key: "schedule", action: "schedule.own" },
+  { key: "tasks", action: "tasks.own" },
+  { key: "menu", action: "menu.view" },
+  { key: "section", action: "floor.view" },
+  { key: "requests", action: "requests.help" },
+  { key: "notes", action: "notes.add" },
+  { key: "bar", action: "bar.report" },
+  { key: "pass", action: "notes.allergy" },
+  { key: "preshift", action: "preshift.publish" },
+  { key: "floor", action: "floor.map" },
+  { key: "messages", action: "messages.read" },
+  { key: "rules", action: "rules.read" },
+  { key: "warnings", action: "warnings.own" },
+  { key: "propose", action: "warnings.propose" },
+  { key: "me", action: "today.view" },
+  { key: "manage", action: "shift.control" },
+  { key: "manageSchedule", action: "schedule.manage" },
+  { key: "issue", action: "warnings.issue" },
+  { key: "close", action: "close.file" },
+  { key: "team", action: "team.view" },
+  { key: "venue", action: "venue.state" },
+  { key: "company", action: "company.view" },
 ];
 
-/** Short how-to per screen and the training checklist per level (BLUEPRINT 6.1 /guide, ADR 0014). */
+/** Positions with a training checklist: every position below venue management (BLUEPRINT 2.5). */
+const TRAINED: Position[] = [
+  "polisher",
+  "busser",
+  "runner",
+  "server",
+  "captain",
+  "host",
+  "maitre_d",
+  "expo",
+  "barback",
+  "bartender",
+  "head_bartender",
+  "sommelier",
+  "dishwasher",
+  "prep_cook",
+  "line_cook",
+  "sous_chef",
+];
+const ITEMS = ["i1", "i2", "i3", "i4"];
+
+/** How-to per screen for my position and the training checklist per position (BLUEPRINT 6.1 /guide, 2.5). */
 export function GuideScreen() {
   const t = useT();
   const me = useMe();
-  const role = (me?.role ?? "server") as Role;
-  const sees = (roles: Role[]) => role === "owner" || role === "dev" || role === "manager" || roles.includes(role);
+  const position = (me?.position ?? "server") as Position;
+  const leader = isAtLeast(position, "manager");
   const [all, setAll] = useState(false);
-  const sections = GUIDE_SECTIONS.filter((s) => all || sees(s.roles));
-  const myLevel = (me?.level ?? "C") as Level;
-  const showLevels = STAFF.includes(role) || role === "manager" || role === "owner" || role === "dev";
+  const sections = GUIDE_SECTIONS.filter((s) => all || leader || can(position, s.action));
+  const mine = TRAINED.includes(position) ? position : null;
+  const next = mine ? nextOnLadder(mine) : null;
+  const training = leader ? TRAINED : [mine, next && TRAINED.includes(next) ? next : null].filter((p): p is Position => !!p);
 
   return (
     <div className="flex flex-col gap-7">
@@ -61,9 +87,9 @@ export function GuideScreen() {
       </nav>
 
       <Section
-        title={all ? t("guide.everything") : t("guide.forYou")}
+        title={all || leader ? t("guide.everything") : t("guide.forYou")}
         action={
-          role !== "owner" && role !== "manager" ? (
+          !leader ? (
             <Button variant="quiet" size="md" onClick={() => setAll((a) => !a)}>
               {all ? t("guide.showMine") : t("guide.showAll")}
             </Button>
@@ -82,32 +108,28 @@ export function GuideScreen() {
         </ul>
       </Section>
 
-      {showLevels ? (
-        <Section title={t("guide.levelsTitle")} id="levels">
-          <p className="px-1 text-body text-ink-muted">{t("guide.levelsBody")}</p>
+      {training.length ? (
+        <Section title={t("guide.trainingTitle")} id="training">
+          <p className="px-1 text-body text-ink-muted">{t("guide.trainingBody")}</p>
           <ul className="flex flex-col gap-3">
-            {LEVELS.slice()
-              .reverse()
-              .map((level) => (
-                <li key={level}>
-                  <Card className={cn("flex flex-col gap-3", level === myLevel && STAFF.includes(role) && "border-brand bg-brand-soft")}>
-                    <div className="flex items-center gap-3">
-                      <LevelBadge level={level} label={t(`levels.${level}`)} />
-                      <h3 className="flex-1 text-body font-semibold text-ink">{t(`guide.level.${level}.title`)}</h3>
-                      {level === myLevel && STAFF.includes(role) ? (
-                        <StatusChip tone="brand" size="sm" icon={false}>
-                          {t("guide.yourLevel")}
-                        </StatusChip>
-                      ) : null}
-                    </div>
-                    <ol className="flex list-decimal flex-col gap-1.5 pl-6 text-body text-ink marker:font-mono marker:text-ink-muted">
-                      {["i1", "i2", "i3", "i4", "i5"].map((i) => (
-                        <li key={i}>{t(`guide.level.${level}.${i}`)}</li>
-                      ))}
-                    </ol>
-                  </Card>
-                </li>
-              ))}
+            {training.map((p) => (
+              <li key={p}>
+                <Card className={cn("flex flex-col gap-3", p === mine && "border-brand")}>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <PositionBadge position={p} />
+                    {p === mine ? <span className="text-small font-semibold text-brand">{t("guide.yourPosition")}</span> : p === next ? <span className="text-small font-semibold text-ink-muted">{t("guide.nextPosition")}</span> : null}
+                  </div>
+                  <ul className="flex flex-col gap-2">
+                    {ITEMS.map((i) => (
+                      <li key={i} className="flex items-start gap-2 text-body text-ink">
+                        <CheckSquare weight="bold" className="mt-0.5 size-5 shrink-0 text-ink-muted" aria-hidden />
+                        <span>{t(`guide.training.${p}.${i}`)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              </li>
+            ))}
           </ul>
         </Section>
       ) : null}

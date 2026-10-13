@@ -1,20 +1,20 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, Checks, ForkKnife, HandWaving } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, CalendarCheck, ForkKnife, TreeStructure } from "@phosphor-icons/react/dist/ssr";
 import { LionMark, Wordmark } from "@/components/ui/brand";
 import { InstallLink } from "@/components/app/install";
 import { LangSwitch } from "@/components/app/lang-switch";
 import { getT } from "@/lib/i18n-server";
 import { currentSubject } from "@/lib/auth/session-server";
 
-/** Brand page (BLUEPRINT 6.1): sign in and install. Signed-in people go straight to their day. */
+/** Brand page (BLUEPRINT 6.1, ADR 0025): executive hospitality, the lion; sign in and install. Signed-in people go straight to their day. */
 export default async function Landing() {
   if (await currentSubject()) redirect("/start");
   const t = await getT();
   const points = [
-    { icon: Checks, text: t("landing.point1") },
+    { icon: CalendarCheck, text: t("landing.point1") },
     { icon: ForkKnife, text: t("landing.point2") },
-    { icon: HandWaving, text: t("landing.point3") },
+    { icon: TreeStructure, text: t("landing.point3") },
   ];
   return (
     <main id="main" className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-6 pt-[calc(1.5rem+var(--safe-top))] pb-[calc(1.5rem+var(--safe-bottom))]">

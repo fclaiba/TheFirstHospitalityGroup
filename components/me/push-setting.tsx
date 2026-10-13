@@ -59,7 +59,7 @@ export function PushSetting() {
       if (!json.endpoint || !json.keys) throw new Error("subscription");
       await subscribe({ endpoint: json.endpoint, keys: json.keys, ua: navigator.userAgent.slice(0, 200) });
       setStatus("granted");
-      toast(t("me.pushOn"), "ok");
+      toast(t("mine.pushOn"), "ok");
     } catch {
       toast(t("errors.UNKNOWN"), "error");
     } finally {
@@ -73,20 +73,20 @@ export function PushSetting() {
       <div className="flex items-start gap-3">
         <BellRinging weight="bold" className="mt-0.5 size-6 shrink-0 text-ink" aria-hidden />
         <div className="min-w-0">
-          <p className="text-body font-medium text-ink">{t("me.pushTitle")}</p>
+          <p className="text-body font-medium text-ink">{t("mine.pushTitle")}</p>
           <p className="text-small text-ink-muted">
-            {status === "needs-install" ? t("me.pushInstall") : status === "denied" ? t("me.pushDenied") : status === "granted" ? t("me.pushGranted") : t("me.pushBody")}
+            {status === "needs-install" ? t("mine.pushInstall") : status === "denied" ? t("mine.pushDenied") : status === "granted" ? t("mine.pushGranted") : t("mine.pushBody")}
           </p>
         </div>
       </div>
       {status === "default" ? (
         <Button variant="secondary" size="md" loading={busy} onClick={() => void enable()} className="self-start">
-          {t("me.pushEnable")}
+          {t("mine.pushEnable")}
         </Button>
       ) : status === "granted" ? (
         <p className="flex items-center gap-1.5 text-small font-semibold text-ok-fg">
           <CheckCircle weight="fill" className="size-4" aria-hidden />
-          {t("me.pushActive")}
+          {t("mine.pushActive")}
         </p>
       ) : null}
     </div>

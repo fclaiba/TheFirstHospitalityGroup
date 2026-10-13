@@ -1,30 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BookOpenText, ChatsCircle, CheckCircle, Clock, NotePencil, SealWarning, Storefront } from "@phosphor-icons/react";
+import {
+  ArrowRight,
+  ArrowSquareOut,
+  CalendarStar,
+  CheckCircle,
+  Clock,
+  Megaphone,
+  NotePencil,
+  Prohibit,
+} from "@phosphor-icons/react";
 import { api } from "@/convex/_generated/api";
 import { useNow, useQuery } from "@/lib/backend/hooks";
 import { useLocale } from "@/lib/i18n-client";
 import { pickLocalized } from "@/lib/domain/i18n";
-import { dateKeyLabel, dateLong, time } from "@/lib/format";
+import { areaOf } from "@/lib/domain/positions";
+import { clock, dateKeyLabel, dateLong, time } from "@/lib/format";
 import { nyWallParts } from "@/lib/time";
-import { useMe, useVenue } from "@/hooks/use-app";
+import { canDo, useMe, useVenue } from "@/hooks/use-app";
 import { useOnline } from "@/hooks/use-online";
 import { ButtonLink } from "@/components/ui/button";
-import { Card, Section } from "@/components/ui/layout";
-import { ProgressRing, StatusChip } from "@/components/ui/status";
-import { EmptyState, LockedState, OfflineNote, ScreenSkeleton } from "@/components/ui/states";
-import type { Tone } from "@/components/ui/status";
-import type { NoteKind } from "@/lib/domain/types";
-
-export const NOTE_TONE: Record<NoteKind, Tone> = { allergy: "review", vip: "brand", occasion: "info", preference: "neutral", other: "neutral" };
+import { Card, List, LinkRow, Section } from "@/components/ui/layout";
+import { PositionBadge, ProgressBar, StatusChip } from "@/components/ui/status";
+import {
+  EmptyState,
+  LockedState,
+  OfflineNote,
+  ScreenSkeleton,
+} from "@/components/ui/states";
+import { ConfirmCard } from "@/components/app/confirm";
+import type { Position } from "@/lib/domain/types";
 
 function greetingKey(now: number) {
   const h = nyWallParts(now).hour;
-  return h < 12 ? "today.greetingMorning" : h < 18 ? "today.greetingAfternoon" : "today.greetingEvening";
+  return h < 12
+    ? "today.greetingMorning"
+    : h < 18
+      ? "today.greetingAfternoon"
+      : "today.greetingEvening";
 }
 
-/** The staff home (BLUEPRINT 2.2): the next thing to do first, then what the shift needs me to know. */
+/**
+ * Today, for every position (BLUEPRINT 2.6, 3.7): what waits for my confirmation first (ADR 0022), then my shift,
+ * pre-shift notes, 86s, my next side work as words and a bar (never a score, ADR 0027), the event and announcements.
+ */
 export function TodayScreen() {
   const { t, locale } = useLocale();
   const me = useMe();
@@ -36,11 +56,13 @@ export function TodayScreen() {
   if (!me || !venueId || data === undefined) return <ScreenSkeleton rows={3} />;
 
   const firstName = me.name.split(" ")[0] ?? me.name;
-  const total = data.runs.reduce((n, r) => n + r.total, 0);
-  const done = data.runs.reduce((n, r) => n + r.done, 0);
-  const pct = total ? Math.round((done / total) * 100) : 0;
-  const nextRun = data.runs.find((r) => r.next);
+  const c = data.confirm;
+  const nextRun = data.sideWork.find((r) => r.next);
+  const done = data.sideWork.reduce((n, r) => n + r.done, 0);
+  const total = data.sideWork.reduce((n, r) => n + r.total, 0);
   const service = data.shift ? t(`services.${data.shift.service}`) : "";
+  const position = data.me.position as Position;
+  const reception = areaOf(position) === "reception";
 
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -48,200 +70,393 @@ export function TodayScreen() {
         <p className="text-small font-semibold text-ink-muted">
           {dateLong(locale, now)} · {venueName}
         </p>
-        <h1 className="text-title font-bold text-ink">{t(greetingKey(now), { name: firstName })}</h1>
+        <h1 className="text-title font-bold text-ink">
+          {t(greetingKey(now), { name: firstName })}
+        </h1>
         {!online ? <OfflineNote /> : null}
       </header>
 
-      {data.rulesPending ? (
-        <Card className="rise flex flex-col gap-3 border-attention-bg bg-attention-bg">
-          <div className="flex items-start gap-3">
-            <BookOpenText weight="fill" className="mt-0.5 size-6 shrink-0 text-attention-fg" aria-hidden />
-            <div>
-              <h2 className="text-title-sm font-bold text-ink">{t("today.rulesTitle")}</h2>
-              <p className="text-body text-ink">{t("today.rulesBody")}</p>
-            </div>
+      {data.pendingTotal > 0 ? (
+        <Section title={t("today.confirmTitle")} id="today-confirm">
+          <div className="flex flex-col gap-2">
+            {c.schedule.map((w) => (
+              <ConfirmCard
+                key={w.weekId}
+                kind="schedule"
+                href="/schedule"
+                title={t("today.confirmSchedule", {
+                  week: dateKeyLabel(locale, w.weekStart),
+                })}
+                body={t("today.confirmScheduleBody")}
+              />
+            ))}
+            {c.menu ? (
+              <ConfirmCard
+                kind="menu"
+                href="/menu?pending=1"
+                title={t("today.confirmMenu", { count: c.menu })}
+                body={t("today.confirmMenuBody")}
+              />
+            ) : null}
+            {c.rules ? (
+              <ConfirmCard
+                kind="rules"
+                href="/rules"
+                title={t("today.confirmRules")}
+                body={t("today.confirmRulesBody")}
+              />
+            ) : null}
+            {c.announcements.map((m) => (
+              <ConfirmCard
+                key={m._id}
+                kind="message"
+                href={`/messages/${m._id}`}
+                title={pickLocalized(m.title, locale)}
+                body={t("today.confirmMessageBody")}
+              />
+            ))}
+            {c.warnings ? (
+              <ConfirmCard
+                kind="warning"
+                href="/me#record"
+                title={t("today.confirmWarning")}
+                body={t("today.confirmWarningBody")}
+              />
+            ) : null}
+            {c.tipPolicy ? (
+              <ConfirmCard
+                kind="tips"
+                href="/rules#tips"
+                title={t("today.confirmTips")}
+                body={t("today.confirmTipsBody")}
+              />
+            ) : null}
           </div>
-          <ButtonLink href="/rules" variant="ink" size="md" className="self-start" icon={<ArrowRight weight="bold" className="size-5" />}>
-            {t("today.rulesCta")}
-          </ButtonLink>
-        </Card>
+        </Section>
       ) : null}
 
-      {data.shift ? (
+      {data.myShift ? (
         <Card lift className="rise flex flex-col gap-4">
-          <div className="flex items-center justify-between gap-3">
-            <StatusChip tone={data.shift.status === "closing" ? "attention" : "ok"} icon={<Clock weight="bold" aria-hidden />}>
-              {t(data.shift.status === "closing" ? "today.shiftClosing" : "today.shiftLive", { service })}
-            </StatusChip>
-            <span className="text-small text-ink-muted tabular">
-              {time(locale, data.shift.startsAt)} - {time(locale, data.shift.endsAt)}
-            </span>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            {data.shift ? (
+              <StatusChip
+                tone={data.shift.status === "closing" ? "attention" : "ok"}
+                icon={<Clock weight="bold" aria-hidden />}
+              >
+                {t(
+                  data.shift.status === "closing"
+                    ? "today.shiftClosing"
+                    : "today.shiftLive",
+                  { service },
+                )}
+              </StatusChip>
+            ) : (
+              <StatusChip
+                tone="neutral"
+                icon={<Clock weight="bold" aria-hidden />}
+              >
+                {t("today.shiftNotOpen")}
+              </StatusChip>
+            )}
+            {data.myShift.double ? (
+              <StatusChip tone="info">{t("today.double")}</StatusChip>
+            ) : null}
           </div>
-          {data.runs.length === 0 ? (
-            <div className="flex flex-col gap-1">
-              <h2 className="text-title-sm font-bold text-ink">{t("today.noRuns")}</h2>
-              <p className="text-body text-ink-muted">{t("today.noRunsBody")}</p>
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center gap-4">
-                <ProgressRing value={pct} size={72} label={t("today.progressLabel", { done, total })}>
-                  {pct}%
-                </ProgressRing>
-                <div className="flex min-w-0 flex-col gap-1">
-                  {nextRun?.next ? (
-                    <>
-                      <p className="text-small font-semibold text-ink-muted">{pickLocalized(nextRun.title, locale)}</p>
-                      <h2 className="text-title-sm font-bold text-ink">{t("today.nextTask", { task: pickLocalized(nextRun.next, locale) })}</h2>
-                    </>
-                  ) : (
-                    <>
-                      <h2 className="flex items-center gap-2 text-title-sm font-bold text-ok-fg">
-                        <CheckCircle weight="fill" className="size-6" aria-hidden />
-                        {t("today.allDone")}
-                      </h2>
-                      <p className="text-body text-ink-muted">{t("today.allDoneBody")}</p>
-                    </>
-                  )}
-                  <p className="text-small text-ink-muted tabular">{t("today.progressLabel", { done, total })}</p>
-                </div>
-              </div>
-              <ButtonLink href="/tasks" variant={nextRun?.next ? "primary" : "secondary"} block icon={<ArrowRight weight="bold" className="size-5" />}>
+          <ul className="flex flex-col gap-2">
+            {data.myShift.blocks.map((b) => (
+              <li
+                key={b._id}
+                className="flex flex-wrap items-center justify-between gap-2"
+              >
+                <span className="font-mono text-title-sm font-semibold text-ink tabular">
+                  {clock(b.start)} -{" "}
+                  {b.untilClose || !b.end
+                    ? t("today.untilClose")
+                    : clock(b.end)}
+                </span>
+                <PositionBadge position={b.position as Position} />
+              </li>
+            ))}
+          </ul>
+          {data.myShift.section ? (
+            <p className="text-body text-ink">
+              {t("today.section", {
+                names: data.myShift.section.names.join(", "),
+              })}
+              {data.myShift.section.lead ? (
+                <span className="text-ink-muted">
+                  {" "}
+                  · {t("today.lead", { name: data.myShift.section.lead })}
+                </span>
+              ) : null}
+            </p>
+          ) : null}
+
+          {data.sideWork.length ? (
+            <div className="flex flex-col gap-2 border-t border-line pt-4">
+              {nextRun?.next ? (
+                <>
+                  <p className="text-small font-semibold text-ink-muted">
+                    {pickLocalized(nextRun.title, locale)}
+                  </p>
+                  <h2 className="text-title-sm font-bold text-ink">
+                    {t("today.nextTask", {
+                      task: pickLocalized(nextRun.next, locale),
+                    })}
+                  </h2>
+                </>
+              ) : (
+                <h2 className="flex items-center gap-2 text-title-sm font-bold text-ok-fg">
+                  <CheckCircle weight="fill" className="size-6" aria-hidden />
+                  {t("today.allDone")}
+                </h2>
+              )}
+              <ProgressBar
+                value={total ? (done / total) * 100 : 0}
+                label={t("today.progressLabel")}
+                tone={nextRun ? "brand" : "ok"}
+              />
+              <ButtonLink
+                href="/tasks"
+                variant={nextRun?.next ? "primary" : "secondary"}
+                block
+                icon={<ArrowRight weight="bold" className="size-5" />}
+              >
                 {nextRun?.next ? t("today.openTasks") : t("today.seeTasks")}
               </ButtonLink>
-            </>
-          )}
+            </div>
+          ) : data.shift ? (
+            <p className="border-t border-line pt-4 text-body text-ink-muted">
+              {t("today.noRuns")}
+            </p>
+          ) : null}
         </Card>
       ) : (
         <LockedState
           title={t("today.noShiftTitle")}
           body={
             data.next && data.next.startsAt
-              ? t("today.nextService", { service: t(`services.${data.next.service}`), date: dateKeyLabel(locale, data.next.date), time: time(locale, data.next.startsAt) })
+              ? t("today.nextService", {
+                  service: t(`services.${data.next.service}`),
+                  date: dateKeyLabel(locale, data.next.date),
+                  time: time(locale, data.next.startsAt),
+                })
               : t("today.noShiftBody")
+          }
+          action={
+            <ButtonLink href="/schedule" variant="secondary" size="md">
+              {t("today.seeSchedule")}
+            </ButtonLink>
           }
         />
       )}
 
-      {data.pendingWarnings > 0 ? (
-        <Link href="/me#record" className="pressable flex items-center gap-3 rounded-card bg-info-bg p-4">
-          <SealWarning weight="fill" className="size-7 shrink-0 text-info-fg" aria-hidden />
-          <span className="flex min-w-0 flex-1 flex-col">
-            <span className="text-body font-bold text-ink">{data.pendingWarnings > 1 ? t("today.warningsTitle", { n: data.pendingWarnings }) : t("today.warningTitle")}</span>
-            <span className="text-small text-ink-muted">{t("today.warningBody")}</span>
-          </span>
-          <span className="text-body font-semibold text-info-fg">{t("today.warningCta")}</span>
-        </Link>
-      ) : null}
-
-      {data.section ? (
-        <Section title={t("today.sectionTitle")} action={<Link href="/floor" className="inline-flex min-h-target items-center text-small font-semibold text-brand">{t("today.seeFloor")}</Link>}>
-          <Card className="flex flex-col gap-4">
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="flex items-center gap-2 text-title-sm font-bold text-ink">
-                <Storefront weight="bold" className="size-6 text-ink-muted" aria-hidden />
-                {t("today.sectionName", { name: data.section.name })}
-              </h3>
-              {data.section.lead ? <StatusChip tone="brand">{t("today.sectionLead")}</StatusChip> : null}
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-small font-semibold text-ink-muted">{t("today.tables")}</p>
-              <ul className="flex flex-wrap gap-2" aria-label={t("today.tables")}>
-                {data.section.tables.map((tb) => {
-                  const noted = data.section!.notes.some((n) => n.table === tb);
-                  return (
-                    <li key={tb} className={`flex size-11 items-center justify-center rounded-control border font-mono text-body font-semibold ${noted ? "border-ink bg-brand-soft text-ink" : "border-line text-ink"}`}>
-                      {tb}
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            {data.section.notes.length ? (
-              <ul className="flex flex-col gap-2">
-                {data.section.notes.map((n) => (
-                  <li key={n._id} className="flex items-start gap-3 rounded-control bg-surface p-3">
-                    <span className="flex size-10 shrink-0 items-center justify-center rounded-control bg-canvas font-mono text-body font-semibold text-ink">{n.table}</span>
-                    <div className="flex min-w-0 flex-col gap-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <StatusChip tone={NOTE_TONE[n.kind]} size="sm">
-                          {t(`today.noteKinds.${n.kind}`)}
-                        </StatusChip>
-                        {n.kind === "allergy" ? (
-                          <StatusChip tone={n.kitchenConfirmed ? "ok" : "attention"} size="sm">
-                            {n.kitchenConfirmed ? t("today.kitchenConfirmed") : t("today.kitchenPending")}
-                          </StatusChip>
-                        ) : null}
-                      </div>
-                      <p className="text-body text-ink">{n.text}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-small text-ink-muted">{t("today.noNotes")}</p>
-            )}
-            {data.openRequests ? <p className="text-small font-semibold text-info-fg">{t("today.openRequests", { n: data.openRequests })}</p> : null}
-          </Card>
+      {data.leader ? (
+        <Section title={t("today.leaderTitle")}>
+          <List>
+            {canDo(me, "floor.map") ? (
+              <LinkRow
+                href="/lead/floor"
+                title={t("today.requestsOpen")}
+                trailing={
+                  <StatusChip
+                    tone={data.leader.requestsOpen ? "attention" : "ok"}
+                    size="sm"
+                  >
+                    {data.leader.requestsOpen
+                      ? t("today.waiting", { count: data.leader.requestsOpen })
+                      : t("today.clear")}
+                  </StatusChip>
+                }
+              />
+            ) : null}
+            {canDo(me, "warnings.issue") ? (
+              <LinkRow
+                href="/manage/warnings"
+                title={t("today.proposalsWaiting")}
+                trailing={
+                  <StatusChip
+                    tone={data.leader.proposalsWaiting ? "attention" : "ok"}
+                    size="sm"
+                  >
+                    {data.leader.proposalsWaiting
+                      ? t("today.waiting", {
+                          count: data.leader.proposalsWaiting,
+                        })
+                      : t("today.clear")}
+                  </StatusChip>
+                }
+              />
+            ) : null}
+            {canDo(me, "bar.resolve") ? (
+              <LinkRow
+                href={canDo(me, "shift.control") ? "/manage/bar" : "/lead/bar"}
+                title={t("today.shortagesOpen")}
+                trailing={
+                  <StatusChip
+                    tone={data.leader.shortagesOpen ? "attention" : "ok"}
+                    size="sm"
+                  >
+                    {data.leader.shortagesOpen
+                      ? t("today.waiting", { count: data.leader.shortagesOpen })
+                      : t("today.clear")}
+                  </StatusChip>
+                }
+              />
+            ) : null}
+          </List>
         </Section>
       ) : null}
 
-      {data.notes.shift || data.notes.fromLastClose ? (
-        <Section title={t("today.notesTitle")}>
+      {data.preshift.length || data.fromLastClose || data.shift?.notes ? (
+        <Section title={t("today.preshiftTitle")}>
           <Card className="flex flex-col gap-4">
-            {data.notes.shift ? (
-              <div className="flex gap-3">
-                <NotePencil weight="bold" className="mt-0.5 size-5 shrink-0 text-ink-muted" aria-hidden />
-                <div>
-                  <p className="text-small font-semibold text-ink-muted">{t("today.fromManager")}</p>
-                  <p className="text-body text-ink">{data.notes.shift}</p>
-                </div>
-              </div>
+            {data.shift?.notes ? (
+              <NoteLine
+                label={t("today.fromManager")}
+                text={data.shift.notes}
+              />
             ) : null}
-            {data.notes.fromLastClose ? (
-              <div className="flex gap-3">
-                <NotePencil weight="bold" className="mt-0.5 size-5 shrink-0 text-ink-muted" aria-hidden />
-                <div>
-                  <p className="text-small font-semibold text-ink-muted">{t("today.fromLastClose")}</p>
-                  <p className="text-body text-ink">{data.notes.fromLastClose}</p>
-                </div>
-              </div>
+            {data.preshift.map((n) => (
+              <NoteLine
+                key={n._id}
+                label={n.byName}
+                text={pickLocalized(n.text, locale)}
+              />
+            ))}
+            {data.fromLastClose ? (
+              <NoteLine
+                label={t("today.fromLastClose")}
+                text={data.fromLastClose}
+              />
             ) : null}
           </Card>
         </Section>
+      ) : null}
+
+      {data.eightySix.length ? (
+        <Section title={t("today.eightySixTitle")}>
+          <List>
+            {data.eightySix.map((e) => (
+              <li
+                key={e.itemId}
+                className="flex min-h-target items-center gap-3 px-4 py-2.5"
+              >
+                <Prohibit
+                  weight="bold"
+                  className="size-5 shrink-0 text-review-fg"
+                  aria-hidden
+                />
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="text-body font-semibold text-ink">
+                    {pickLocalized(e.name, locale)}
+                  </span>
+                  {e.note ? (
+                    <span className="text-small text-ink-muted">{e.note}</span>
+                  ) : null}
+                </span>
+                <StatusChip tone="review" size="sm" icon={false}>
+                  {t("today.eightySixChip")}
+                </StatusChip>
+              </li>
+            ))}
+          </List>
+        </Section>
+      ) : null}
+
+      {data.events.length ? (
+        <Section title={t("today.eventsTitle")}>
+          <div className="flex flex-col gap-2">
+            {data.events.map((e) => (
+              <Card key={e._id} className="flex items-start gap-3">
+                <CalendarStar
+                  weight="bold"
+                  className="mt-0.5 size-6 shrink-0 text-brand"
+                  aria-hidden
+                />
+                <div className="flex min-w-0 flex-1 flex-col gap-1">
+                  <p className="text-body font-semibold text-ink">
+                    {pickLocalized(e.name, locale)}
+                  </p>
+                  <p className="font-mono text-small text-ink-muted tabular">
+                    {clock(e.start)} - {clock(e.end)}
+                  </p>
+                </div>
+                {e.mine ? (
+                  <StatusChip tone="brand" size="sm">
+                    {t("today.youWorkIt")}
+                  </StatusChip>
+                ) : null}
+              </Card>
+            ))}
+          </div>
+        </Section>
+      ) : null}
+
+      {reception && data.venue.reservationsUrl ? (
+        <a
+          href={data.venue.reservationsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pressable hover-surface flex min-h-target-lg items-center gap-3 rounded-card border border-line px-4 text-body font-semibold text-ink transition-colors"
+        >
+          <ArrowSquareOut
+            weight="bold"
+            className="size-5 text-ink-muted"
+            aria-hidden
+          />
+          {t("today.reservations")}
+        </a>
       ) : null}
 
       <Section
         title={t("today.messagesTitle")}
         action={
-          <Link href="/messages" className="inline-flex min-h-target items-center text-small font-semibold text-brand">
+          <Link
+            href="/messages"
+            className="inline-flex min-h-target items-center text-small font-semibold text-brand"
+          >
             {t("today.allMessages")}
           </Link>
         }
       >
-        {data.unread.count ? (
-          <ul className="overflow-hidden rounded-card border border-line bg-surface-raised [&>li+li]:border-t [&>li+li]:border-line">
-            {data.unread.latest.map((m) => (
-              <li key={m._id}>
-                <Link href={`/messages/${m._id}`} className="pressable-row hover-surface flex min-h-target-lg items-center gap-3 px-4 py-2.5">
-                  <ChatsCircle weight="fill" className="size-6 shrink-0 text-info-fg" aria-hidden />
-                  <span className="min-w-0 flex-1 truncate text-body font-semibold text-ink">{pickLocalized(m.title, locale)}</span>
-                  {m.requiresConfirmation ? (
-                    <StatusChip tone="info" size="sm" icon={false}>
-                      {t("today.needsConfirm")}
-                    </StatusChip>
-                  ) : null}
-                </Link>
-              </li>
+        {data.unread.length ? (
+          <List>
+            {data.unread.map((m) => (
+              <LinkRow
+                key={m._id}
+                href={`/messages/${m._id}`}
+                leading={
+                  <Megaphone weight="fill" className="size-5 text-info-fg" />
+                }
+                title={pickLocalized(m.title, locale)}
+              />
             ))}
-            {data.unread.count > data.unread.latest.length ? (
-              <li className="px-4 py-3 text-small font-semibold text-ink-muted">{t("today.unreadCount", { n: data.unread.count })}</li>
-            ) : null}
-          </ul>
+          </List>
         ) : (
-          <EmptyState icon={<CheckCircle weight="bold" />} title={t("today.noUnread")} className="py-6" />
+          <EmptyState
+            icon={<CheckCircle weight="bold" />}
+            title={t("today.noUnread")}
+            className="py-6"
+          />
         )}
       </Section>
+    </div>
+  );
+}
+
+function NoteLine({ label, text }: { label: string; text: string }) {
+  return (
+    <div className="flex gap-3">
+      <NotePencil
+        weight="bold"
+        className="mt-0.5 size-5 shrink-0 text-ink-muted"
+        aria-hidden
+      />
+      <div className="min-w-0">
+        <p className="text-small font-semibold text-ink-muted">{label}</p>
+        <p className="text-body text-ink">{text}</p>
+      </div>
     </div>
   );
 }

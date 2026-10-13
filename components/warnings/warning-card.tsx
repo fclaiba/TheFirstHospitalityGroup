@@ -19,11 +19,13 @@ import type { Localized, WarningState } from "@/lib/domain/types";
 export type WarningItem = {
   _id: string;
   personName: string;
+  personPosition?: string | null;
   rule: { title: Localized; body: Localized; howTo: Localized; key: string } | null;
   severity: "minor" | "major";
   note: string | null;
   photoId: string | null;
-  loggedByName: string;
+  issuedByName: string;
+  proposedByName?: string | null;
   at: number;
   acknowledgedAt: number | null;
   response: string | null;
@@ -44,8 +46,9 @@ export function SeverityChip({ severity }: { severity: "minor" | "major" }) {
 }
 
 /**
- * One warning, as the person reads it (BLUEPRINT 2.2): the rule, what happened, how to do it right, then "I read it"
- * with an optional response. Calm language; never a red wall.
+ * One warning, as the person reads it (BLUEPRINT 2.6): the rule, what happened, how to do it right, then "I saw it"
+ * with an optional response that goes to the issuer, never to colleagues (ADR 0026). Calm language; never a red wall.
+ * Leaders see who issued it and, when a lead proposed it, who proposed it.
  */
 export function WarningCard({ w, mine, footer }: { w: WarningItem; mine?: boolean; footer?: React.ReactNode }) {
   const { t, locale } = useLocale();
@@ -61,8 +64,9 @@ export function WarningCard({ w, mine, footer }: { w: WarningItem; mine?: boolea
           {!mine ? <p className="text-small font-semibold text-ink-muted">{w.personName}</p> : null}
           <h3 className="text-body font-bold text-ink">{w.rule ? pickLocalized(w.rule.title, locale) : t("warnings.ruleRemoved")}</h3>
           <p className="text-small text-ink-muted">
-            {dateShort(locale, w.at)}, {t("common.by", { name: w.loggedByName })}
+            {dateShort(locale, w.at)}, {t("common.by", { name: w.issuedByName })}
           </p>
+          {w.proposedByName && !mine ? <p className="text-small text-ink-muted">{t("warnings.proposedBy", { name: w.proposedByName })}</p> : null}
         </div>
         <div className="flex flex-wrap gap-1.5">
           <SeverityChip severity={w.severity} />

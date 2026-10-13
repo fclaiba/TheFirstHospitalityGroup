@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
-import { CheckCircle, Translate, UsersThree } from "@phosphor-icons/react";
+import { Translate, UsersThree } from "@phosphor-icons/react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "@/lib/backend/hooks";
@@ -13,9 +13,10 @@ import { Button } from "@/components/ui/button";
 import { ScreenSkeleton } from "@/components/ui/states";
 import { StoredPhoto } from "@/components/ui/photo-field";
 import { ReceiptsSheet } from "@/components/messages/receipts-sheet";
+import { AckBanner } from "@/components/app/confirm";
 import type { Locale } from "@/lib/domain/types";
 
-/** A message in my language, the other one tap away; "I read it" when confirmation is required (BLUEPRINT 2.2). */
+/** An announcement in my language, the other one tap away; "I saw it" when confirmation is required. One way: no replies (ADR 0026). */
 export default function MessageDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { t, locale } = useLocale();
@@ -52,19 +53,13 @@ export default function MessageDetail({ params }: { params: Promise<{ id: string
         </button>
       ) : null}
       {m.isRecipient && m.requiresConfirmation ? (
-        m.confirmedAt ? (
-          <p role="status" className="flex items-center gap-2 rounded-card bg-ok-bg p-4 text-body font-semibold text-ok-fg">
-            <CheckCircle weight="fill" className="size-6" aria-hidden />
-            {t("messages.youConfirmed", { time: time(locale, m.confirmedAt) })}
-          </p>
-        ) : (
-          <div className="flex flex-col gap-2 rounded-card border border-ink p-4">
-            <p className="text-body text-ink">{t("messages.confirmAsk")}</p>
-            <Button block loading={confirm.busy} onClick={() => void confirm.run({ messageId })}>
-              {t("messages.iReadIt")}
-            </Button>
-          </div>
-        )
+        <AckBanner
+          label={t("messages.iReadIt")}
+          confirmedLabel={m.confirmedAt ? t("messages.youConfirmed", { time: time(locale, m.confirmedAt) }) : t("confirm.confirmed")}
+          confirmed={!!m.confirmedAt}
+          loading={confirm.busy}
+          onConfirm={() => void confirm.run({ messageId })}
+        />
       ) : null}
       {m.canSeeReceipts ? (
         <Button variant="secondary" icon={<UsersThree weight="bold" className="size-5" />} onClick={() => setReceipts(true)} className="self-start">

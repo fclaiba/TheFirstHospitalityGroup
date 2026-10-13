@@ -1,12 +1,11 @@
 {
   "tasks": {
-    "title": "My checklist",
-    "progress": "{done} of {total} done",
+    "title": "My side work",
     "due": "Due at {time}",
     "phaseOpen": "Opening",
     "phaseMid": "Service",
     "phaseClose": "Closing",
-    "phases": "Checklist phase",
+    "phases": "Side work phase",
     "photo": "Photo needed",
     "photoDone": "Photo added",
     "critical": "Important",
@@ -16,13 +15,13 @@
     "photoSheetBody": "Take a photo of the finished task, then mark it done.",
     "markDone": "Mark as done",
     "completeTitle": "All done",
-    "completeBody": "Your {phase} checklist is complete. Thank you.",
+    "completeBody": "Your {phase} side work is complete. Thank you.",
     "lockedTitle": "The shift is not open yet",
-    "lockedBody": "Your checklist appears when the manager opens the shift.",
+    "lockedBody": "Your side work appears when the manager opens the shift.",
     "rulesTitle": "Confirm the new rules first",
     "rulesBody": "The house rules changed. Read them, confirm, and come back.",
     "rulesCta": "Read the rules",
-    "emptyTitle": "No checklist for you this shift",
+    "emptyTitle": "No side work for you this shift",
     "emptyBody": "Ask your manager if you expected one.",
     "excused": "Excused by the manager",
     "setup": {
@@ -81,6 +80,9 @@
       "cta": "Print",
       "open": "Print checklists",
       "signature": "Done by, time:"
-    }
+    },
+    "progressLabel": "Side work progress",
+    "stateDone": "Done",
+    "stateInProgress": "In progress"
   }
 }

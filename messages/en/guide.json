@@ -2,61 +2,208 @@
   "guide": {
     "title": "Guide",
     "subtitle": "How each screen works, in a few lines.",
-    "forYou": "For your role",
+    "forYou": "For your position",
     "everything": "All screens",
     "showAll": "Show every screen",
     "showMine": "Show only my screens",
-    "levelsTitle": "Training by level",
-    "levelsBody": "Your level decides what you can do. Your manager moves you up when you are ready.",
-    "yourLevel": "Your level",
     "help": "Help",
     "helpFor": "Help for this screen",
-    "stillStuck": "Still stuck? Send a Help request during the shift, or ask your captain or manager.",
+    "stillStuck": "Still stuck? Send a Help request during the shift, or ask your lead or manager.",
     "contents": "Contents",
     "section": {
-      "today": { "title": "Today", "body": "Your home for the shift. The big button is the next thing to do. You also see your checklist progress, new messages, any note waiting for you and the manager's notes for tonight." },
-      "tasks": { "title": "Tasks", "body": "Your opening and closing checklists. Tap a row to tick it. A camera badge means it needs a photo first: take it of the work, never of guests. Tasks open when the manager opens the shift." },
-      "menu": { "title": "Menu", "body": "Every dish and drink with photo, ingredients and allergens. Search by any word. Not available today means the kitchen ran out. Tap View in Spanish or English to read it in the other language." },
-      "floor": { "title": "Floor", "body": "Your section and its tables for tonight, with the notes on each table. Requests for your section show up here first." },
-      "requests": { "title": "Requests", "body": "The round button asks for water, a table clear, help, a void or a comp in two taps: what, then which table. When someone taps I am on it, you see it. If nobody takes it in 90 seconds, it goes to the whole team." },
-      "notes": { "title": "Table notes", "body": "Add a short note to a table: allergy, VIP, occasion or preference. Never write phone numbers or emails. Allergy notes go to the kitchen, and you see when they confirm." },
-      "kitchen": { "title": "Allergy board", "body": "Kitchen: every allergy note of tonight, by table. Read it and tap Confirm before the course fires." },
-      "inventory": { "title": "Bar count", "body": "Count each bottle at open and at close, in tenths: 0.7 is seven tenths of a bottle. Tap plus and minus or type the number. The screen stays on while you count." },
-      "messages": { "title": "Messages", "body": "News from your manager or the owner. When a message asks for it, tap I read it so they know it reached you." },
-      "rules": { "title": "House rules", "body": "The rules for your role. When they change, read and confirm them before your next checklist starts." },
-      "warnings": { "title": "Notes from your manager", "body": "A note always points to one house rule and says how to do it right. Confirm you read it and, if you want, add your side. Notes stop counting after 30 days." },
-      "schedule": { "title": "Schedule", "body": "Your next shifts and the venue's events, like private dinners and tastings, with notes for your role." },
-      "me": { "title": "Me", "body": "Language, Large text, theme, notifications and your password. Your record of notes is here too. Sign out everywhere if you lost a phone." },
-      "manage": { "title": "Shift control", "body": "Managers: open the shift, watch each person's progress live, excuse a checklist with a reason, and start the close." },
-      "close": { "title": "Close report", "body": "Managers: type covers, net sales, comps and voids from the POS end-of-day report, add incidents and notes, and submit. The summary flags bar shortages and comp differences." },
-      "team": { "title": "Team", "body": "Managers: each person's notes, state, on-time rate and messages read, plus the longest run without a note." },
-      "owner": { "title": "Venues", "body": "Owners: the four venues on one screen, tonight's status, the last close, shortages and who needs a review." },
-      "pay": { "title": "Pay", "body": "Captains and managers propose a bonus or award; the person above switches it on. You see your own rate and approved bonuses. Pay is never reduced for a note or a mistake." }
+      "today": {
+        "title": "Today",
+        "body": "Your home for the shift. What waits for your confirmation comes first: your schedule, menu changes, new rules or a note from your manager. Then your shift, your section, pre-shift notes, the 86s and your next side work."
+      },
+      "schedule": {
+        "title": "Schedule",
+        "body": "Your week, with doubles as two blocks and the events you work. When the schedule is published or changes, open it and tap I saw it. Ask for time off, set your availability, ask your manager for a swap naming a colleague, or claim an open shift."
+      },
+      "tasks": {
+        "title": "Side work",
+        "body": "Your opening, service and closing side work. Tap a row to tick it. A camera badge means it needs a photo first: of the work, never of guests. Side work opens when the manager opens the shift."
+      },
+      "menu": {
+        "title": "Menu",
+        "body": "Every dish, drink and wine with photo, ingredients, allergens and pairing. No prices. 86 means sold out for this service. New or changed items ask you to tap I saw it before your shift."
+      },
+      "section": {
+        "title": "My section",
+        "body": "Your section on the floor plan for tonight, its tables and seats, the table notes and the requests for you."
+      },
+      "requests": {
+        "title": "Requests",
+        "body": "The round button asks for water, a table clear or help in two taps: what, then which table. It goes to the role that handles it, never to a friend. If nobody takes it in 90 seconds, it widens to the whole team and the manager."
+      },
+      "notes": {
+        "title": "Table notes",
+        "body": "Add a short note to a table: allergy with the seat, VIP, occasion or preference. Never write phone numbers or emails. Allergy notes go to the expo, and you see when they confirm."
+      },
+      "bar": {
+        "title": "Bar shortages",
+        "body": "Bartender and barback own every bottle running out. Mark an item Low or Out as soon as you see it; the head bartender or manager marks it Restocked or Ordered."
+      },
+      "pass": {
+        "title": "Pass",
+        "body": "The expo's view: allergy notes to confirm with table and seat, the 86s and the floor plan with seats. No ticket, no plate."
+      },
+      "preshift": {
+        "title": "Pre-shift",
+        "body": "Leads and managers write the notes said at pre-shift and mark 86s. They reach everyone working and expire at close."
+      },
+      "floor": {
+        "title": "Floor map",
+        "body": "Leads: assign today's sections and see who is where, the table notes and the open requests on the live map."
+      },
+      "messages": {
+        "title": "Announcements",
+        "body": "News from your managers, one way. When an announcement asks for it, tap I saw it so they know it reached you. There are no replies or chats."
+      },
+      "rules": {
+        "title": "House rules",
+        "body": "The rules of the company, your venue and your position. When they change, read them and tap I saw it before your next shift."
+      },
+      "warnings": {
+        "title": "Notes from your manager",
+        "body": "A note always points to one house rule and says how to do it right. Confirm you saw it and, if you want, add your side: it goes to the manager, never to colleagues. Notes stop counting after 30 days."
+      },
+      "propose": {
+        "title": "Propose a warning",
+        "body": "Area leads propose a warning for their own team: the person, the rule, minor or major, what happened. The manager on duty issues it or discards it; after 24 hours it goes to the general manager."
+      },
+      "me": {
+        "title": "Me",
+        "body": "Your notes and state, your position and career ladder, language, Large text, theme and notifications, password and sign out."
+      },
+      "manage": {
+        "title": "Shift control",
+        "body": "Open the shift, watch side work by person and area, assign sections, start closing. Everything is recorded."
+      },
+      "manageSchedule": {
+        "title": "Building the schedule",
+        "body": "Build the week by area, staff the events, publish. Everyone scheduled is notified and confirms; a change after publishing notifies only the people affected. Decide swaps, open shifts and time off."
+      },
+      "issue": {
+        "title": "Issuing warnings",
+        "body": "Managers issue the proposals of the leads or issue directly. Always tied to a rule; the content never appears in notifications. Void within 24 hours with a reason."
+      },
+      "close": {
+        "title": "The close",
+        "body": "Incidents, attendance, side work still open, open shortages, 86s, cleaning and notes for the next shift. No money. Submitting locks the shift."
+      },
+      "team": {
+        "title": "Team",
+        "body": "Your people by area, with their state in words and their positions. Promotions are proposed here."
+      },
+      "venue": {
+        "title": "Venue state",
+        "body": "On track, Needs attention or Action required, with the reasons in words and the names behind them."
+      },
+      "company": {
+        "title": "Company",
+        "body": "The four venues, each with one overall state and its reasons, the organization chart and the company setup."
+      }
     },
-    "level": {
-      "C": {
-        "title": "Level C, in training",
-        "i1": "Learn the table numbers and your section.",
-        "i2": "Know every allergen on the menu by heart.",
-        "i3": "Finish your checklists on time for two weeks.",
-        "i4": "Ask your captain before any comp.",
-        "i5": "Shadow a level A at line-up."
+    "trainingTitle": "Training by position",
+    "trainingBody": "What to master in your position, and in the next step of your ladder. Your leaders sign it off with you.",
+    "yourPosition": "Your position",
+    "nextPosition": "Next step",
+    "training": {
+      "polisher": {
+        "i1": "Polish glasses by the stem, never by the rim",
+        "i2": "Restock every station before service",
+        "i3": "Fold napkins to the house standard",
+        "i4": "Read your schedule and confirm it"
       },
-      "B": {
-        "title": "Level B, trained",
-        "i1": "Run your section alone on a full book.",
-        "i2": "Request comps and voids with the right reason.",
-        "i3": "Pair wine with every main.",
-        "i4": "Help a level C on their first week.",
-        "i5": "No notes in the last 30 days."
+      "busser": {
+        "i1": "Reset a table in under two minutes",
+        "i2": "Water and bread without being asked",
+        "i3": "Clear between courses from the right side",
+        "i4": "Answer Water and Clear requests"
       },
-      "A": {
-        "title": "Level A, lead",
-        "i1": "Lead a section and its runners and bussers.",
-        "i2": "Run the line-up when the captain is off.",
-        "i3": "Handle a guest complaint end to end.",
-        "i4": "Train new hires on the floor.",
-        "i5": "Keep your section's checklists at 100 percent."
+      "runner": {
+        "i1": "Learn every table number and seat",
+        "i2": "No ticket, no plate",
+        "i3": "Name each dish and its allergens at the table",
+        "i4": "Read the 86s before service"
+      },
+      "server": {
+        "i1": "Pass the menu quiz",
+        "i2": "Note every allergy with the seat",
+        "i3": "Guide the guest through food, drinks and wine",
+        "i4": "Confirm menu changes before your shift"
+      },
+      "captain": {
+        "i1": "Assign sections and run pre-shift",
+        "i2": "Read the live map and answer help",
+        "i3": "Train new staff in your zone",
+        "i4": "Propose warnings through the system, never in chats"
+      },
+      "host": {
+        "i1": "Seat by today's sections",
+        "i2": "Read VIP and occasion notes",
+        "i3": "Keep the book up to date",
+        "i4": "Hand over the book at the end"
+      },
+      "maitre_d": {
+        "i1": "Review sections with the captains",
+        "i2": "Walk the whole room every hour",
+        "i3": "Brief the host on VIPs",
+        "i4": "Write notes for the close"
+      },
+      "expo": {
+        "i1": "Read every ticket before the plate leaves",
+        "i2": "Confirm allergy notes by table and seat",
+        "i3": "Publish 86s as soon as the line calls them",
+        "i4": "Call times to the line clearly"
+      },
+      "barback": {
+        "i1": "Keep ice, glassware and garnish stocked",
+        "i2": "Mark bottles Low before they run out",
+        "i3": "Restock bottles in order",
+        "i4": "Close the bar side work with photos"
+      },
+      "bartender": {
+        "i1": "Know every drink on the menu",
+        "i2": "Check ID before serving alcohol",
+        "i3": "Mark shortages Low or Out",
+        "i4": "Confirm drinks menu changes"
+      },
+      "head_bartender": {
+        "i1": "Resolve shortages: Restocked or Ordered",
+        "i2": "Propose drinks menu changes",
+        "i3": "Lead the bar side work",
+        "i4": "Propose bar warnings through the system"
+      },
+      "sommelier": {
+        "i1": "Know the wine list and its pairings",
+        "i2": "Propose wine list changes",
+        "i3": "Brief servers on pairings at pre-shift",
+        "i4": "Check ID before serving alcohol"
+      },
+      "dishwasher": {
+        "i1": "Run the dish machine safely",
+        "i2": "Keep the floors dry",
+        "i3": "Take out trash and recycling at close",
+        "i4": "Read your schedule and confirm it"
+      },
+      "prep_cook": {
+        "i1": "Finish the prep list of the day",
+        "i2": "Label and date every container",
+        "i3": "Follow the allergen binder",
+        "i4": "Keep your station clean"
+      },
+      "line_cook": {
+        "i1": "Log fridge temperatures at opening",
+        "i2": "Call 86s to the sous chef",
+        "i3": "Read allergy notes before firing",
+        "i4": "Close your station clean"
+      },
+      "sous_chef": {
+        "i1": "Run the line during service",
+        "i2": "Check the prep before service",
+        "i3": "Write kitchen notes for the close",
+        "i4": "Propose kitchen warnings through the system"
       }
     }
   }

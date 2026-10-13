@@ -23,12 +23,12 @@ import type { Phase } from "@/lib/domain/types";
 
 type Run = NonNullable<ReturnType<typeof useRunsData>>["runs"][number];
 function useRunsData(venueId: Id<"venues"> | null) {
-  return useQuery(api.tasks.myRun, venueId ? { venueId } : "skip");
+  return useQuery(api.tasks.myRuns, venueId ? { venueId } : "skip");
 }
 
 const PHASE_KEY: Record<Phase, string> = { open: "tasks.phaseOpen", mid: "tasks.phaseMid", close: "tasks.phaseClose" };
 
-/** My checklist (BLUEPRINT 2.2, 4.2): one tap per task, photo first when evidence is needed, never red for being late. */
+/** My side work (BLUEPRINT 2.6, 4.2): one tap per task, photo first when evidence is needed, never red for being late, progress as a bar and words (ADR 0027). */
 export function ChecklistScreen() {
   const { t, locale } = useLocale();
   const online = useOnline();
@@ -49,7 +49,7 @@ export function ChecklistScreen() {
   const [picked, setPicked] = useState<Phase | null>(null);
   // Default: the latest phase that still has work, else the latest phase.
   const auto = useMemo(() => {
-    const open = [...phases].reverse().find((p) => data?.runs.some((r) => r.phase === p && r.progress.pct < 100));
+    const open = [...phases].reverse().find((p) => data?.runs.some((r) => r.phase === p && r.done < r.total));
     return open ?? phases[phases.length - 1] ?? null;
   }, [phases, data]);
   const phase = picked && phases.includes(picked) ? picked : auto;
@@ -100,7 +100,7 @@ export function ChecklistScreen() {
   const toggle = async (run: Run, index: number, photo?: string) => {
     const item = run.items[index]!;
     const next = !isDone(run, index);
-    if (next && item.photoRequired && !item.photoId && !photo) {
+    if (next && item.photoRequired && !photo) {
       setPhotoId(null);
       setPhotoFor({ run, index });
       return;
@@ -134,11 +134,9 @@ export function ChecklistScreen() {
       <Card lift className="flex flex-col gap-3">
         <div className="flex items-baseline justify-between gap-3">
           <h2 className="text-title-sm font-bold text-ink">{t(PHASE_KEY[phase!])}</h2>
-          <span className="font-mono text-body font-semibold text-ink tabular">
-            {t("tasks.progress", { done: doneCount, total })}
-          </span>
+          <span className="text-body font-semibold text-ink">{allDone ? t("tasks.stateDone") : t("tasks.stateInProgress")}</span>
         </div>
-        <ProgressBar value={total ? (doneCount / total) * 100 : 0} label={t("tasks.progress", { done: doneCount, total })} tone={allDone ? "ok" : "brand"} />
+        <ProgressBar value={total ? (doneCount / total) * 100 : 0} label={t("tasks.progressLabel")} tone={allDone ? "ok" : "brand"} />
       </Card>
 
       {allDone ? (
@@ -170,8 +168,8 @@ export function ChecklistScreen() {
                 done={isDone(run, i)}
                 onToggle={() => void toggle(run, i)}
                 photoRequired={item.photoRequired}
-                hasPhoto={!!item.photoId}
-                photoLabel={item.photoId ? t("tasks.photoDone") : t("tasks.photo")}
+                hasPhoto={item.photoRequired && isDone(run, i)}
+                photoLabel={item.photoRequired && isDone(run, i) ? t("tasks.photoDone") : t("tasks.photo")}
                 critical={item.critical}
                 criticalLabel={t("tasks.critical")}
                 disabled={!online}

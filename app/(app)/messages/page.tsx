@@ -10,7 +10,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { EmptyState, ScreenSkeleton } from "@/components/ui/states";
 import { MessageRow } from "@/components/messages/message-row";
 
-/** Inbox (BLUEPRINT 2.2): unread and to-confirm first; the in-app inbox is the source of truth (ADR 0006). */
+/** Announcements (BLUEPRINT 2.6): one way, down the chain; unread and to-confirm first. No replies or threads (ADR 0026). */
 export default function Inbox() {
   const { t } = useLocale();
   const canSend = useCan("messages.send");
