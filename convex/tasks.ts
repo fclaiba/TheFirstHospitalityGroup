@@ -1,97 +1,82 @@
-// Checklists (BLUEPRINT 2.2, ADR 0015): templates per venue, role and phase with a weekly schedule and per-item
-// minimum level and section; runs per person and shift; live progress for the manager; late only for the manager.
+// Side work (BLUEPRINT 2.6, ADR 0015): templates per venue, positions, optional section and phase, with a weekly
+// schedule and estimated minutes; runs per person and shift; live progress for leads and managers; late only for
+// leaders (never shown to the person, ADR 0027); the side-work indicator for tipped positions (NY limit).
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
-import type { MutationCtx, QueryCtx } from "./_generated/server";
+import type { QueryCtx } from "./_generated/server";
 import type { Doc, Id } from "./_generated/dataModel";
-import { requireRole, requireUser, requireVenue } from "./lib/auth";
-import type { Actor } from "./lib/auth";
+import { requireCan, requireVenue, pickVenue } from "./lib/auth";
 import { appError } from "./lib/errors";
 import { audit } from "./lib/audit";
 import { enqueue } from "./lib/notify";
-import { getShift, liveShiftOf, rosterOf } from "./lib/shift";
+import { getShift, liveShiftOf, venueManagers } from "./lib/shift";
+import { asPlan, attachFile, pendingRuleSets, planOf, sideWorkRows } from "./lib/service";
 import { parseOrThrow } from "./lib/validate";
 import { taskTemplateInput } from "../schemas";
 import { canCheck, isComplete, isLate, runProgress } from "../lib/domain/tasks";
 import { isLive } from "../lib/domain/shift";
-import { needsAck, setFor } from "../lib/domain/rules";
-import type { Role } from "../lib/domain/types";
+import { areaOf } from "../lib/domain/positions";
 
-async function ruleAckPending(ctx: QueryCtx, user: Doc<"users">, venueId: Id<"venues">): Promise<boolean> {
-  const sets = await ctx.db
-    .query("ruleSets")
-    .withIndex("by_role_venue", (q) => q.eq("role", user.role))
-    .collect();
-  const set = setFor(
-    sets.map((s) => ({ ...s, venueId: s.venueId as string | undefined })),
-    user.role,
-    venueId,
-  );
-  if (!set) return false;
-  const acks = await ctx.db
-    .query("ruleAcks")
-    .withIndex("by_user_set", (q) => q.eq("userId", user._id).eq("setId", set._id))
-    .collect();
-  return needsAck(set, acks);
-}
-
-async function withLabels(ctx: QueryCtx, run: Doc<"taskRuns">, now: number) {
+async function withLabels(ctx: QueryCtx, run: Doc<"taskRuns">) {
   const template = await ctx.db.get(run.templateId);
   const items = run.items.map((it, i) => {
     const t = template?.items[run.itemIndexes[i]!];
-    return { ...it, index: i, label: t?.label ?? { en: "", es: "" }, photoRequired: !!t?.photoRequired, critical: !!t?.critical };
+    return { done: it.done, at: it.at ?? null, photoId: it.photoId ?? null, index: i, label: t?.label ?? { en: "", es: "" }, photoRequired: !!t?.photoRequired, critical: !!t?.critical };
   });
+  const p = runProgress(run);
   return {
     _id: run._id,
     shiftId: run.shiftId,
+    position: run.position,
     phase: run.phase,
     title: template?.title ?? { en: "", es: "" },
     dueAt: run.dueAt,
     completedAt: run.completedAt ?? null,
-    excused: run.excused ?? null,
+    excused: run.excused ? { reason: run.excused.reason, at: run.excused.at } : null,
     items,
-    progress: runProgress(run),
-    late: isLate(run, now),
+    done: p.done,
+    total: p.total,
   };
 }
 
-/** My runs in the live shift of a venue (or a given shift). Late is never sent to staff: the UI does not show it. */
-export const myRun = query({
-  args: { venueId: v.id("venues"), shiftId: v.optional(v.id("shifts")) },
+/** My side work in the live shift of a venue (or a given shift). Never says "late" to the person. */
+export const myRuns = query({
+  args: { venueId: v.optional(v.id("venues")), shiftId: v.optional(v.id("shifts")) },
   handler: async (ctx, args) => {
-    const actor = await requireUser(ctx);
-    requireVenue(actor, args.venueId);
-    const shift = args.shiftId ? await getShift(ctx, actor, args.shiftId) : await liveShiftOf(ctx, args.venueId);
+    const actor = await requireCan(ctx, "tasks.own");
+    const shift = args.shiftId ? await getShift(ctx, actor, args.shiftId) : await liveShiftOf(ctx, pickVenue(actor, args.venueId));
     if (!shift) return { shift: null, runs: [], rulesPending: false };
     const runs = await ctx.db
       .query("taskRuns")
       .withIndex("by_user_shift", (q) => q.eq("userId", actor._id).eq("shiftId", shift._id))
       .collect();
-    const now = Date.now();
     const out = [];
-    for (const r of runs.sort((a, b) => a.dueAt - b.dueAt)) {
-      const run = await withLabels(ctx, r, now);
-      out.push({ ...run, late: false });
-    }
-    return { shift: { _id: shift._id, status: shift.status, service: shift.service, date: shift.date }, runs: out, rulesPending: await ruleAckPending(ctx, actor, shift.venueId) };
+    for (const r of runs.sort((a, b) => a.dueAt - b.dueAt)) out.push(await withLabels(ctx, r));
+    return {
+      shift: { _id: shift._id, status: shift.status, service: shift.service, date: shift.date },
+      runs: out,
+      rulesPending: (await pendingRuleSets(ctx, actor, shift.venueId)).length > 0,
+    };
   },
 });
 
 export const check = mutation({
   args: { runId: v.id("taskRuns"), itemIndex: v.number(), done: v.boolean(), photoId: v.optional(v.id("_storage")) },
   handler: async (ctx, args) => {
-    const actor = await requireUser(ctx);
+    const actor = await requireCan(ctx, "tasks.own");
     const run = await ctx.db.get(args.runId);
     if (!run) throw appError("NOT_FOUND");
     requireVenue(actor, run.venueId);
     if (run.userId !== actor._id) throw appError("FORBIDDEN");
     const shift = await ctx.db.get(run.shiftId);
     if (!shift || !isLive(shift.status)) throw appError("SHIFT_NOT_OPEN");
-    if (await ruleAckPending(ctx, actor, run.venueId)) throw appError("RULES_NOT_ACKNOWLEDGED");
+    if ((await pendingRuleSets(ctx, actor, run.venueId)).length) throw appError("RULES_NOT_ACKNOWLEDGED");
     const template = await ctx.db.get(run.templateId);
     const item = template?.items[run.itemIndexes[args.itemIndex] ?? -1];
     const problem = canCheck(run, args.itemIndex, item, args.done, args.photoId);
     if (problem) throw appError(problem);
+    // Ticking an item that is already in that state changes nothing (two taps, two phones).
+    if (run.items[args.itemIndex]!.done === args.done && !args.photoId) return { done: runProgress(run).done, total: run.items.length, complete: isComplete(run) };
     if (args.photoId) await attachFile(ctx, actor, args.photoId, `taskRuns:${run._id}`);
     const now = Date.now();
     const items = run.items.map((it, i) =>
@@ -99,25 +84,16 @@ export const check = mutation({
     );
     const complete = isComplete({ items });
     await ctx.db.patch(run._id, { items, completedAt: complete ? (run.completedAt ?? now) : undefined, late: complete ? (run.completedAt ?? now) > run.dueAt : run.late });
-    if (complete && !run.completedAt) await ctx.db.insert("analyticsEvents", { name: "run_completed", userId: actor._id, venueId: run.venueId, props: { runId: run._id }, at: now });
     await ctx.db.insert("analyticsEvents", { name: "task_checked", userId: actor._id, venueId: run.venueId, at: now });
-    return { progress: runProgress({ items }), complete };
+    const p = runProgress({ items });
+    return { done: p.done, total: p.total, complete };
   },
 });
-
-async function attachFile(ctx: MutationCtx, actor: Actor, storageId: Id<"_storage">, to: string) {
-  const file = await ctx.db
-    .query("files")
-    .withIndex("by_storage", (q) => q.eq("storageId", storageId))
-    .unique();
-  if (!file || file.ownerId !== actor._id) throw appError("NOT_FOUND");
-  await ctx.db.patch(file._id, { attachedTo: to });
-}
 
 export const excuse = mutation({
   args: { runId: v.id("taskRuns"), reason: v.string() },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "tasks.excuse");
     const run = await ctx.db.get(args.runId);
     if (!run) throw appError("NOT_FOUND");
     requireVenue(actor, run.venueId);
@@ -131,11 +107,11 @@ export const excuse = mutation({
   },
 });
 
-/** Live progress per person (captain, manager): done/total, late, phase. */
-export const shiftProgress = query({
+/** Live side work per person and area (leads, managers). States, not scores: done/total feeds a bar, late is a state. */
+export const progress = query({
   args: { shiftId: v.id("shifts") },
   handler: async (ctx, { shiftId }) => {
-    const actor = await requireRole(ctx, ["captain", "manager"]);
+    const actor = await requireCan(ctx, "tasks.progress");
     const shift = await getShift(ctx, actor, shiftId);
     const runs = await ctx.db
       .query("taskRuns")
@@ -149,35 +125,31 @@ export const shiftProgress = query({
       const user = await ctx.db.get(userId as Id<"users">);
       if (!user) continue;
       const detailed = [];
-      for (const r of list.sort((a, b) => a.dueAt - b.dueAt)) detailed.push(await withLabels(ctx, r, now));
+      for (const r of list.sort((a, b) => a.dueAt - b.dueAt)) detailed.push({ ...(await withLabels(ctx, r)), late: isLate(r, now) });
       const done = list.reduce((n, r) => n + runProgress(r).done, 0);
       const total = list.reduce((n, r) => n + runProgress(r).total, 0);
-      people.push({ userId, name: user.name, role: user.role, level: user.level, done, total, pct: total ? Math.round((done / total) * 100) : 100, late: list.some((r) => isLate(r, now)), runs: detailed });
+      const position = list[0]!.position;
+      const late = list.some((r) => isLate(r, now));
+      people.push({ userId, name: user.name, position, area: areaOf(position), done, total, state: late ? "late" : done === total ? "done" : "on_time", runs: detailed });
     }
-    people.sort((a, b) => Number(b.late) - Number(a.late) || a.pct - b.pct || a.name.localeCompare(b.name));
-    const done = people.reduce((n, p) => n + p.done, 0);
-    const total = people.reduce((n, p) => n + p.total, 0);
-    return { shift, people, totals: { done, total, pct: total ? Math.round((done / total) * 100) : 100, late: people.filter((p) => p.late).length } };
+    people.sort((a, b) => Number(b.state === "late") - Number(a.state === "late") || a.done / (a.total || 1) - b.done / (b.total || 1) || a.name.localeCompare(b.name));
+    return { shift: { _id: shift._id, status: shift.status, service: shift.service, date: shift.date }, people, late: people.filter((p) => p.state === "late").length };
   },
 });
 
 export const templates = query({
   args: { venueId: v.id("venues") },
   handler: async (ctx, { venueId }) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "tasks.templates");
     requireVenue(actor, venueId);
     const all = [];
-    for (const phase of ["open", "mid", "close"] as const) {
-      // No index on venue alone: one pass per role keeps it bounded by the role list.
-      for (const role of ["server", "runner", "busser", "bartender", "barback", "kitchen", "captain", "manager"] as Role[]) {
-        all.push(
-          ...(await ctx.db
-            .query("taskTemplates")
-            .withIndex("by_venue_role_phase", (q) => q.eq("venueId", venueId).eq("role", role).eq("phase", phase))
-            .collect()),
-        );
-      }
-    }
+    for (const phase of ["open", "mid", "close"] as const)
+      all.push(
+        ...(await ctx.db
+          .query("taskTemplates")
+          .withIndex("by_venue_phase", (q) => q.eq("venueId", venueId).eq("phase", phase))
+          .collect()),
+      );
     return all;
   },
 });
@@ -186,7 +158,8 @@ export const upsertTemplate = mutation({
   args: {
     templateId: v.optional(v.id("taskTemplates")),
     venueId: v.id("venues"),
-    role: v.string(),
+    positions: v.array(v.string()),
+    sectionId: v.optional(v.string()),
     phase: v.string(),
     title: v.object({ en: v.string(), es: v.string() }),
     schedule: v.any(),
@@ -195,25 +168,11 @@ export const upsertTemplate = mutation({
     active: v.boolean(),
   },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "tasks.templates");
     const p = parseOrThrow(taskTemplateInput, args);
     requireVenue(actor, args.venueId);
-    for (const it of p.items) {
-      if (it.sectionId) {
-        const section = await ctx.db.get(it.sectionId as Id<"sections">);
-        if (!section || section.venueId !== args.venueId) throw appError("INVALID_INPUT", undefined, { fields: { items: "section" } });
-      }
-    }
-    const doc = {
-      venueId: args.venueId,
-      role: p.role,
-      phase: p.phase,
-      title: p.title,
-      schedule: p.schedule,
-      items: p.items.map((i) => ({ ...i, sectionId: i.sectionId as Id<"sections"> | undefined })),
-      dueOffsetMin: p.dueOffsetMin,
-      active: p.active,
-    };
+    if (p.sectionId && !asPlan(await planOf(ctx, args.venueId)).sections.some((s) => s.id === p.sectionId)) throw appError("INVALID_INPUT", undefined, { fields: { sectionId: "unknown" } });
+    const doc = { venueId: args.venueId, positions: p.positions, sectionId: p.sectionId, phase: p.phase, title: p.title, schedule: p.schedule, items: p.items, dueOffsetMin: p.dueOffsetMin, active: p.active };
     if (args.templateId) {
       const prev = await ctx.db.get(args.templateId);
       if (!prev) throw appError("NOT_FOUND");
@@ -232,7 +191,7 @@ export const upsertTemplate = mutation({
 export const removeTemplate = mutation({
   args: { templateId: v.id("taskTemplates") },
   handler: async (ctx, { templateId }) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "tasks.templates");
     const t = await ctx.db.get(templateId);
     if (!t) throw appError("NOT_FOUND");
     requireVenue(actor, t.venueId);
@@ -242,7 +201,23 @@ export const removeTemplate = mutation({
   },
 });
 
-/** Every 15 min (crons.ts): marks runs late and tells the manager on duty once per shift. */
+/**
+ * Side-work indicator (BLUEPRINT 2.6, managers only): for each tipped planned shift of a week, the estimated
+ * non-tipped minutes from the templates that apply, against the company limit (2 h or 20 % by default).
+ */
+export const sideWorkLoad = query({
+  args: { venueId: v.id("venues"), weekStart: v.string() },
+  handler: async (ctx, args) => {
+    const actor = await requireCan(ctx, "schedule.manage");
+    requireVenue(actor, args.venueId);
+    const venue = await ctx.db.get(args.venueId);
+    if (!venue) throw appError("NOT_FOUND");
+    const { limit, rows } = await sideWorkRows(ctx, venue, args.weekStart);
+    return { limit, rows, over: rows.filter((r) => r.state === "over_limit").length };
+  },
+});
+
+/** Every 15 min (crons.ts): marks runs late and tells the managers on duty once per batch. */
 export const lateCheck = internalMutation({
   args: {},
   handler: async (ctx) => {
@@ -261,7 +236,7 @@ export const lateCheck = internalMutation({
         for (const r of newly) await ctx.db.patch(r._id, { late: true, lateNotifiedAt: now });
         marked += newly.length;
         if (newly.length) {
-          const managers = (await rosterOf(ctx, shift)).filter((u) => u.role === "manager").map((u) => u._id);
+          const managers = (await venueManagers(ctx, shift.venueId, ["floor_manager", "agm"])).map((u) => u._id);
           await enqueue(ctx, managers, { topic: "task_late", key: "tasksLate", vars: { count: newly.length }, url: "/manage" });
         }
       }
@@ -269,3 +244,4 @@ export const lateCheck = internalMutation({
     return { marked };
   },
 });
+

@@ -155,6 +155,10 @@
     "tipPolicy": {
       "title": "Política de propinas publicada",
       "body": "Lee y confirma la política escrita."
+    },
+    "closeFiled": {
+      "title": "Cierre enviado",
+      "body": "{venue}: el cierre está listo para leer."
     }
   }
 }

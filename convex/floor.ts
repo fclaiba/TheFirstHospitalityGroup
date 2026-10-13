@@ -1,161 +1,170 @@
-// Sections per shift (ADR 0013): the manager or captain assigns sections at shift open; a section lead is level A
-// (ADR 0014). mySection feeds the staff Floor screen: my tables, their live notes and the requests waiting for me.
+// Floor plan, sections and the live map (ADR 0021). The owner or a manager loads a versioned plan with sections,
+// tables and seats; leads assign today's sections; staff see their section; leads see who is where.
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import type { Doc, Id } from "./_generated/dataModel";
-import { requireRole, requireUser, requireVenue } from "./lib/auth";
+import { requireCan, requireUser, requireVenue, pickVenue } from "./lib/auth";
 import { appError } from "./lib/errors";
 import { audit } from "./lib/audit";
-import { getShift, requireLiveShift, rosterOf } from "./lib/shift";
+import { getShift, liveShiftOf, requireLiveShift, rosterOf } from "./lib/shift";
+import { asPlan, nameOf, planOf } from "./lib/service";
 import { parseOrThrow } from "./lib/validate";
-import { sectionInput } from "../schemas";
-import { canDo } from "../lib/domain/levels";
+import { assignSectionsInput, floorPlanInput } from "../schemas";
+import { planProblem, seatCount, whoIsWhere } from "../lib/domain/floor";
 import { isOpenStatus } from "../lib/domain/requests";
 
-export const sections = query({
+const table = v.object({ number: v.string(), seats: v.number(), x: v.number(), y: v.number() });
+
+/** The current floor plan of a venue. */
+export const plan = query({
   args: { venueId: v.id("venues") },
   handler: async (ctx, { venueId }) => {
     const actor = await requireUser(ctx);
     requireVenue(actor, venueId);
-    return await ctx.db
-      .query("sections")
-      .withIndex("by_venue", (q) => q.eq("venueId", venueId))
-      .collect();
+    const p = await planOf(ctx, venueId);
+    return { venueId, version: p?.version ?? 0, sections: p?.sections ?? [], seats: seatCount(asPlan(p)) };
   },
 });
 
-export const upsertSection = mutation({
-  args: { sectionId: v.optional(v.id("sections")), venueId: v.id("venues"), name: v.string(), tables: v.array(v.string()) },
+export const upsertPlan = mutation({
+  args: { venueId: v.id("venues"), sections: v.array(v.object({ id: v.string(), name: v.string(), tables: v.array(table) })) },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
-    const p = parseOrThrow(sectionInput, args);
+    const actor = await requireCan(ctx, "floor.plans");
+    const p = parseOrThrow(floorPlanInput, args);
     requireVenue(actor, args.venueId);
-    const tables = [...new Set(p.tables.map((t) => t.trim()))];
-    if (args.sectionId) {
-      const section = await ctx.db.get(args.sectionId);
-      if (!section || section.venueId !== args.venueId) throw appError("NOT_FOUND");
-      await ctx.db.patch(section._id, { name: p.name, tables });
-      return { sectionId: section._id };
-    }
-    const count = (
-      await ctx.db
-        .query("sections")
-        .withIndex("by_venue", (q) => q.eq("venueId", args.venueId))
-        .collect()
-    ).length;
-    const sectionId = await ctx.db.insert("sections", { venueId: args.venueId, name: p.name, tables, sort: count });
-    return { sectionId };
+    const problem = planProblem(p);
+    if (problem) throw appError("INVALID_INPUT", undefined, { fields: { sections: problem } });
+    const prev = await planOf(ctx, args.venueId);
+    const version = (prev?.version ?? 0) + 1;
+    const planId = await ctx.db.insert("floorPlans", { venueId: args.venueId, version, sections: p.sections, updatedBy: actor._id, at: Date.now() });
+    await audit(ctx, { actorId: actor._id, venueId: args.venueId, action: "floor.plan_changed", entity: "floorPlans", entityId: planId, meta: { version } });
+    return { planId, version };
   },
 });
 
-/** Replaces the shift's section assignments. People must be on the shift roster; a lead must be level A. */
+/** Replaces the shift's section assignments. People and leads must be on the shift roster. */
 export const assignSections = mutation({
   args: {
     shiftId: v.id("shifts"),
-    assignments: v.array(v.object({ sectionId: v.id("sections"), userIds: v.array(v.id("users")), leadId: v.optional(v.id("users")) })),
+    assignments: v.array(v.object({ sectionId: v.string(), userIds: v.array(v.id("users")), leadId: v.optional(v.id("users")) })),
   },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["captain", "manager"]);
+    const actor = await requireCan(ctx, "floor.sections");
+    parseOrThrow(assignSectionsInput, args);
     const shift = await requireLiveShift(ctx, actor, args.shiftId);
-    const roster = await rosterOf(ctx, shift);
-    const onRoster = new Map(roster.map((u) => [u._id as string, u]));
+    const sections = new Set(asPlan(await planOf(ctx, shift.venueId)).sections.map((s) => s.id));
+    const roster = new Set((await rosterOf(ctx, shift)).map((r) => r.user._id as string));
     for (const a of args.assignments) {
-      const section = await ctx.db.get(a.sectionId);
-      if (!section || section.venueId !== shift.venueId) throw appError("NOT_FOUND");
-      for (const id of a.userIds) if (!onRoster.has(id)) throw appError("INVALID_INPUT", undefined, { fields: { userIds: "roster" } });
-      if (a.leadId) {
-        const lead = onRoster.get(a.leadId);
-        if (!lead || !a.userIds.includes(a.leadId)) throw appError("INVALID_INPUT", undefined, { fields: { leadId: "member" } });
-        if (!canDo(lead.level, "section_lead")) throw appError("LEVEL_FORBIDDEN");
-      }
+      if (!sections.has(a.sectionId)) throw appError("INVALID_INPUT", undefined, { fields: { sectionId: "unknown" } });
+      for (const id of [...a.userIds, ...(a.leadId ? [a.leadId] : [])]) if (!roster.has(id)) throw appError("INVALID_INPUT", undefined, { fields: { userIds: "not_on_shift" } });
     }
-    const previous = await ctx.db
+    for (const old of await ctx.db
       .query("sectionAssignments")
       .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
-      .collect();
-    for (const p of previous) await ctx.db.delete(p._id);
+      .collect())
+      await ctx.db.delete(old._id);
     const now = Date.now();
     for (const a of args.assignments) {
-      if (!a.userIds.length) continue;
+      if (!a.userIds.length && !a.leadId) continue;
       await ctx.db.insert("sectionAssignments", { shiftId: shift._id, sectionId: a.sectionId, userIds: [...new Set(a.userIds)], leadId: a.leadId, by: actor._id, at: now });
     }
-    await audit(ctx, {
-      actorId: actor._id,
-      venueId: shift.venueId,
-      action: "sections.assigned",
-      entity: "shifts",
-      entityId: shift._id,
-      meta: { sections: args.assignments.map((a) => ({ sectionId: a.sectionId, people: a.userIds.length, leadId: a.leadId ?? null })) },
-    });
+    await audit(ctx, { actorId: actor._id, venueId: shift.venueId, action: "sections.assigned", entity: "shifts", entityId: shift._id, meta: { sections: args.assignments.length } });
     return { ok: true };
   },
 });
 
-/**
- * Everything the Floor screen needs for one shift: the venue's sections with who holds them, my sections, the live
- * table notes, the requests waiting for me and the roster (names and roles only).
- */
-export const mySection = query({
-  args: { shiftId: v.id("shifts") },
-  handler: async (ctx, { shiftId }) => {
-    const actor = await requireUser(ctx);
-    const shift = await getShift(ctx, actor, shiftId);
-    const sections = await ctx.db
-      .query("sections")
-      .withIndex("by_venue", (q) => q.eq("venueId", shift.venueId))
-      .collect();
+/** The live map (captain, maître d', host, managers): sections with tables and seats, who is where, notes, open requests. */
+export const map = query({
+  args: { shiftId: v.optional(v.id("shifts")), venueId: v.optional(v.id("venues")) },
+  handler: async (ctx, args) => {
+    const actor = await requireCan(ctx, "floor.map");
+    const shift = args.shiftId ? await getShift(ctx, actor, args.shiftId) : await liveShiftOf(ctx, pickVenue(actor, args.venueId));
+    const venueId = shift?.venueId ?? pickVenue(actor, args.venueId);
+    const p = asPlan(await planOf(ctx, venueId));
+    if (!shift) return { shift: null, sections: p.sections.map((s) => ({ ...s, lead: null, people: [], notes: [], requests: 0 })), roster: [] };
     const assignments = await ctx.db
       .query("sectionAssignments")
       .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
       .collect();
     const roster = await rosterOf(ctx, shift);
-    const names = new Map<string, Doc<"users">>(roster.map((u) => [u._id, u]));
-    const nameOf = async (id: Id<"users">) => names.get(id)?.name ?? (await ctx.db.get(id))?.name ?? "";
-
-    const bySection = sections.map((s) => {
-      const a = assignments.find((x) => x.sectionId === s._id);
-      return {
-        _id: s._id,
-        name: s.name,
-        tables: s.tables,
-        sort: s.sort,
-        people: (a?.userIds ?? []).map((id) => ({ id, name: names.get(id)?.name ?? "", role: names.get(id)?.role ?? "server" })),
-        leadId: a?.leadId ?? null,
-        mine: !!a?.userIds.includes(actor._id),
-      };
-    });
-
+    const where = whoIsWhere(
+      assignments,
+      roster.map((r) => ({ _id: r.user._id, name: r.user.name })),
+    );
     const notes = (
       await ctx.db
         .query("tableNotes")
         .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
         .collect()
     ).filter((n) => !n.archivedAt);
-    const noteRows = [];
-    for (const n of notes.sort((a, b) => b.at - a.at)) {
-      noteRows.push({ _id: n._id, table: n.table, kind: n.kind, text: n.text, at: n.at, by: n.by, byName: await nameOf(n.by), kitchenConfirmedAt: n.kitchenConfirmedAt ?? null });
-    }
+    const requests: Doc<"requests">[] = [];
+    for (const status of ["open", "claimed"] as const)
+      requests.push(
+        ...(await ctx.db
+          .query("requests")
+          .withIndex("by_shift_status", (q) => q.eq("shiftId", shift._id).eq("status", status))
+          .collect()),
+      );
+    const sections = p.sections.map((s) => {
+      const tables = new Set(s.tables.map((t) => t.number));
+      return {
+        ...s,
+        lead: where[s.id]?.lead ?? null,
+        people: where[s.id]?.people ?? [],
+        notes: notes.filter((n) => tables.has(n.table)).map((n) => ({ _id: n._id, table: n.table, seat: n.seat ?? null, kind: n.kind, text: n.text, expoConfirmed: !!n.expoConfirmedAt })),
+        requests: requests.filter((r) => r.sectionId === s.id || (r.table !== undefined && tables.has(r.table))).length,
+      };
+    });
+    return {
+      shift: { _id: shift._id, status: shift.status, service: shift.service, date: shift.date },
+      sections,
+      roster: roster.map((r) => ({ userId: r.user._id, name: r.user.name, position: r.position, sectionIds: assignments.filter((a) => a.userIds.includes(r.user._id) || a.leadId === r.user._id).map((a) => a.sectionId) })),
+    };
+  },
+});
 
+/** My section today: its tables with seats, the live notes on them, and the requests waiting for me. */
+export const mySection = query({
+  args: { shiftId: v.optional(v.id("shifts")), venueId: v.optional(v.id("venues")) },
+  handler: async (ctx, args) => {
+    const actor = await requireCan(ctx, "floor.view");
+    const shift = args.shiftId ? await getShift(ctx, actor, args.shiftId) : await liveShiftOf(ctx, pickVenue(actor, args.venueId));
+    if (!shift) return { shift: null, sections: [], lead: null, notes: [], requests: [] };
+    const assignments = (
+      await ctx.db
+        .query("sectionAssignments")
+        .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
+        .collect()
+    ).filter((a) => a.userIds.includes(actor._id) || a.leadId === actor._id);
+    const p = asPlan(await planOf(ctx, shift.venueId));
+    const mine = p.sections.filter((s) => assignments.some((a) => a.sectionId === s.id));
+    const tables = new Set(mine.flatMap((s) => s.tables.map((t) => t.number)));
+    const notes = (
+      await ctx.db
+        .query("tableNotes")
+        .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
+        .collect()
+    )
+      .filter((n) => !n.archivedAt && tables.has(n.table))
+      .sort((a, b) => b.at - a.at)
+      .map((n) => ({ _id: n._id, table: n.table, seat: n.seat ?? null, kind: n.kind, text: n.text, expoConfirmed: !!n.expoConfirmedAt, at: n.at }));
     const requests = [];
     for (const status of ["open", "claimed"] as const) {
       for (const r of await ctx.db
         .query("requests")
         .withIndex("by_shift_status", (q) => q.eq("shiftId", shift._id).eq("status", status))
         .collect()) {
-        if (!r.recipients.includes(actor._id) && r.claimedBy !== actor._id) continue;
-        requests.push({ ...r, byName: await nameOf(r.createdBy), claimedByName: r.claimedBy ? await nameOf(r.claimedBy) : null });
+        if (!isOpenStatus(r.status) || !(r.recipients.includes(actor._id) || r.claimedBy === actor._id)) continue;
+        requests.push({ _id: r._id, kind: r.kind, table: r.table ?? null, status: r.status, byName: (await nameOf(ctx, r.createdBy)) ?? "", claimedByName: await nameOf(ctx, r.claimedBy), at: r.at });
       }
     }
-    requests.sort((a, b) => (a.kind === "help" ? -1 : 0) - (b.kind === "help" ? -1 : 0) || a.at - b.at);
-
+    const leadId = assignments.find((a) => a.leadId)?.leadId as Id<"users"> | undefined;
     return {
-      shift: { _id: shift._id, status: shift.status, service: shift.service, date: shift.date, venueId: shift.venueId },
-      live: shift.status === "open" || shift.status === "closing",
-      sections: bySection.sort((a, b) => a.sort - b.sort),
-      mine: bySection.filter((s) => s.mine).map((s) => s._id),
-      notes: noteRows,
-      requests: requests.filter((r) => isOpenStatus(r.status)),
-      roster: roster.map((u) => ({ id: u._id, name: u.name, role: u.role, level: u.level })).sort((a, b) => a.name.localeCompare(b.name)),
+      shift: { _id: shift._id, status: shift.status, service: shift.service, date: shift.date },
+      sections: mine,
+      lead: await nameOf(ctx, leadId),
+      notes,
+      requests,
     };
   },
 });

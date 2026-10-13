@@ -1,27 +1,27 @@
-// Shift lifecycle (ADR 0008): scheduled → open → closing → closed. Opening creates the opening runs; starting the
-// close creates the closing runs; close.submit closes it. The hourly sweep notifies at end + 4 h and auto-closes at
-// end + 8 h, marked to review.
+// Shift lifecycle (ADR 0008): scheduled → open → closing → closed. Opening creates the opening side work for the
+// people on the published schedule; starting the close creates the closing side work; close.submit closes it. The
+// hourly sweep notifies at end + 4 h and auto-closes at end + 8 h, marked to review. No money (ADR 0018).
 import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
 import type { MutationCtx } from "./_generated/server";
 import type { Doc } from "./_generated/dataModel";
-import { requireRole, requireUser, requireVenue } from "./lib/auth";
+import { requireCan, requireUser, requireVenue, pickVenue } from "./lib/auth";
 import { appError } from "./lib/errors";
 import { audit } from "./lib/audit";
 import { enqueue } from "./lib/notify";
-import { createRuns, getShift, liveShiftOf, ownersOf, rosterOf } from "./lib/shift";
+import { corporateOf, createRuns, getShift, liveShiftOf, rosterOf, venueManagers } from "./lib/shift";
 import { parseOrThrow } from "./lib/validate";
 import { shiftOpenInput } from "../schemas";
-import { currentService, serviceWindow, sweepAction, transition } from "../lib/domain/shift";
+import { currentService, runsOn, serviceWindow, sweepAction, transition } from "../lib/domain/shift";
 import { addDays, nyDateKey } from "../lib/time";
 import type { Service } from "../lib/domain/types";
 
-/** The live shift of a venue, or what comes next today, plus the last close notes for the next shift's Today. */
+/** The live shift of a venue, or what comes next, plus the last close notes for the next shift. */
 export const current = query({
-  args: { venueId: v.id("venues") },
-  handler: async (ctx, { venueId }) => {
+  args: { venueId: v.optional(v.id("venues")) },
+  handler: async (ctx, args) => {
     const actor = await requireUser(ctx);
-    requireVenue(actor, venueId);
+    const venueId = pickVenue(actor, args.venueId);
     const venue = await ctx.db.get(venueId);
     if (!venue) throw appError("NOT_FOUND");
     const now = Date.now();
@@ -29,9 +29,9 @@ export const current = query({
     const today = nyDateKey(now);
     let nextService: Service | null = currentService(venue.services, today, now);
     let nextDate = today;
-    if (!nextService) {
-      nextDate = addDays(today, 1);
-      nextService = venue.services[0]?.key ?? null;
+    for (let d = 1; !nextService && d <= 7; d++) {
+      nextDate = addDays(today, d);
+      nextService = venue.services.filter((s) => runsOn(s, nextDate)).sort((a, b) => a.startsAt.localeCompare(b.startsAt))[0]?.key ?? null;
     }
     const window = nextService ? serviceWindow(venue.services, nextDate, nextService) : null;
     const lastClose = await ctx.db
@@ -41,6 +41,7 @@ export const current = query({
       .first();
     return {
       venue: { id: venue._id, name: venue.name, services: venue.services },
+      position: actor.position,
       shift: live,
       next: nextService ? { date: nextDate, service: nextService, startsAt: window?.startsAt ?? null, endsAt: window?.endsAt ?? null } : null,
       lastClose: lastClose ? { shiftId: lastClose.shiftId, nextShiftNotes: lastClose.nextShiftNotes, submittedAt: lastClose.submittedAt ?? null } : null,
@@ -56,11 +57,11 @@ export const get = query({
   },
 });
 
-/** Recent shifts of a venue, newest first (manager, owner). */
+/** Recent shifts of a venue, newest first (leads read, managers, corporate). */
 export const list = query({
   args: { venueId: v.id("venues"), limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "close.read");
     requireVenue(actor, args.venueId);
     return await ctx.db
       .query("shifts")
@@ -73,13 +74,14 @@ export const list = query({
 export const open = mutation({
   args: { venueId: v.id("venues"), service: v.string(), date: v.string(), notes: v.optional(v.string()) },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "shift.control");
     const p = parseOrThrow(shiftOpenInput, args);
     requireVenue(actor, args.venueId);
     const venue = await ctx.db.get(args.venueId);
     if (!venue || !venue.active) throw appError("NOT_FOUND");
-    const window = serviceWindow(venue.services, p.date, p.service);
-    if (!window) throw appError("NOT_SCHEDULED");
+    const svc = venue.services.find((s) => s.key === p.service);
+    if (!svc || !runsOn(svc, p.date)) throw appError("NOT_SCHEDULED");
+    const window = serviceWindow(venue.services, p.date, p.service)!;
     if (await liveShiftOf(ctx, venue._id)) throw appError("OTHER_SHIFT_OPEN");
     const same = (
       await ctx.db
@@ -102,7 +104,7 @@ export const open = mutation({
     const roster = await rosterOf(ctx, shift);
     await enqueue(
       ctx,
-      roster.filter((u) => u._id !== actor._id).map((u) => u._id),
+      roster.filter((r) => r.user._id !== actor._id).map((r) => r.user._id),
       { topic: "shift", key: "shiftOpen", vars: { venue: venue.name }, url: "/today" },
     );
     return { shiftId: shift._id, runs };
@@ -112,7 +114,7 @@ export const open = mutation({
 export const startClosing = mutation({
   args: { shiftId: v.id("shifts") },
   handler: async (ctx, { shiftId }) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "shift.control");
     const shift = await getShift(ctx, actor, shiftId);
     if (transition(shift.status, "start_closing") === "INVALID_TRANSITION") throw appError("INVALID_TRANSITION");
     await ctx.db.patch(shift._id, { status: "closing", closingAt: Date.now() });
@@ -122,11 +124,11 @@ export const startClosing = mutation({
   },
 });
 
-/** Owner marks an auto-closed shift as reviewed. */
+/** The GM, director or owner marks an auto-closed shift as reviewed. */
 export const review = mutation({
   args: { shiftId: v.id("shifts") },
   handler: async (ctx, { shiftId }) => {
-    const actor = await requireRole(ctx, ["owner"]);
+    const actor = await requireCan(ctx, "venue.state");
     const shift = await getShift(ctx, actor, shiftId);
     if (!shift.autoClosedAt) throw appError("INVALID_TRANSITION");
     await ctx.db.patch(shift._id, { reviewedAt: Date.now() });
@@ -135,7 +137,21 @@ export const review = mutation({
   },
 });
 
-/** Auto-close (ADR 0008): runs, counts and report become read-only; the report is filed as "auto", to review. */
+/** Archives what lives only for one service: table notes, pre-shift notes, 86s (ADR 0021). */
+export async function expireServiceItems(ctx: MutationCtx, shift: Doc<"shifts">, now: number) {
+  for (const n of await ctx.db
+    .query("tableNotes")
+    .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
+    .collect())
+    if (!n.archivedAt) await ctx.db.patch(n._id, { archivedAt: now });
+  for (const e of await ctx.db
+    .query("eightySix")
+    .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
+    .collect())
+    if (!e.clearedAt) await ctx.db.patch(e._id, { clearedAt: now });
+}
+
+/** Auto-close (ADR 0008): side work and the close become read-only; the close is filed as "auto", to review. */
 export async function autoClose(ctx: MutationCtx, shift: Doc<"shifts">, now: number) {
   await ctx.db.patch(shift._id, { status: "closed", closedAt: now, autoClosedAt: now });
   const existing = await ctx.db
@@ -147,23 +163,16 @@ export async function autoClose(ctx: MutationCtx, shift: Doc<"shifts">, now: num
     await ctx.db.insert("closeReports", {
       shiftId: shift._id,
       venueId: shift.venueId,
-      coversCount: 0,
-      netSalesCents: 0,
-      compsCents: 0,
-      voidsCents: 0,
       incidents: [],
+      openItems: [],
+      cleaning: "not_done",
       staffNotes: "",
       nextShiftNotes: "",
       status: "auto",
       submittedAt: now,
       updatedAt: now,
     });
-  // Table notes archive at close (ADR 0016).
-  for (const n of await ctx.db
-    .query("tableNotes")
-    .withIndex("by_shift", (q) => q.eq("shiftId", shift._id))
-    .collect())
-    if (!n.archivedAt) await ctx.db.patch(n._id, { archivedAt: now });
+  await expireServiceItems(ctx, shift, now);
   await audit(ctx, { venueId: shift.venueId, action: "shift.auto_closed", entity: "shifts", entityId: shift._id });
 }
 
@@ -183,15 +192,15 @@ export const sweep = internalMutation({
         if (!action) continue;
         const venue = await ctx.db.get(shift.venueId);
         if (!venue) continue;
-        const managers = (await rosterOf(ctx, shift)).filter((u) => u.role === "manager").map((u) => u._id);
-        const owners = (await ownersOf(ctx, venue.companyId)).map((u) => u._id);
+        const managers = (await venueManagers(ctx, venue._id)).map((u) => u._id);
+        const corporate = (await corporateOf(ctx, venue.companyId)).map((u) => u._id);
         if (action === "notify") {
           await ctx.db.patch(shift._id, { sweepNotifiedAt: now });
-          await enqueue(ctx, [...managers, ...owners], { topic: "shift", key: "shiftForgotten", vars: { venue: venue.name }, url: "/manage/close" });
+          await enqueue(ctx, managers, { topic: "shift", key: "shiftForgotten", vars: { venue: venue.name }, url: "/manage/close" });
           notified += 1;
         } else {
           await autoClose(ctx, shift, now);
-          await enqueue(ctx, owners, { topic: "shift", key: "shiftAutoClosed", vars: { venue: venue.name }, url: `/owner/venues/${venue._id}` });
+          await enqueue(ctx, [...managers, ...corporate], { topic: "shift", key: "shiftAutoClosed", vars: { venue: venue.name }, url: `/company/venues/${venue._id}` });
           closed += 1;
         }
       }
@@ -199,4 +208,3 @@ export const sweep = internalMutation({
     return { notified, closed };
   },
 });
-

@@ -1,22 +1,27 @@
-// Performance board and owner dashboard (BLUEPRINT 2.2, 7.2 reports). Bounded by venue and date windows (8.2).
+// Leader views in states, not scores (ADR 0027; BLUEPRINT 2.6, 7.2 reports). The GM sees the venue in states with the
+// names behind each one; the director and owner see the four venues, each with one overall state and the reasons in
+// words. Never money, never percentages. Bounded by venue and date windows (BLUEPRINT 8.2).
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import type { QueryCtx } from "./_generated/server";
 import type { Doc, Id } from "./_generated/dataModel";
-import { requireRole, requireVenue } from "./lib/auth";
-import type { Actor } from "./lib/auth";
+import { requireCan, requireVenue } from "./lib/auth";
 import { appError } from "./lib/errors";
 import { liveShiftOf } from "./lib/shift";
-import { shiftStock } from "./lib/stockReport";
-import { DAY_MS, DEFAULT_THRESHOLDS, STATE_ORDER, countable, streak, warningState } from "../lib/domain/warnings";
-import { onTimeRate } from "../lib/domain/tasks";
-import { readRate } from "../lib/domain/messages";
+import { sideWorkRows } from "./lib/service";
+import { DAY_MS, DEFAULT_THRESHOLDS, countable, proposalStale, streak, warningState } from "../lib/domain/warnings";
+import { isLate } from "../lib/domain/tasks";
+import { needsConfirm, weekOf } from "../lib/domain/schedule";
+import { byUrgency, isConfirmLate, personState, venueState } from "../lib/domain/states";
+import type { VenueInputs } from "../lib/domain/states";
+import { NOTIFY_AFTER_MS } from "../lib/domain/shift";
+import { areaOf, isCorporate } from "../lib/domain/positions";
+import { AREAS } from "../lib/domain/types";
+import type { Thresholds } from "../lib/domain/types";
 import { nyDateKey } from "../lib/time";
-import type { CloseSummary } from "../lib/domain/close";
-import type { Thresholds, WarningState } from "../lib/domain/types";
 
-async function thresholdsOf(ctx: QueryCtx, actor: Actor): Promise<Thresholds> {
-  return (await ctx.db.get(actor.companyId))?.warningThresholds ?? DEFAULT_THRESHOLDS;
+async function thresholdsOf(ctx: QueryCtx, companyId: Id<"companies">): Promise<Thresholds> {
+  return (await ctx.db.get(companyId))?.thresholds.warnings ?? DEFAULT_THRESHOLDS;
 }
 
 async function peopleOf(ctx: QueryCtx, venueId: Id<"venues">): Promise<Doc<"users">[]> {
@@ -27,289 +32,206 @@ async function peopleOf(ctx: QueryCtx, venueId: Id<"venues">): Promise<Doc<"user
   const out: Doc<"users">[] = [];
   for (const r of rows) {
     const u = await ctx.db.get(r.userId);
-    if (u && u.active && u.role !== "owner" && !u.isDev) out.push(u);
+    if (u && u.active && !u.isDev && !isCorporate(u.primaryPosition)) out.push(u);
   }
   return out;
 }
 
-const ruleTitle = async (ctx: QueryCtx, ruleId: Id<"rules">) => (await ctx.db.get(ruleId))?.title ?? { en: "", es: "" };
-
-/** Everything the board shows for one person over a window. */
-async function stats(ctx: QueryCtx, user: Doc<"users">, t: Thresholds, from: number, to: number, now: number) {
-  const warnings = await ctx.db
-    .query("warnings")
-    .withIndex("by_user_at", (q) => q.eq("userId", user._id).gte("at", Math.min(from, now - t.windowDays * DAY_MS)))
-    .collect();
-  const live = warnings.filter((w) => countable(w, now, t.windowDays));
-  const state = warningState(warnings, now, t);
-  const missed = new Map<string, number>();
-  for (const w of live) missed.set(w.ruleId, (missed.get(w.ruleId) ?? 0) + 1);
-  const topRules = [];
-  for (const [ruleId, count] of [...missed].sort((a, b) => b[1] - a[1]).slice(0, 3)) topRules.push({ ruleId, count, title: await ruleTitle(ctx, ruleId as Id<"rules">) });
-  const runs = await ctx.db
-    .query("taskRuns")
-    .withIndex("by_user_due", (q) => q.eq("userId", user._id).gte("dueAt", from).lte("dueAt", to))
-    .collect();
-  const reads = (
+/** The current published week of a venue with its shifts and acks. */
+async function currentWeek(ctx: QueryCtx, venueId: Id<"venues">, now: number) {
+  const week = await ctx.db
+    .query("scheduleWeeks")
+    .withIndex("by_venue_week", (q) => q.eq("venueId", venueId).eq("weekStart", weekOf(nyDateKey(now))))
+    .unique();
+  if (!week || week.status !== "published") return null;
+  const shifts = (
     await ctx.db
-      .query("messageReads")
-      .withIndex("by_user", (q) => q.eq("userId", user._id).gte("at", from))
+      .query("shiftsPlanned")
+      .withIndex("by_week", (q) => q.eq("weekId", week._id))
       .collect()
-  ).filter((r) => r.at <= to);
-  const shiftStarts: number[] = [];
-  for (const id of new Set(runs.map((r) => r.shiftId))) {
-    const s = await ctx.db.get(id);
-    if (s) shiftStarts.push(s.startsAt);
+  ).map((s) => ({ ...s, userId: s.userId as string | undefined, eventId: s.eventId as string | undefined }));
+  const acks = (
+    await ctx.db
+      .query("scheduleAcks")
+      .withIndex("by_week_user", (q) => q.eq("weekId", week._id))
+      .collect()
+  ).map((a) => ({ userId: a.userId as string, version: a.version }));
+  return { week, shifts, acks };
+}
+
+/** Everything venueState() needs, with the names behind each state. */
+async function venueInputs(ctx: QueryCtx, venue: Doc<"venues">, now: number): Promise<VenueInputs & { people: Doc<"users">[]; t: Thresholds }> {
+  const t = await thresholdsOf(ctx, venue.companyId);
+  const since = nyDateKey(now - 7 * DAY_MS);
+  const recent = await ctx.db
+    .query("shifts")
+    .withIndex("by_venue_date", (q) => q.eq("venueId", venue._id).gte("date", since))
+    .collect();
+  const closesMissing = recent.filter((s) => (s.status === "open" || s.status === "closing") && now >= s.endsAt + NOTIFY_AFTER_MS).length;
+  const autoClosed = recent.filter((s) => s.autoClosedAt && !s.reviewedAt).length;
+  const people = await peopleOf(ctx, venue._id);
+  const name = new Map(people.map((p) => [p._id as string, p.name]));
+  const unconfirmed: string[] = [];
+  const lateConfirmations: string[] = [];
+  const cw = await currentWeek(ctx, venue._id, now);
+  if (cw) {
+    for (const userId of new Set(cw.shifts.map((s) => s.userId).filter((x): x is string => !!x))) {
+      if (!needsConfirm(userId, cw.week, cw.shifts, cw.acks)) continue;
+      const n = name.get(userId);
+      if (!n) continue;
+      unconfirmed.push(n);
+      if (cw.week.publishedAt && isConfirmLate(cw.week.publishedAt, now)) lateConfirmations.push(n);
+    }
   }
-  const s = streak(shiftStarts, warnings);
+  let lateRuns = 0;
+  const live = await liveShiftOf(ctx, venue._id);
+  if (live) {
+    lateRuns = (
+      await ctx.db
+        .query("taskRuns")
+        .withIndex("by_shift", (q) => q.eq("shiftId", live._id))
+        .collect()
+    ).filter((r) => isLate(r, now)).length;
+  }
+  const open = await ctx.db
+    .query("shortages")
+    .withIndex("by_venue_status", (q) => q.eq("venueId", venue._id).eq("status", "open"))
+    .collect();
+  const reviews: string[] = [];
+  for (const p of people) {
+    const ws = await ctx.db
+      .query("warnings")
+      .withIndex("by_user_at", (q) => q.eq("userId", p._id).gte("at", now - t.windowDays * DAY_MS))
+      .collect();
+    if (warningState(ws, now, t) === "review") reviews.push(p.name);
+  }
+  const staleProposals = (
+    await ctx.db
+      .query("warningProposals")
+      .withIndex("by_venue_status", (q) => q.eq("venueId", venue._id).eq("status", "open"))
+      .collect()
+  ).filter((p) => now - p.at > 24 * 3600_000 || proposalStale(p, now)).length;
+  const sw = await sideWorkRows(ctx, venue, weekOf(nyDateKey(now)));
   return {
-    id: user._id,
-    name: user.name,
-    role: user.role,
-    level: user.level,
-    state,
-    warnings: live.length,
-    major: live.filter((w) => w.severity === "major").length,
-    unacknowledged: live.filter((w) => !w.acknowledgedAt).length,
-    topRules,
-    onTime: onTimeRate(runs, now),
-    runs: runs.length,
-    readRate: readRate(reads, reads.length),
-    streak: s.current,
-    bestStreak: s.best,
+    closesMissing,
+    autoClosed,
+    unconfirmed,
+    lateConfirmations,
+    lateRuns,
+    shortagesOut: open.filter((s) => s.level === "out").length,
+    shortagesLow: open.filter((s) => s.level === "low").length,
+    reviews,
+    staleProposals,
+    overSideWork: sw.rows.filter((r) => r.state === "over_limit").length,
+    people,
+    t,
   };
 }
 
-const severity = (s: WarningState) => STATE_ORDER.indexOf(s);
+async function stateOfVenue(ctx: QueryCtx, venue: Doc<"venues">, now: number) {
+  const inputs = await venueInputs(ctx, venue, now);
+  return { venue: { _id: venue._id, name: venue.name, slug: venue.slug }, ...venueState(inputs) };
+}
 
+/** People of a venue by area, each with their states (warnings, confirmation, side work), never a score. */
 export const team = query({
-  args: { venueId: v.id("venues"), from: v.optional(v.number()), to: v.optional(v.number()) },
-  handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
-    requireVenue(actor, args.venueId);
+  args: { venueId: v.id("venues") },
+  handler: async (ctx, { venueId }) => {
+    const actor = await requireCan(ctx, "team.view");
+    requireVenue(actor, venueId);
     const now = Date.now();
-    const t = await thresholdsOf(ctx, actor);
-    const from = args.from ?? now - t.windowDays * DAY_MS;
-    const to = args.to ?? now;
-    const people = [];
-    for (const u of await peopleOf(ctx, args.venueId)) people.push(await stats(ctx, u, t, from, to, now));
-    people.sort((a, b) => severity(b.state) - severity(a.state) || a.name.localeCompare(b.name));
-    const roles = new Map<string, { role: string; people: number; onTimeSum: number; onTimeN: number; states: Record<WarningState, number> }>();
-    for (const p of people) {
-      const r = roles.get(p.role) ?? { role: p.role, people: 0, onTimeSum: 0, onTimeN: 0, states: { up_to_date: 0, attention: 0, follow_up: 0, review: 0 } };
-      r.people += 1;
-      r.states[p.state] += 1;
-      if (p.onTime !== null) {
-        r.onTimeSum += p.onTime;
-        r.onTimeN += 1;
+    const t = await thresholdsOf(ctx, actor.companyId);
+    const people = await peopleOf(ctx, venueId);
+    const cw = await currentWeek(ctx, venueId, now);
+    const live = await liveShiftOf(ctx, venueId);
+    const liveRuns = live
+      ? await ctx.db
+          .query("taskRuns")
+          .withIndex("by_shift", (q) => q.eq("shiftId", live._id))
+          .collect()
+      : [];
+    const out = [];
+    for (const u of people) {
+      const warnings = await ctx.db
+        .query("warnings")
+        .withIndex("by_user_at", (q) => q.eq("userId", u._id))
+        .collect();
+      const ws = warningState(warnings, now, t);
+      const pending = cw ? (needsConfirm(u._id, cw.week, cw.shifts, cw.acks) ? 1 : 0) : 0;
+      const latePending = pending > 0 && !!cw?.week.publishedAt && isConfirmLate(cw.week.publishedAt, now);
+      const lateRuns = liveRuns.filter((r) => r.userId === u._id && isLate(r, now)).length;
+      const runs = await ctx.db
+        .query("taskRuns")
+        .withIndex("by_user_due", (q) => q.eq("userId", u._id).gte("dueAt", now - 30 * DAY_MS))
+        .collect();
+      const starts: number[] = [];
+      for (const id of new Set(runs.map((r) => r.shiftId))) {
+        const s = await ctx.db.get(id);
+        if (s) starts.push(s.startsAt);
       }
-      roles.set(p.role, r);
+      const ruleCounts = new Map<string, number>();
+      for (const w of warnings.filter((x) => countable(x, now, t.windowDays))) ruleCounts.set(w.ruleId, (ruleCounts.get(w.ruleId) ?? 0) + 1);
+      const topRules = [];
+      for (const [ruleId] of [...ruleCounts].sort((a, b) => b[1] - a[1]).slice(0, 2)) topRules.push((await ctx.db.get(ruleId as Id<"rules">))?.title ?? { en: "", es: "" });
+      out.push({
+        userId: u._id,
+        name: u.name,
+        position: u.primaryPosition,
+        enabledPositions: u.enabledPositions,
+        area: areaOf(u.primaryPosition),
+        title: u.title ?? null,
+        ...personState({ warnings: ws, pendingConfirmations: pending, latePending, lateRuns }),
+        topRules,
+        recognition: streak(starts, warnings).current,
+      });
     }
+    const order = (s: string) => ["review", "follow_up", "attention", "up_to_date"].indexOf(s);
+    out.sort((a, b) => AREAS.indexOf(a.area) - AREAS.indexOf(b.area) || order(a.warnings) - order(b.warnings) || a.name.localeCompare(b.name));
+    return { people: out };
+  },
+});
+
+/** The venue in states with reasons and names (GM, managers, corporate). */
+export const venueStateQuery = query({
+  args: { venueId: v.id("venues") },
+  handler: async (ctx, { venueId }) => {
+    const actor = await requireCan(ctx, "venue.state");
+    requireVenue(actor, venueId);
+    const venue = await ctx.db.get(venueId);
+    if (!venue) throw appError("NOT_FOUND");
+    const now = Date.now();
+    const inputs = await venueInputs(ctx, venue, now);
+    const live = await liveShiftOf(ctx, venueId);
+    const lastClose = await ctx.db
+      .query("closeReports")
+      .withIndex("by_venue_submitted", (q) => q.eq("venueId", venueId).gt("submittedAt", 0))
+      .order("desc")
+      .first();
     return {
-      thresholds: t,
-      from,
-      to,
-      people,
-      roles: [...roles.values()].map((r) => ({ role: r.role, people: r.people, onTime: r.onTimeN ? Math.round(r.onTimeSum / r.onTimeN) : null, states: r.states })),
-      recognition: [...people]
-        .filter((p) => p.streak > 0)
-        .sort((a, b) => b.streak - a.streak || b.bestStreak - a.bestStreak)
-        .slice(0, 3)
-        .map((p) => ({ id: p.id, name: p.name, role: p.role, streak: p.streak })),
+      venue: { _id: venue._id, name: venue.name, slug: venue.slug },
+      ...venueState(inputs),
+      shift: live ? { _id: live._id, status: live.status, service: live.service } : null,
+      lastClose: lastClose ? { shiftId: lastClose.shiftId, status: lastClose.status, submittedAt: lastClose.submittedAt ?? null, nextShiftNotes: lastClose.nextShiftNotes } : null,
+      names: { unconfirmed: inputs.unconfirmed, reviews: inputs.reviews },
     };
   },
 });
+export { venueStateQuery as venueState };
 
-export const person = query({
-  args: { userId: v.id("users"), venueId: v.id("venues") },
-  handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
-    requireVenue(actor, args.venueId);
-    const user = await ctx.db.get(args.userId);
-    if (!user || user.companyId !== actor.companyId) throw appError("NOT_FOUND");
-    const assigned = await ctx.db
-      .query("assignments")
-      .withIndex("by_user", (q) => q.eq("userId", user._id))
-      .collect();
-    if (!assigned.some((a) => a.venueId === args.venueId)) throw appError("VENUE_FORBIDDEN");
-    const now = Date.now();
-    const t = await thresholdsOf(ctx, actor);
-    const from = now - 30 * DAY_MS;
-    const summary = await stats(ctx, user, t, from, now, now);
-    const all = await ctx.db
-      .query("warnings")
-      .withIndex("by_user_at", (q) => q.eq("userId", user._id).gte("at", now - 180 * DAY_MS))
-      .order("desc")
-      .collect();
-    const warnings = [];
-    for (const w of all) {
-      const by = await ctx.db.get(w.loggedBy);
-      warnings.push({
-        _id: w._id,
-        at: w.at,
-        severity: w.severity,
-        note: w.note ?? null,
-        rule: await ruleTitle(ctx, w.ruleId),
-        loggedBy: by?.name ?? "",
-        acknowledgedAt: w.acknowledgedAt ?? null,
-        response: w.response ?? null,
-        voidedAt: w.voidedAt ?? null,
-        voidReason: w.voidReason ?? null,
-        counts: countable(w, now, t.windowDays),
-      });
-    }
-    const runs = (
-      await ctx.db
-        .query("taskRuns")
-        .withIndex("by_user_due", (q) => q.eq("userId", user._id).gte("dueAt", from))
-        .order("desc")
-        .take(20)
-    ).map((r) => ({
-      _id: r._id,
-      phase: r.phase,
-      dueAt: r.dueAt,
-      completedAt: r.completedAt ?? null,
-      late: r.late,
-      excused: !!r.excused,
-      done: r.items.filter((i) => i.done).length,
-      total: r.items.length,
-      date: nyDateKey(r.dueAt),
-    }));
-    return { person: { ...summary, username: user.username, languageLevel: user.languageLevel ?? null }, warnings, runs };
-  },
-});
-
-type VenueStatus = "open" | "closing" | "overdue" | "auto_closed" | "closed" | "idle";
-
-/** Tonight's status, last close and live exceptions of one venue. */
-async function venueCard(ctx: QueryCtx, venue: Doc<"venues">, t: Thresholds, now: number) {
-  const live = await liveShiftOf(ctx, venue._id);
-  const last = await ctx.db
-    .query("closeReports")
-    .withIndex("by_venue_submitted", (q) => q.eq("venueId", venue._id).gt("submittedAt", 0))
-    .order("desc")
-    .first();
-  const lastShift = last ? await ctx.db.get(last.shiftId) : null;
-  let status: VenueStatus = "idle";
-  if (live) status = now > live.endsAt + 4 * 3600_000 ? "overdue" : live.status === "closing" ? "closing" : "open";
-  else if (lastShift?.autoClosedAt && !lastShift.reviewedAt) status = "auto_closed";
-  else if (lastShift && nyDateKey(lastShift.closedAt ?? 0) === nyDateKey(now)) status = "closed";
-  const summary = (last?.summary ?? null) as CloseSummary | null;
-  let shortages = summary?.shortages ?? { items: 0, lostCostCents: 0 };
-  if (live) {
-    const s = await shiftStock(ctx, live);
-    if (s.totals.shortItems) shortages = { items: s.totals.shortItems, lostCostCents: s.totals.lostCostCents };
-  }
-  const states: Record<WarningState, number> = { up_to_date: 0, attention: 0, follow_up: 0, review: 0 };
-  for (const u of await peopleOf(ctx, venue._id)) {
-    const ws = await ctx.db
-      .query("warnings")
-      .withIndex("by_user_at", (q) => q.eq("userId", u._id).gte("at", now - t.windowDays * DAY_MS))
-      .collect();
-    states[warningState(ws, now, t)] += 1;
-  }
-  const weekRuns = await ctx.db
-    .query("taskRuns")
-    .withIndex("by_venue_due", (q) => q.eq("venueId", venue._id).gte("dueAt", now - 7 * DAY_MS).lte("dueAt", now))
-    .collect();
-  return {
-    id: venue._id,
-    name: venue.name,
-    status,
-    live: live ? { _id: live._id, service: live.service, status: live.status, openedAt: live.openedAt ?? null, endsAt: live.endsAt } : null,
-    lastClose: last
-      ? {
-          shiftId: last.shiftId,
-          date: lastShift?.date ?? null,
-          service: lastShift?.service ?? null,
-          auto: last.status === "auto",
-          coversCount: last.coversCount,
-          netSalesCents: last.netSalesCents,
-          compsCents: last.compsCents,
-          voidsCents: last.voidsCents,
-          flagged: !!summary?.flagged,
-          submittedAt: last.submittedAt ?? null,
-        }
-      : null,
-    shortages,
-    states,
-    onTimeWeek: onTimeRate(weekRuns, now),
-  };
-}
-
-export const owner = query({
+/** The four venues, each with one overall state and its reasons, most urgent first (director, owner). */
+export const company = query({
   args: {},
   handler: async (ctx) => {
-    const actor = await requireRole(ctx, ["owner"]);
+    const actor = await requireCan(ctx, "company.view");
     const now = Date.now();
-    const t = await thresholdsOf(ctx, actor);
     const venues = (
       await ctx.db
         .query("venues")
         .withIndex("by_company", (q) => q.eq("companyId", actor.companyId))
         .collect()
-    ).filter((v) => v.active);
-    const cards = [];
-    for (const venue of venues) cards.push(await venueCard(ctx, venue, t, now));
-    const rated = cards.filter((c) => c.onTimeWeek !== null);
-    return {
-      venues: cards,
-      totals: {
-        netSalesCents: cards.reduce((n, c) => n + (c.lastClose?.netSalesCents ?? 0), 0),
-        coversCount: cards.reduce((n, c) => n + (c.lastClose?.coversCount ?? 0), 0),
-        lostCostCents: cards.reduce((n, c) => n + c.shortages.lostCostCents, 0),
-        review: cards.reduce((n, c) => n + c.states.review, 0),
-        followUp: cards.reduce((n, c) => n + c.states.follow_up, 0),
-        onTimeWeek: rated.length ? Math.round(rated.reduce((n, c) => n + c.onTimeWeek!, 0) / rated.length) : null,
-        exceptions: cards.filter((c) => c.status === "overdue" || c.status === "auto_closed" || c.lastClose?.flagged || c.shortages.items > 0).length,
-      },
-    };
-  },
-});
-
-export const venue = query({
-  args: { venueId: v.id("venues") },
-  handler: async (ctx, { venueId }) => {
-    const actor = await requireRole(ctx, ["owner"]);
-    const venue = await ctx.db.get(venueId);
-    if (!venue || venue.companyId !== actor.companyId) throw appError("NOT_FOUND");
-    const now = Date.now();
-    const t = await thresholdsOf(ctx, actor);
-    const card = await venueCard(ctx, venue, t, now);
-    const reports = await ctx.db
-      .query("closeReports")
-      .withIndex("by_venue_submitted", (q) => q.eq("venueId", venueId).gt("submittedAt", 0))
-      .order("desc")
-      .take(14);
-    const closes = [];
-    for (const r of reports) {
-      const shift = await ctx.db.get(r.shiftId);
-      if (!shift) continue;
-      const summary = (r.summary ?? null) as CloseSummary | null;
-      const by = r.submittedBy ? await ctx.db.get(r.submittedBy) : null;
-      closes.push({
-        shiftId: shift._id,
-        date: shift.date,
-        service: shift.service,
-        status: r.status,
-        autoClosed: !!shift.autoClosedAt,
-        reviewed: !!shift.reviewedAt,
-        coversCount: r.coversCount,
-        netSalesCents: r.netSalesCents,
-        compsCents: r.compsCents,
-        voidsCents: r.voidsCents,
-        flagged: !!summary?.flagged,
-        compsDiffCents: summary?.compsDiffCents ?? 0,
-        voidsDiffCents: summary?.voidsDiffCents ?? 0,
-        shortages: summary?.shortages ?? { items: 0, lostCostCents: 0 },
-        lateRuns: summary?.runs.late ?? 0,
-        incidents: r.incidents.length,
-        incidentTexts: r.incidents.map((i) => i.text),
-        nextShiftNotes: r.nextShiftNotes,
-        submittedBy: by?.name ?? null,
-        submittedAt: r.submittedAt ?? null,
-      });
-    }
-    return { venue: { id: venue._id, name: venue.name, address: venue.address ?? null, services: venue.services }, card, closes };
+    ).filter((x) => x.active);
+    const out = [];
+    for (const venue of venues) out.push({ ...(await stateOfVenue(ctx, venue, now)), sort: venue.sort });
+    return { venues: out.sort((a, b) => byUrgency(a, b) || a.sort - b.sort) };
   },
 });

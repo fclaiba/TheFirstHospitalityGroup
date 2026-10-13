@@ -155,6 +155,10 @@
     "tipPolicy": {
       "title": "Tip policy published",
       "body": "Read and confirm the written policy."
+    },
+    "closeFiled": {
+      "title": "Close filed",
+      "body": "{venue}: the close is ready to read."
     }
   }
 }
