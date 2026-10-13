@@ -128,7 +128,6 @@ export function MenuCard({ item, content }: { item: MenuItemView; content: Local
         href={`/menu/${item._id}`}
         className={cn(
           "pressable hover-line flex h-full flex-col overflow-hidden rounded-card border border-line bg-surface-raised",
-          !item.available && "opacity-80",
         )}
       >
         <div className="relative">

@@ -85,6 +85,15 @@ function initials(name: string) {
     .toUpperCase();
 }
 
+function VenueTitle({ name, role }: { name: string; role: string }) {
+  return (
+    <span className="flex min-w-0 flex-col leading-tight">
+      <span className="truncate text-body font-semibold text-ink">{name}</span>
+      {role ? <span className="truncate text-caption text-ink-muted">{role}</span> : null}
+    </span>
+  );
+}
+
 /**
  * The signed-in shell (BLUEPRINT 4.2, 4.4): a translucent header and tab bar that content scrolls under, safe areas,
  * 100dvh, the floating Request button on staff screens. One primary action per screen lives in the page itself.
@@ -106,19 +115,21 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link href={HREF[tabs[0]!]} aria-label={t("brand.name")} className="pressable flex size-target items-center justify-center rounded-control text-brand">
             <TFHGMark className="size-8" />
           </Link>
-          <button
-            type="button"
-            onClick={() => venues.length > 1 && setSwitcher(true)}
-            disabled={venues.length <= 1}
-            className="pressable flex min-h-target min-w-0 flex-1 items-center gap-1 rounded-control px-1 text-left disabled:opacity-100"
-            aria-label={venues.length > 1 ? `${t("common.chooseVenue")}: ${venueName}` : undefined}
-          >
-            <span className="flex min-w-0 flex-col leading-tight">
-              <span className="truncate text-body font-semibold text-ink">{venueName || t("brand.company")}</span>
-              {me ? <span className="truncate text-caption text-ink-muted">{t(`roles.${me.role}`)}</span> : null}
-            </span>
-            {venues.length > 1 ? <CaretDown weight="bold" className="size-4 shrink-0 text-ink-muted" aria-hidden /> : null}
-          </button>
+          {venues.length > 1 ? (
+            <button
+              type="button"
+              onClick={() => setSwitcher(true)}
+              className="pressable flex min-h-target min-w-0 flex-1 items-center gap-1 rounded-control px-1 text-left"
+              aria-label={`${t("common.chooseVenue")}: ${venueName}`}
+            >
+              <VenueTitle name={venueName || t("brand.company")} role={me ? t(`roles.${me.role}`) : ""} />
+              <CaretDown weight="bold" className="size-4 shrink-0 text-ink-muted" aria-hidden />
+            </button>
+          ) : (
+            <div className="flex min-h-target min-w-0 flex-1 items-center px-1">
+              <VenueTitle name={venueName || t("brand.company")} role={me ? t(`roles.${me.role}`) : ""} />
+            </div>
+          )}
           <Link href="/messages" aria-label={t("nav.messages")} className="pressable hover-surface relative flex size-target items-center justify-center rounded-full text-ink">
             <ChatsCircle weight="regular" className="size-6" aria-hidden />
             {unread ? (
