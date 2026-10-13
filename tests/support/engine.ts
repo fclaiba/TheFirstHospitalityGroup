@@ -86,4 +86,16 @@ export class World {
   liveShift(): Doc {
     return this.rows("shifts").find((s) => s.status === "open")!;
   }
+
+  /** This week's published schedule week of a venue (seeded). */
+  week(slug: "v1" | "v2" | "v3" | "v4" = "v1"): Doc {
+    const venueId = this.venue(slug)._id;
+    return this.rows("scheduleWeeks").filter((w) => w.venueId === venueId && w.status === "published")[0]!;
+  }
+
+  /** The rule with this key in a set ("company" or a position). */
+  rule(set: string, key: string): string {
+    const s = this.rows("ruleSets").find((x) => (set === "company" ? x.scope === "company" : x.scope === "position" && x.position === set))!;
+    return this.rows("rules").find((r) => r.setId === s._id && r.key === key)!._id;
+  }
 }
