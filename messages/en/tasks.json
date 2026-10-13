@@ -64,8 +64,23 @@
       "inactive": "Off",
       "saved": "Checklist saved",
       "itemsCount": "{n} tasks",
-      "weekdayNames": { "0": "Sun", "1": "Mon", "2": "Tue", "3": "Wed", "4": "Thu", "5": "Fri", "6": "Sat" },
+      "weekdayNames": {
+        "0": "Sun",
+        "1": "Mon",
+        "2": "Tue",
+        "3": "Wed",
+        "4": "Thu",
+        "5": "Fri",
+        "6": "Sat"
+      },
       "missingTranslation": "Fill in both languages"
+    },
+    "print": {
+      "title": "Printable checklists",
+      "subtitle": "The paper fallback for an outage. Print it every week for the office.",
+      "cta": "Print",
+      "open": "Print checklists",
+      "signature": "Done by, time:"
     }
   }
 }

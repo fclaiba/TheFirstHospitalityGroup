@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowUp, Camera, ListChecks, Plus, Star, Trash } from "@phosphor-icons/react";
+import { ArrowDown, ArrowUp, Camera, ListChecks, Plus, Printer, Star, Trash } from "@phosphor-icons/react";
 import { api } from "@/convex/_generated/api";
 import type { Doc, Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "@/lib/backend/hooks";
@@ -10,7 +10,7 @@ import { useLocale } from "@/lib/i18n-client";
 import { pickLocalized } from "@/lib/domain/i18n";
 import { taskTemplateInput } from "@/schemas";
 import { useMe, useVenue } from "@/hooks/use-app";
-import { Button, ConfirmButton, IconButton } from "@/components/ui/button";
+import { Button, ButtonLink, ConfirmButton, IconButton } from "@/components/ui/button";
 import { Field, Input, Select, SwitchRow } from "@/components/ui/field";
 import { ChoicePills } from "@/components/ui/choice";
 import { PageHeader, Section } from "@/components/ui/layout";
@@ -90,6 +90,9 @@ export function TemplateEditorScreen() {
           </Button>
         }
       />
+      <ButtonLink href="/manage/setup/tasks/print" variant="secondary" size="md" icon={<Printer weight="bold" className="size-5" />} className="self-start">
+        {t("tasks.print.open")}
+      </ButtonLink>
       <div className="scrollbar-none -mx-4 overflow-x-auto px-4">
         <ChoicePills label={t("tasks.setup.role")} value={role} onChange={setRole} options={ROLES.map((r) => ({ value: r, label: t(`roles.${r}`) }))} className="flex-nowrap" />
       </div>

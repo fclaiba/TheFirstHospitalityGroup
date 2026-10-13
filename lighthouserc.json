@@ -1,0 +1,18 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run start",
+      "startServerReadyPattern": "Ready",
+      "url": ["http://localhost:3300/", "http://localhost:3300/login"],
+      "numberOfRuns": 1
+    },
+    "assert": {
+      "assertions": {
+        "categories:accessibility": ["error", { "minScore": 1 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }]
+      }
+    },
+    "upload": { "target": "temporary-public-storage" }
+  }
+}

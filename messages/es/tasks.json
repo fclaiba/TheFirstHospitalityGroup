@@ -64,8 +64,23 @@
       "inactive": "Inactivo",
       "saved": "Checklist guardado",
       "itemsCount": "{n} tareas",
-      "weekdayNames": { "0": "Dom", "1": "Lun", "2": "Mar", "3": "Mié", "4": "Jue", "5": "Vie", "6": "Sáb" },
+      "weekdayNames": {
+        "0": "Dom",
+        "1": "Lun",
+        "2": "Mar",
+        "3": "Mié",
+        "4": "Jue",
+        "5": "Vie",
+        "6": "Sáb"
+      },
       "missingTranslation": "Completa los dos idiomas"
+    },
+    "print": {
+      "title": "Checklists para imprimir",
+      "subtitle": "El respaldo en papel para una caída. Imprímelo cada semana para la oficina.",
+      "cta": "Imprimir",
+      "open": "Imprimir checklists",
+      "signature": "Hecho por, hora:"
     }
   }
 }

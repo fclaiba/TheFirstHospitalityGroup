@@ -6,3 +6,9 @@ prototype/index.html
 *.png
 *.ico
 *.woff2
+ref/
+test-results/
+playwright-report/
+coverage/
+convex/_generated/
+lib/demo/registry.ts
