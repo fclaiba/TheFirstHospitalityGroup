@@ -50,8 +50,8 @@ function VenueCard({ card }: { card: VenueCardData }) {
           <div className="flex flex-col gap-1">
             <p className="text-small text-ink-muted">{lc.date ? t("owner.lastClose", { date: dateKeyLabel(locale, lc.date), service: lc.service ? t(`services.${lc.service}`) : "" }) : t("owner.lastCloseNoDate")}</p>
             <div className="grid grid-cols-2 gap-3">
-              <Kpi label={t("close.netSales")} value={lc.auto ? "·" : money(locale, lc.netSalesCents)} />
-              <Kpi label={t("close.covers")} value={lc.auto ? "·" : lc.coversCount} />
+              <Kpi label={t("close.netSales")} value={lc.auto ? t("owner.noFigures") : money(locale, lc.netSalesCents)} />
+              <Kpi label={t("close.covers")} value={lc.auto ? t("owner.noFigures") : lc.coversCount} />
             </div>
           </div>
         ) : (
@@ -78,9 +78,11 @@ function VenueCard({ card }: { card: VenueCardData }) {
               {t("owner.followN", { n: card.states.follow_up })}
             </StatusChip>
           ) : null}
-          <StatusChip tone="neutral" size="sm" icon={false}>
-            {t("owner.onTimeWeek", { pct: card.onTimeWeek === null ? "·" : `${card.onTimeWeek}%` })}
-          </StatusChip>
+          {card.onTimeWeek !== null ? (
+            <StatusChip tone="neutral" size="sm" icon={false}>
+              {t("owner.onTimeWeek", { pct: `${card.onTimeWeek}%` })}
+            </StatusChip>
+          ) : null}
         </div>
       </Link>
     </li>
@@ -101,7 +103,7 @@ export function VenueGrid() {
           <Kpi label={t("owner.netSalesLast")} value={money(locale, data.totals.netSalesCents)} />
           <Kpi label={t("owner.coversLast")} value={data.totals.coversCount} />
           <Kpi label={t("owner.shortageCost")} value={money(locale, data.totals.lostCostCents)} tone={data.totals.lostCostCents ? "danger" : "ok"} />
-          <Kpi label={t("owner.onTime")} value={data.totals.onTimeWeek === null ? "·" : `${data.totals.onTimeWeek}%`} hint={t("owner.thisWeek")} />
+          <Kpi label={t("owner.onTime")} value={data.totals.onTimeWeek === null ? t("owner.noFigures") : `${data.totals.onTimeWeek}%`} hint={t("owner.thisWeek")} />
         </KpiGrid>
       </Card>
       {sorted.length ? (
@@ -131,7 +133,7 @@ export function VenueDetail({ venueId }: { venueId: Id<"venues"> }) {
       <PageHeader back="/owner" eyebrow={data.venue.address ?? undefined} title={data.venue.name} action={<VenueStatusChip card={card} />} />
       <Card lift>
         <KpiGrid>
-          <Kpi label={t("owner.onTime")} value={card.onTimeWeek === null ? "·" : `${card.onTimeWeek}%`} hint={t("owner.thisWeek")} />
+          <Kpi label={t("owner.onTime")} value={card.onTimeWeek === null ? t("owner.noFigures") : `${card.onTimeWeek}%`} hint={t("owner.thisWeek")} />
           <Kpi label={t("close.shortages")} value={card.shortages.items} hint={card.shortages.items ? money(locale, card.shortages.lostCostCents) : undefined} tone={card.shortages.items ? "danger" : "ok"} />
           <Kpi label={t("states.review")} value={card.states.review} tone={card.states.review ? "danger" : undefined} />
           <Kpi label={t("states.follow_up")} value={card.states.follow_up} />

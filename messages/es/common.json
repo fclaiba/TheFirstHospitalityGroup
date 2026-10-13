@@ -89,10 +89,10 @@
     "late": "Trasnoche"
   },
   "shiftStatus": {
-    "scheduled": "Programado",
-    "open": "Abierto",
-    "closing": "Cerrando",
-    "closed": "Cerrado"
+    "scheduled": "Turno programado",
+    "open": "Turno abierto",
+    "closing": "Cerrando el turno",
+    "closed": "Turno cerrado"
   },
   "phases": {
     "open": "Apertura",

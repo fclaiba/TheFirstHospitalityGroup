@@ -34,7 +34,8 @@ export function getDemoState(): DemoState {
 }
 
 /** Runs a mutation through the engine, keeps its writes, and arms what it scheduled (requests.escalate at 90 s). */
-export async function commit(name: string, args: unknown): Promise<unknown> {
+export async function commit(name: string, args: unknown, opts: { seeding?: boolean } = {}): Promise<unknown> {
+  if (!opts.seeding) await whenReady();
   const { runMutation } = await loadEngine();
   const { result, state, scheduled } = await runMutation(getDemoState(), name, args);
   useDemoStore.setState(state);
@@ -54,7 +55,7 @@ export async function commit(name: string, args: unknown): Promise<unknown> {
 export async function reseed(keepSession = false): Promise<void> {
   const session = keepSession ? useDemoStore.getState().session : null;
   useDemoStore.setState({ ...emptyState(), seeding: true, hydrated: false });
-  await commit("seed:demo", {});
+  await commit("seed:demo", {}, { seeding: true });
   useDemoStore.setState({ session, seeding: false, hydrated: true });
 }
 
@@ -74,5 +75,18 @@ export function storeBlob(dataUrl: string, contentType: string, size: number): s
 if (typeof window !== "undefined") {
   window.addEventListener("storage", (e) => {
     if (e.key === KEY) void useDemoStore.persist.rehydrate();
+  });
+}
+
+/** Resolves once the demo database is hydrated or seeded, so nothing runs against an empty store. */
+export function whenReady(): Promise<void> {
+  if (useDemoStore.getState().hydrated) return Promise.resolve();
+  return new Promise((resolve) => {
+    const stop = useDemoStore.subscribe((s) => {
+      if (s.hydrated) {
+        stop();
+        resolve();
+      }
+    });
   });
 }

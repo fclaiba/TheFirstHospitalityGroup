@@ -59,13 +59,19 @@
       "nameRequired": "Ponle un nombre al local.",
       "serviceRequired": "Activa al menos un servicio.",
       "timeFormat": "Escribe las horas como 17:30."
-    }
+    },
+    "noFigures": "Sin cifras"
   },
   "audit": {
     "subtitle": "Cada acción sensible, de la más nueva a la más vieja.",
     "entity": "Qué cambió",
     "window": "Cuándo",
-    "windows": { "1": "Últimas 24 horas", "7": "Últimos 7 días", "30": "Últimos 30 días", "all": "Todo" },
+    "windows": {
+      "1": "Últimas 24 horas",
+      "7": "Últimos 7 días",
+      "30": "Últimos 30 días",
+      "all": "Todo"
+    },
     "none": "Nada en este período",
     "system": "El sistema",
     "entities": {

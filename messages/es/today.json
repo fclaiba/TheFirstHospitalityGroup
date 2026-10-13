@@ -3,7 +3,7 @@
     "greetingMorning": "Buenos días, {name}",
     "greetingAfternoon": "Buenas tardes, {name}",
     "greetingEvening": "Buenas noches, {name}",
-    "shiftLive": "{service} abierto",
+    "shiftLive": "{service} en curso",
     "shiftClosing": "{service} en cierre",
     "noShiftTitle": "No hay un turno abierto ahora",
     "noShiftBody": "Tu checklist aparece aquí cuando el manager abre el turno.",

@@ -95,7 +95,7 @@ export function MenuScreen() {
                 {t(`menu.category.${cat}`)}
                 <span className="font-mono text-caption tracking-normal normal-case">{t("menu.count", { n: list.length })}</span>
               </h2>
-              <ul className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 md:grid-cols-3">
+              <ul className="grid grid-cols-2 gap-3 md:grid-cols-3">
                 {list.map((item) => (
                   <MenuCard key={item._id} item={item} content={content} />
                 ))}

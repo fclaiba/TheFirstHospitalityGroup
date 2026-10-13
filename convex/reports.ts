@@ -198,7 +198,7 @@ async function venueCard(ctx: QueryCtx, venue: Doc<"venues">, t: Thresholds, now
   let shortages = summary?.shortages ?? { items: 0, lostCostCents: 0 };
   if (live) {
     const s = await shiftStock(ctx, live);
-    shortages = { items: s.totals.shortItems, lostCostCents: s.totals.lostCostCents };
+    if (s.totals.shortItems) shortages = { items: s.totals.shortItems, lostCostCents: s.totals.lostCostCents };
   }
   const states: Record<WarningState, number> = { up_to_date: 0, attention: 0, follow_up: 0, review: 0 };
   for (const u of await peopleOf(ctx, venue._id)) {

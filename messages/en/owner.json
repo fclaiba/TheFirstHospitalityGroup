@@ -59,13 +59,19 @@
       "nameRequired": "Give the venue a name.",
       "serviceRequired": "Turn on at least one service.",
       "timeFormat": "Write times like 17:30."
-    }
+    },
+    "noFigures": "No figures"
   },
   "audit": {
     "subtitle": "Every sensitive action, newest first.",
     "entity": "What changed",
     "window": "When",
-    "windows": { "1": "Last 24 hours", "7": "Last 7 days", "30": "Last 30 days", "all": "All time" },
+    "windows": {
+      "1": "Last 24 hours",
+      "7": "Last 7 days",
+      "30": "Last 30 days",
+      "all": "All time"
+    },
     "none": "Nothing in this window",
     "system": "The system",
     "entities": {
