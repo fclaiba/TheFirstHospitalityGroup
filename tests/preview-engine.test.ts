@@ -29,8 +29,8 @@ describe("preview engine", () => {
 
   it("signs in through the bridge and answers me with venues", async () => {
     const s = await signIn(await seeded(), "ana.p");
-    const me = (await runQuery(s, "auth:me", {})) as { role: string; venues: Array<{ name: string }> };
-    expect(me.role).toBe("server");
+    const me = (await runQuery(s, "auth:me", {})) as { primaryPosition: string; venues: Array<{ name: string }> };
+    expect(me.primaryPosition).toBe("server");
     expect(me.venues.map((v) => v.name)).toEqual(["The First Midtown"]);
   }, 30_000);
 
@@ -51,7 +51,7 @@ describe("preview engine", () => {
   it("gives staff their run for tonight", async () => {
     const s = await signIn(await seeded(), "ana.p");
     const venueId = s.tables.venues![0]!._id;
-    const r = (await runQuery(s, "tasks:myRun", { venueId })) as { runs: Array<{ items: unknown[] }> };
+    const r = (await runQuery(s, "tasks:myRuns", { venueId })) as { runs: Array<{ items: unknown[] }> };
     expect(r.runs.length).toBeGreaterThan(0);
     expect(r.runs[0]!.items.length).toBeGreaterThan(0);
   }, 30_000);
