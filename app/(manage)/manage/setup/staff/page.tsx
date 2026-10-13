@@ -8,21 +8,23 @@ import { useQuery } from "@/lib/backend/hooks";
 import { useRun } from "@/lib/backend/run";
 import { useLocale } from "@/lib/i18n-client";
 import { useMe, useVenue } from "@/hooks/use-app";
-import { ALCOHOL_ROLES, staffRoles } from "@/lib/domain/permissions";
-import { LEVELS } from "@/lib/domain/types";
-import type { Level, Locale, Role } from "@/lib/domain/types";
+import { manageablePositions } from "@/lib/domain/permissions";
+import { areaOf, servesAlcohol } from "@/lib/domain/positions";
+import { AREAS, POSITIONS } from "@/lib/domain/types";
+import type { Locale, Position } from "@/lib/domain/types";
 import { toast } from "@/lib/toast";
 import { RequireAuth } from "@/components/app/require-auth";
 import { PageHeader, List } from "@/components/ui/layout";
 import { Button, ConfirmButton } from "@/components/ui/button";
-import { ChoicePills, Segmented } from "@/components/ui/choice";
+import { ChoicePills } from "@/components/ui/choice";
 import { Field, Input, Select, SwitchRow } from "@/components/ui/field";
 import { Sheet } from "@/components/ui/sheet";
 import { EmptyState, InlineError, ScreenSkeleton } from "@/components/ui/states";
-import { LevelBadge, StatusChip } from "@/components/ui/status";
+import { PositionBadge, StatusChip } from "@/components/ui/status";
+import { cn } from "@/lib/cn";
 
-type Person = { id: string; name: string; username: string; email: string | null; locale: string; role: string; level: string; active: boolean; mustChangePassword: boolean; venueIds: string[]; locked: boolean };
-type Draft = { userId?: string; name: string; username: string; email: string; role: Role; level: Level; venueIds: string[]; locale: Locale; legalAge: boolean };
+type Person = { id: string; name: string; username: string; email: string | null; locale: string; primaryPosition: string; enabledPositions: string[]; title: string | null; active: boolean; mustChangePassword: boolean; legalAgeConfirmed: boolean; venueIds: string[]; locked: boolean };
+type Draft = { userId?: string; name: string; username: string; email: string; primary: Position; enabled: Position[]; title: string; venueIds: string[]; locale: Locale; legalAge: boolean };
 
 /** Shows a temporary password once, with copy (ADR 0003): the person must choose their own at first sign-in. */
 function TempPassword({ value, name, onClose }: { value: string | null; name: string; onClose: () => void }) {
@@ -54,8 +56,9 @@ function PersonSheet({ draft, setDraft, onSaved }: { draft: Draft | null; setDra
   const reset = useRun(api.staff.resetPassword, { silent: true });
   const deactivate = useRun(api.staff.deactivate, { success: t("staff.deactivated") });
   if (!draft || !me) return null;
-  const roles = staffRoles(me.role as Role);
-  const needsAge = ALCOHOL_ROLES.includes(draft.role);
+  const allowed = manageablePositions((me.primaryPosition as Position) ?? "server", POSITIONS);
+  const needsAge = [draft.primary, ...draft.enabled].some(servesAlcohol);
+  const toggleEnabled = (p: Position) => setDraft({ ...draft, enabled: draft.enabled.includes(p) ? draft.enabled.filter((x) => x !== p) : [...draft.enabled, p] });
   const f = upsert.fields;
   const save = async () => {
     const r = await upsert.run({
@@ -63,8 +66,9 @@ function PersonSheet({ draft, setDraft, onSaved }: { draft: Draft | null; setDra
       name: draft.name,
       username: draft.username,
       email: draft.email || undefined,
-      role: draft.role,
-      level: draft.level,
+      primaryPosition: draft.primary,
+      enabledPositions: draft.enabled.filter((p) => p !== draft.primary),
+      title: draft.title.trim() || undefined,
       venueIds: draft.venueIds as Id<"venues">[],
       locale: draft.locale,
       legalAgeConfirmed: needsAge ? draft.legalAge : undefined,
@@ -96,21 +100,48 @@ function PersonSheet({ draft, setDraft, onSaved }: { draft: Draft | null; setDra
         <Field label={t("staff.email")} optional={t("common.optional")} help={t("staff.emailHelp")}>
           {(p) => <Input {...p} type="email" inputMode="email" autoCapitalize="none" value={draft.email} onChange={(e) => setDraft({ ...draft, email: e.target.value })} />}
         </Field>
-        <Field label={t("staff.role")}>
+        <Field label={t("staff.primaryPosition")} help={t("staff.primaryHelp")}>
           {(p) => (
-            <Select {...p} value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value as Role })}>
-              {roles.map((r) => (
-                <option key={r} value={r}>
-                  {t(`roles.${r}`)}
-                </option>
+            <Select {...p} value={draft.primary} onChange={(e) => setDraft({ ...draft, primary: e.target.value as Position, enabled: draft.enabled.filter((x) => x !== e.target.value) })}>
+              {AREAS.filter((a) => allowed.some((x) => areaOf(x) === a)).map((a) => (
+                <optgroup key={a} label={t(`areas.${a}`)}>
+                  {allowed
+                    .filter((x) => areaOf(x) === a)
+                    .map((x) => (
+                      <option key={x} value={x}>
+                        {t(`positions.${x}`)}
+                      </option>
+                    ))}
+                </optgroup>
               ))}
             </Select>
           )}
         </Field>
-        <div className="flex flex-col gap-2">
-          <p className="text-small font-semibold text-ink">{t("levels.label")}</p>
-          <Segmented<Level> label={t("levels.label")} value={draft.level} onChange={(level) => setDraft({ ...draft, level })} options={LEVELS.map((l) => ({ value: l, label: t(`levels.${l}`) }))} />
-        </div>
+        <fieldset className="flex flex-col gap-2">
+          <legend className="mb-1 text-small font-semibold text-ink">{t("staff.enabledPositions")}</legend>
+          <p className="text-small text-ink-muted">{t("staff.enabledHelp")}</p>
+          <div className="flex flex-wrap gap-2">
+            {allowed
+              .filter((x) => x !== draft.primary && areaOf(x) !== "venue_management" && areaOf(x) !== "corporate")
+              .map((x) => {
+                const on = draft.enabled.includes(x);
+                return (
+                  <button
+                    key={x}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => toggleEnabled(x)}
+                    className={cn("pressable inline-flex min-h-target items-center rounded-pill border px-4 text-control font-medium", on ? "border-ink bg-ink text-on-ink" : "hover-line border-line-strong text-ink")}
+                  >
+                    {t(`positions.${x}`)}
+                  </button>
+                );
+              })}
+          </div>
+        </fieldset>
+        <Field label={t("staff.jobTitle")} optional={t("common.optional")} help={t("staff.jobTitleHelp")}>
+          {(p) => <Input {...p} maxLength={40} value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} />}
+        </Field>
         {me.venues.length > 1 ? (
           <div className="flex flex-col gap-2">
             <p className="text-small font-semibold text-ink">{t("staff.venues")}</p>
@@ -188,7 +219,7 @@ function PersonSheet({ draft, setDraft, onSaved }: { draft: Draft | null; setDra
   );
 }
 
-/** Staff accounts of the venue (ADR 0003): create with a temporary password, edit, level, reset, deactivate. */
+/** Staff accounts of the venue (ADR 0003, 0020): create with a temporary password, primary and enabled positions, reset, deactivate. */
 function StaffSetup() {
   const { t } = useLocale();
   const me = useMe();
@@ -206,9 +237,9 @@ function StaffSetup() {
   }, [list, query]);
 
   const edit = (p: Person) =>
-    setDraft({ userId: p.id, name: p.name, username: p.username, email: p.email ?? "", role: p.role as Role, level: p.level as Level, venueIds: p.venueIds, locale: p.locale as Locale, legalAge: true });
+    setDraft({ userId: p.id, name: p.name, username: p.username, email: p.email ?? "", primary: p.primaryPosition as Position, enabled: p.enabledPositions as Position[], title: p.title ?? "", venueIds: p.venueIds, locale: p.locale as Locale, legalAge: p.legalAgeConfirmed });
   const create = () =>
-    setDraft({ name: "", username: "", email: "", role: "server", level: "C", venueIds: venueId ? [venueId] : [], locale: (me?.locale as Locale) ?? "en", legalAge: false });
+    setDraft({ name: "", username: "", email: "", primary: "polisher", enabled: [], title: "", venueIds: venueId ? [venueId] : [], locale: (me?.locale as Locale) ?? "en", legalAge: false });
 
   return (
     <>
@@ -245,11 +276,11 @@ function StaffSetup() {
                 onClick={() => (p.active ? edit(p) : void reactivate.run({ userId: p.id as Id<"users">, active: true }))}
                 className="pressable-row hover-surface flex min-h-target-lg w-full items-center gap-3 px-4 py-2.5 text-left"
               >
-                <LevelBadge level={p.level as Level} label={t(`levels.${p.level}`)} />
-                <span className="flex min-w-0 flex-1 flex-col">
+                <span className="flex min-w-0 flex-1 flex-col gap-1">
                   <span className="truncate text-body font-semibold text-ink">{p.name}</span>
-                  <span className="truncate text-small text-ink-muted">
-                    {t(`roles.${p.role}`)}, <span className="font-mono">{p.username}</span>
+                  <span className="flex flex-wrap items-center gap-2 text-small text-ink-muted">
+                    <PositionBadge position={p.primaryPosition as Position} />
+                    <span className="font-mono">{p.username}</span>
                   </span>
                 </span>
                 {!p.active ? (

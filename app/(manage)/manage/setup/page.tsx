@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpenText, ForkKnife, IdentificationCard, ListChecks, MapTrifold, Wine } from "@phosphor-icons/react";
+import { BookOpenText, ForkKnife, IdentificationCard, ListChecks, MapTrifold } from "@phosphor-icons/react";
 import { RequireAuth } from "@/components/app/require-auth";
 import { LinkRow, List, PageHeader, Section } from "@/components/ui/layout";
 import { useVenue } from "@/hooks/use-app";
@@ -14,9 +14,8 @@ function SetupHub() {
     { href: "/manage/setup/staff", icon: IdentificationCard, key: "staff" },
     { href: "/manage/setup/tasks", icon: ListChecks, key: "tasks" },
     { href: "/manage/setup/rules", icon: BookOpenText, key: "rules" },
-    { href: "/manage/setup/menu", icon: ForkKnife, key: "menu" },
-    { href: "/manage/setup/inventory", icon: Wine, key: "inventory" },
-    { href: "/manage/sections", icon: MapTrifold, key: "sections" },
+    { href: "/manage/setup/sections", icon: MapTrifold, key: "sections" },
+    { href: "/manage/setup/menu-availability", icon: ForkKnife, key: "menu" },
   ];
   return (
     <div className="flex flex-col gap-6">
