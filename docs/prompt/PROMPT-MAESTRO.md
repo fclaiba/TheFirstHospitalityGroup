@@ -1,7 +1,8 @@
 # Prompt maestro — The First Hospitality Group (brandkit + blueprint fullstack centralizado)
 
 > Modelo destino: Claude (Claude Code o chat de Claude con skills). Copiar todo lo que está entre las líneas `=====`.
-> Ya se ejecutó una vez el 2026-10-13: el resultado es este paquete. Sirve para rehacerlo o actualizarlo en otra sesión, adjuntando el blueprint de OSCURA NYC como blueprint existente.
+> Ya se ejecutó el 2026-10-13 y se actualizó a v1.3 el mismo día (estética ejecutiva, verde martini, el león, toda la organización por áreas, cadena de supervisión, estados en vez de números). Antes, v1.2: solo gestión (sin plata), el horario en el centro como 7shifts y 10 puestos con escalera. Donde este prompt diga algo distinto, mandan `docs/BLUEPRINT.md` y `docs/adr/README.md`.
+> El resultado es este paquete. Sirve para rehacerlo o actualizarlo en otra sesión, adjuntando el blueprint de OSCURA NYC como blueprint existente.
 
 ## Estrategia
 
@@ -11,7 +12,7 @@
    3. Correr /blueprint-fullstack-premium usando lo anterior como entrada.
    4. Entregar un único .zip.
 - **Conflictos:** en producto y marca manda el prompt nuevo. En stack, convenciones de código e infraestructura manda el blueprint existente. Cada conflicto queda registrado como decisión de arquitectura (ADR).
-- **Branding:** blanco como principal, negro como secundario y verde aceituna `#5C6B2F` como color de marca, con chequeo de contraste. Los colores de los warnings van aparte, para no confundir el color de marca con un estado.
+- **Branding:** blanco como principal, negro como secundario y verde martini `#4A6B3E` como color de marca, y un león de perfil como logo, con chequeo de contraste. Los colores de los warnings van aparte, para no confundir el color de marca con un estado.
 
 =====
 
@@ -25,7 +26,7 @@ Sos el director técnico y de producto de TCM. Vas a centralizar un proyecto de 
 </insumos>
 
 <contexto_del_producto>
-<nombre>The First (la app) de The First Hospitality Group. Monograma TFHG.</nombre>
+<nombre>The First (la app) de The First Hospitality Group. Logo: un león de perfil en verde martini.</nombre>
 
 <cliente>
 Una compañía de hospitality high-class en Nueva York, The First Hospitality Group, con 4 restaurantes. Quien paga es el dueño. Pidió algo como 7shifts, pero 7shifts solo resuelve horarios y comunicación.
@@ -137,11 +138,11 @@ Próximo hito comercial: piloto de 2 semanas en 1 restaurante, luego los 4.
 <branding>
 - Blanco: color principal (fondos, superficies). Proponé un blanco cálido apenas roto si mejora la lectura; justificalo.
 - Negro: color secundario (texto, navegación, contraste).
-- Verde aceituna: color de marca (acentos, botón principal, estados activos). Punto de partida: #5C6B2F; validá contraste AA sobre blanco y armá su escala de tonos.
-- Colores semánticos aparte para warnings (atención, seguimiento, revisión): no usar el verde aceituna como "OK" para no mezclar marca con estado.
+- Verde martini: color de marca (el león, botón principal, estados activos): #4A6B3E, 6,1:1 con texto blanco; escala de tonos en docs/brand/tokens.css.
+- Colores semánticos aparte para warnings (atención, seguimiento, revisión): no usar el verde martini como "OK" para no mezclar marca con estado.
 - Tono: corporativo, sobrio, de lujo silencioso. Sin emojis, sin degradados chillones.
 - Tipografía: Figtree para toda la interfaz (ejecutiva, legible de 12 a 65 años, no snob) e IBM Plex Mono para cifras.
-- Logo: monograma TFHG (TF sobre HG) en Figtree Bold con espaciado óptico, más el wordmark THE FIRST.
+- Logo: un león de perfil, una sola masa en verde martini #4A6B3E con tres curvas concéntricas en la melena, más el wordmark THE FIRST. Estética ejecutiva de hospitalidad, sin nada de vida nocturna.
 - El branding es del producto, no de TCM: la firma de TCM va oculta, como indique la skill de brand kit.
 </branding>
 </contexto_del_producto>

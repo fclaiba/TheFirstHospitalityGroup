@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { World } from "./support/engine";
 import { addDays, nyDateKey } from "../lib/time";
 
-// Menu and schedule contracts (BLUEPRINT 7.2) over the real handlers (ADR 0018).
+// Menu and schedule contracts (BLUEPRINT 7.2) over the real handlers (ADR 0028).
 
 type Item = { _id: string; name: { en: string }; available: boolean; priceCents: number; basePriceCents: number; category: string; allergens: string[] };
 

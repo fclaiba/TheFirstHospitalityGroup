@@ -36,9 +36,9 @@ Status: **Keep** (copy with tests), **Adapt** (copy and change), **Replace** (OS
 |---|---|---|---|
 | Events (nights) with open/close | Adapt | Shifts per venue and service | ADR 0008 |
 | `night.open` requires opening counts | Adapt | `shifts.open` creates opening runs; bar counts at open | |
-| Close calculator (`lib/domain/close.ts`) | Adapt | Manager close report and summary | ADR 0008 |
+| Close calculator (`lib/domain/close.ts`) | Adapt | Manager close without money: incidents, attendance, open items, shortages, notes | ADR 0008, 0018 |
 | Ended-night sweep (ADR 0027) | Adapt | `shift.sweep` (+4 h notify, +8 h auto-close) | |
-| Stock ledger, purchases, weighted cost (ADR 0014) | Keep | Bar inventory, counts in tenths, per venue | |
+| Stock ledger, purchases, weighted cost (ADR 0014) | Replace | Bar shortage list (Low, Out, Restocked, Ordered); optional counts in tenths without costs (P3) | ADR 0018, 0023 |
 | Menu catalog (drinks, tiers, spirits) | Replace | Company menu with photos, allergens, `{en, es}`, venue availability | Problem 1 |
 | House rules + consent before a QR | Adapt | Rule sets per role, versioned, acknowledgment before runs | Rules feed warnings |
 | Owner guide with checklists (ADR 0018) | Adapt | `/guide` per role + task templates | |
@@ -50,20 +50,22 @@ Status: **Keep** (copy with tests), **Adapt** (copy and change), **Replace** (OS
 | Bar sales registration, free drinks | Drop | - | The POS sells; The First controls |
 | Remarketing, segments, campaigns, unsubscribe, Resend webhook | Drop | - | No guests |
 | 21+ door check, last call | Drop | Legal-age note on bartender role assignment | Blueprint 10 |
-| Black and white brand, Instrument Serif | Replace | TFHG brand: white, ink, olive, Figtree, TFHG monogram | ADR 0009 |
+| Black and white brand, Instrument Serif, after-hours mood | Replace | Executive hospitality brand: white, ink, martini green, Figtree, the lion; light by default | ADR 0009, 0025 |
 | - | Add | Opening and closing checklists with photo evidence | Problem 2 |
 | - | Add | Messages with read receipts and confirmation | Problem 6 |
 | - | Add | Warnings and performance states | ADR 0007 |
 | - | Add | Web push | ADR 0006 |
 | - | Add | Multi-venue tenancy | ADR 0002 |
 | - | Add | Photo storage | ADR 0005 |
-| - | Add (P3) | Schedule and events | ADR 0011 |
-| Bar sales registration (button flow) | Replace | Floor requests: water, clear, help, void and comp approvals (no sales) | ADR 0013 |
-| Night close money check (expected vs counted) | Adapt | Approved comps and voids vs POS figures in the close | ADR 0013 |
-| - | Add | Sections per shift, table notes, kitchen allergy board | ADR 0013, 0016 |
-| - | Add | Staff levels A, B, C | ADR 0014 |
+| Bar sales registration (button flow) | Replace | Floor requests: water, clear, help | ADR 0013, 0018 |
+| Night close money check (expected vs counted) | Drop | - | ADR 0018 |
+| - | Add | Sections per shift, table notes with allergy confirmation by the expo | ADR 0016, 0021 |
+| Roles owner, door, bar | Replace | Ten positions in four layers, enabled positions, career ladder | ADR 0020 |
 | - | Add | Weekly recurring tasks | ADR 0015 |
-| - | Add (P3) | Pay records and adjustments with approval | ADR 0017 |
+| Events calendar (ADR 0018 of OSCURA) | Adapt | Schedule weeks, shifts, events with required positions, publish with confirmation | ADR 0019 |
+| - | Add | Floor plans with seats, 86s, pre-shift notes | ADR 0021 |
+| - | Add | Schedule and menu confirmations, menu quiz | ADR 0022 |
+| - | Add (P3) | Tip policy as configuration | ADR 0024 |
 
 ## OSCURA debt not carried
 Stripe packages and fields, `lib/money.ts` ticket tax and tips, the `table` copy namespace, the legacy inventory editor, `REFERRAL_REQUIRED`, Spanish route redirects, the old Vercel project name. None of these enter the new repo.

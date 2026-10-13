@@ -1,4 +1,4 @@
-// Backend test harness (BLUEPRINT 15, ADR 0018): runs the real Convex handlers over the in-memory database with the
+// Backend test harness (BLUEPRINT 15, ADR 0028): runs the real Convex handlers over the in-memory database with the
 // demo seed. `as(username)` signs in through the bridge; `q` and `m` run a query or a mutation as that person and
 // keep mutation writes, like a sequence of Convex transactions.
 import { previewSecret, runMutation, runQuery } from "../../lib/demo/engine";

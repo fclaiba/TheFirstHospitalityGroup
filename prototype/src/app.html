@@ -7,12 +7,12 @@
 :root {
   --canvas: #ffffff; --surface: #f6f7f3; --raised: #ffffff; --line: #e3e6dc; --line-strong: #858a7f;
   --ink: #111311; --ink-muted: #5e625b; --ink-subtle: #6b6f68; --on-ink: #ffffff;
-  --olive-50: #f3f5ec; --olive-100: #e8ecdc; --olive-200: #c9d1ae; --olive-300: #9aaa62;
-  --brand: #5c6b2f; --brand-pressed: #4a5726; --on-brand: #ffffff; --focus: #2f5b8f;
+  --olive-50: #eef2e8; --olive-100: #e3ebdb; --olive-200: #c8d6ba; --olive-300: #9db88a;
+  --brand: #4a6b3e; --brand-pressed: #36522f; --on-brand: #ffffff; --focus: #2f5b8f;
   --ok-fg: #1f5f46; --ok-bg: #e3f1ea; --info-fg: #2f5b8f; --info-bg: #e5edf6;
   --att-fg: #7a4a04; --att-bg: #fef3c7; --fol-fg: #9a3b0b; --fol-bg: #fde8d7;
   --rev-fg: #912018; --rev-bg: #fee4e2; --danger: #b42318;
-  --stage: #1a1d18; --stage-ink: #f2f3ee; --stage-muted: #a2a79a;
+  --stage: #e9ebe4; --stage-ink: #111311; --stage-muted: #5e625b;
   --sans: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
   --scale: 1;
@@ -28,19 +28,19 @@
   :root:not([data-theme="light"]) {
     --canvas: #0f110e; --surface: #171a15; --raised: #1d211b; --line: #2a2f26; --line-strong: #636a5d;
     --ink: #f2f3ee; --ink-muted: #b6bbae; --ink-subtle: #a2a79a; --on-ink: #111311;
-    --olive-50: #1a1f12; --olive-100: #232a17; --brand: #9aaa62; --brand-pressed: #c9d1ae; --on-brand: #111311; --focus: #8fb4e3;
+    --olive-50: #1b2418; --olive-100: #24301f; --brand: #9db88a; --brand-pressed: #c8d6ba; --on-brand: #111311; --focus: #8fb4e3;
     --ok-fg: #8fd1b3; --ok-bg: #16281f; --info-fg: #9dbfe6; --info-bg: #15202d; --att-fg: #f5cf6b; --att-bg: #2b2208;
     --fol-fg: #f6a774; --fol-bg: #2e1709; --rev-fg: #f69c94; --rev-bg: #301110; --danger: #f69c94;
-    --stage: #090a08; color-scheme: dark;
+    --stage: #e9ebe4; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --canvas: #0f110e; --surface: #171a15; --raised: #1d211b; --line: #2a2f26; --line-strong: #636a5d;
   --ink: #f2f3ee; --ink-muted: #b6bbae; --ink-subtle: #a2a79a; --on-ink: #111311;
-  --olive-50: #1a1f12; --olive-100: #232a17; --brand: #9aaa62; --brand-pressed: #c9d1ae; --on-brand: #111311; --focus: #8fb4e3;
+  --olive-50: #1b2418; --olive-100: #24301f; --brand: #9db88a; --brand-pressed: #c8d6ba; --on-brand: #111311; --focus: #8fb4e3;
   --ok-fg: #8fd1b3; --ok-bg: #16281f; --info-fg: #9dbfe6; --info-bg: #15202d; --att-fg: #f5cf6b; --att-bg: #2b2208;
   --fol-fg: #f6a774; --fol-bg: #2e1709; --rev-fg: #f69c94; --rev-bg: #301110; --danger: #f69c94;
-  --stage: #090a08; color-scheme: dark;
+  --stage: #e9ebe4; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html { -webkit-tap-highlight-color: transparent; -webkit-text-size-adjust: 100%; }
@@ -56,21 +56,22 @@ p { margin: 0; }
 .stage { min-height: 100dvh; display: flex; gap: 40px; align-items: center; justify-content: center; padding-block: 24px; padding-inline: 16px; }
 .panel { width: 320px; color: var(--stage-ink); display: flex; flex-direction: column; gap: 22px; }
 .panel .brand { display: flex; align-items: center; gap: 14px; }
-.panel .brand svg { width: 44px; height: 44px; }
+.panel .brand svg { width: 56px; height: 56px; }
 .panel .brand b { display: block; font-size: 17px; letter-spacing: .16em; font-weight: 600; }
-.panel .brand span { font-size: 11px; letter-spacing: .3em; color: var(--olive-200); font-weight: 500; }
+.panel .brand span { font-size: 11px; letter-spacing: .3em; color: #4a6b3e; font-weight: 500; }
 .panel h2 { font-size: 13px; font-weight: 600; letter-spacing: .06em; color: var(--stage-muted); text-transform: uppercase; margin-bottom: 8px; }
 .panel p { font-size: 15px; color: var(--stage-muted); }
 .roles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.roles button { border: 1px solid #3a4034; border-radius: var(--r-ctl); padding: 12px; text-align: left; min-height: 56px; color: var(--stage-ink); }
+.panel .brand b { color: #111311; }
+.roles button { border: 1px solid #c8cdbd; background: #ffffff; border-radius: var(--r-ctl); padding: 12px; text-align: left; min-height: 56px; color: var(--stage-ink); }
 .roles button small { display: block; color: var(--stage-muted); font-size: 12px; }
-.roles button[aria-pressed="true"] { background: #5c6b2f; border-color: #5c6b2f; }
-.roles button[aria-pressed="true"] small { color: #e8ecdc; }
+.roles button[aria-pressed="true"] { background: #4a6b3e; border-color: #4a6b3e; color: #ffffff; }
+.roles button[aria-pressed="true"] small { color: #e3ebdb; }
 .panel .row { display: flex; gap: 8px; flex-wrap: wrap; }
-.chipbtn { border: 1px solid #3a4034; border-radius: 999px; padding: 8px 14px; font-size: 14px; color: var(--stage-ink); min-height: 40px; }
-.chipbtn[aria-pressed="true"] { background: var(--stage-ink); color: #111311; }
-.demo-note { font-size: 13px; color: var(--stage-muted); border-top: 1px solid #2a2f26; padding-top: 14px; }
-.phone { width: 400px; height: min(860px, calc(100dvh - 48px)); border-radius: 48px; background: #050605; padding: 12px; box-shadow: 0 40px 80px rgba(0,0,0,.45); flex: none; }
+.chipbtn { border: 1px solid #c8cdbd; background: #ffffff; border-radius: 999px; padding: 8px 14px; font-size: 14px; color: var(--stage-ink); min-height: 40px; }
+.chipbtn[aria-pressed="true"] { background: #111311; color: #ffffff; border-color: #111311; }
+.demo-note { font-size: 13px; color: var(--stage-muted); border-top: 1px solid #d5d9cd; padding-top: 14px; }
+.phone { width: 400px; height: min(860px, calc(100dvh - 48px)); border-radius: 48px; background: #2b2f2a; padding: 10px; box-shadow: 0 30px 60px rgba(17,19,17,.18); flex: none; }
 .app { width: 100%; height: 100%; border-radius: 38px; overflow: hidden; background: var(--canvas); display: flex; flex-direction: column; position: relative; }
 @media (max-width: 860px) {
   .stage { padding: 0; display: block; }
@@ -82,7 +83,7 @@ p { margin: 0; }
 
 /* App chrome */
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: calc(14px + env(safe-area-inset-top, 0px)) 18px 12px; border-bottom: 1px solid var(--line); background: var(--canvas); }
-.topbar .mark { width: 30px; height: 30px; color: var(--brand); flex: none; }
+.topbar .mark { width: 34px; height: 34px; flex: none; }
 .topbar .who { text-align: right; font-size: var(--t-cap); line-height: 1.3; min-width: 0; }
 .topbar .who b { display: block; font-size: var(--t-small); font-weight: 600; }
 .topbar .who span { color: var(--ink-muted); }
@@ -94,7 +95,7 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px 18
 .tabs button { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 52px; justify-content: center; font-size: 12px; font-weight: 600; color: var(--ink-muted); position: relative; border-radius: 10px; }
 .tabs button svg { width: 24px; height: 24px; }
 .tabs button[aria-current="page"] { color: var(--brand); }
-.tabs .dot { position: absolute; top: 6px; left: calc(50% + 8px); min-width: 18px; height: 18px; border-radius: 9px; background: var(--danger); color: #fff; font-size: 11px; line-height: 18px; padding: 0 5px; }
+.tabs .dot { position: absolute; top: 8px; left: calc(50% + 8px); width: 10px; height: 10px; border-radius: 5px; background: var(--danger); box-shadow: 0 0 0 2px var(--canvas); }
 
 /* Type */
 .h1 { font-size: var(--t-title); font-weight: 700; letter-spacing: -.01em; }
@@ -226,12 +227,33 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px 18
 .toggle[aria-checked="true"] { background: var(--brand); }
 .toggle[aria-checked="true"]::after { transform: translateX(24px); }
 .lvl { font-family: var(--mono); font-weight: 600; font-size: 12px; border: 1.5px solid currentColor; border-radius: 6px; padding: 0 5px; margin-left: 4px; }
+.day { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r-card); }
+.day .grow { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.day .dname { width: 64px; flex: none; font-weight: 700; font-size: var(--t-small); }
+.day.is-today { border-color: var(--brand); box-shadow: inset 4px 0 0 var(--brand); }
+.day.is-off { background: var(--surface); border-color: transparent; }
+.day .block { font-weight: 600; }
+.plan { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sec { border: 1.5px solid var(--line); border-radius: var(--r-card); padding: 10px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.sec.mine { border-color: var(--brand); background: var(--olive-50); }
+.tbls { display: flex; flex-wrap: wrap; gap: 6px; }
+.tb { min-width: 42px; height: 42px; border-radius: 10px; border: 1.5px solid var(--line-strong); display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; background: var(--canvas); }
+.tb b { font-family: var(--mono); font-size: 13px; }
+.tb i { font-style: normal; font-size: 10px; color: var(--ink-muted); margin-top: 2px; }
+.tb.flag { border-color: var(--rev-fg); box-shadow: inset 0 0 0 1.5px var(--rev-fg); }
+button.badge { border: 0; cursor: pointer; min-height: 32px; }
+.chain { display: flex; flex-direction: column; gap: 10px; }
+.area { border: 1px solid var(--line); border-radius: var(--r-card); padding: 12px 14px; }
+.area .label { color: var(--brand); }
+.area .lad { font-size: var(--t-small); margin-top: 6px; line-height: 1.6; }
+.state { display: flex; align-items: center; gap: 8px; }
+.reasons { margin: 0; padding-left: 18px; font-size: var(--t-small); color: var(--ink-muted); }
 </style>
 
 <div class="stage">
   <aside class="panel" aria-label="Demo controls">
     <div class="brand">
-      <svg viewBox="0 0 64 64" aria-hidden="true"><!--MARK_WHITE--></svg>
+      <svg viewBox="0 0 512 512" aria-hidden="true"><!--MARK_WHITE--></svg>
       <div><b>THE FIRST</b><span>HOSPITALITY GROUP</span></div>
     </div>
     <div>
@@ -256,7 +278,8 @@ main { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 18px 18
 
 <script>
 "use strict";
-/* ---------- storage (per-viewer conveniences only) ---------- */
+/* The First prototype v1.2: management only, schedule first, positions by layer.
+   Demo data for Venue 2. State lives in memory; localStorage keeps only viewer preferences. */
 const store = {
   get(k, d) { try { const v = localStorage.getItem("tfhg-proto-" + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem("tfhg-proto-" + k, JSON.stringify(v)); } catch (e) {} }
@@ -266,218 +289,234 @@ const store = {
 const COPY = {
   en: {
     seeAs: "See it as", language: "Language", view: "View", largeText: "Large text", dark: "Dark", light: "Light",
-    demoNote: "Prototype with demo data for Venue 2. Every action works and resets when you reload the page.",
-    today: "Today", tasks: "Tasks", menu: "Menu", messages: "Messages", me: "Me", inventory: "Bar", shift: "Shift", team: "Team", close: "Close", venues: "Venues", settings: "Settings",
-    goodEvening: "Good evening", dinner: "Dinner", venue: "Venue",
-    nextTask: "Next task", openingTasks: "Your opening tasks", closingTasks: "Your closing tasks", allDone: "All done. Thank you.",
-    of: "of", doneWord: "done", photoRequired: "Photo required", takePhoto: "Take photo", photoAdded: "Photo added",
-    unread: "unread", fromManager: "From your manager", readIt: "I read it", confirmed: "Confirmed", requiresConfirm: "Please confirm you read this",
-    newNote: "You have a new note from your manager", openNote: "Open", shiftNotes: "Notes for tonight",
+    demoNote: "Prototype with demo data for Venue 2, Tuesday Oct 20. Everything works and resets when you reload. Management only: no money and no scores, just states.",
+    today: "Today", schedule: "Schedule", section: "Section", menu: "Menu", rules: "Rules", me: "Me", bar: "Bar", floor: "Floor", preshift: "Pre-shift",
+    shift: "Shift", team: "Team", close: "Close", messages: "Messages", venues: "Venues", tasks: "Side work",
+    goodEvening: "Good evening", dinner: "Dinner", lunch: "Lunch", venue: "Venue", untilClose: "close", preShiftAt: "Pre-shift",
+    toConfirm: "To confirm", schedOut: "Your schedule for Oct 19–25 is out", sawIt: "I saw it", confirmedAt: "Confirmed",
+    menuChanged: "Menu change", newItem: "New", rulesUpdated: "Rules updated for your position",
+    yourShift: "Your shift today", yourSection: "Section", captain: "Captain", off: "Off", double: "Double",
+    preNotes: "Pre-shift notes", eightySix: "86 tonight", sideWork: "Your side work", openSideWork: "Open my side work",
+    of: "of", doneWord: "done", photoRequired: "Photo required", photoAdded: "Photo added", weekly: "Weekly", allDone: "All done. Thank you.",
+    unread: "unread", openNote: "Open", newNote: "You have a new note from your manager",
+    week: "Week of Oct 19–25", event: "Event", privateDinner: "Private dinner · 40 guests", swap: "Request a swap", swapSent: "Swap request sent to Ana L. Your manager approves it after she accepts.",
+    openShifts: "Open shifts", pickUp: "Pick up", pickedUp: "Requested. Your manager approves it.", timeOff: "Request time off", timeOffSent: "Time off requested. Your manager will answer.",
+    tables: "Tables", seats: "seats", tableNotes: "Table notes", allergy: "Allergy", occasion: "Occasion", vip: "VIP",
     search: "Search the menu", all: "All", starters: "Starters", mains: "Mains", desserts: "Desserts", cocktails: "Cocktails",
-    unavailableToday: "Not available today", allergens: "Allergens", ingredients: "Ingredients", price: "Price", noResults: "Nothing matches. Try another word.",
+    allergens: "Allergens", ingredients: "Ingredients", pairing: "Pairing", soldOut: "86 · sold out", noResults: "Nothing matches. Try another word.", none: "None",
+    myRules: "Rules for your position", version: "Version", confirmRules: "Confirm I read them",
     myRecord: "My record", last30: "Last 30 days", noWarnings: "No notes in the last 30 days.", rule: "Rule", whatHappened: "What happened", howToDoIt: "How to do it right",
-    yourResponse: "Your response (optional)", send: "Send", acknowledged: "Read and confirmed", logged: "Logged by", preferences: "Preferences",
+    yourResponse: "Your response (optional)", acknowledged: "Read and confirmed", logged: "Issued by", preferences: "Preferences",
+    position: "Position", ladder: "Next step", notifications: "Notifications", on: "On",
     state_up: "Up to date", state_att: "Attention", state_fol: "Follow-up", state_rev: "Review", minor: "Minor", major: "Major",
-    countOpening: "Opening count", countClosing: "Closing count", bottles: "bottles", saveCount: "Save count", countSaved: "Count saved",
-    lastClose: "Last close", expected: "Expected", diff: "Difference",
-    liveProgress: "Live progress", openShift: "Open dinner", shiftOpen: "Dinner is open", startClosing: "Start closing", late: "Late", logWarning: "Log a warning", sendMessage: "Send a message",
-    person: "Person", severity: "Severity", note: "Note (optional)", chooseRule: "Choose the rule", warningSent: "Warning sent. The person was notified.",
-    to: "To", everyone: "Everyone at Venue 2", title: "Title", message: "Message", messageSent: "Message sent",
-    closeTitle: "Close dinner", covers: "Covers", netSales: "Net sales (USD)", comps: "Comps (USD)", voids: "Voids (USD)", incidents: "Incidents", nextShift: "Notes for the next shift",
-    summary: "Summary", lateRuns: "Late checklists", shortages: "Bar shortages", warningsTonight: "Warnings tonight", submitClose: "Submit close", closed: "Dinner is closed. The report went to the owner.",
-    tasksOnTime: "Tasks on time", openReview: "In review", closeMissing: "Close missing", closeIn: "Closed", open: "Open",
-    thisWeek: "This week", venueDetail: "Venue detail", back: "Back",
-    readBy: "Read by", stateLegend: "States count the last 30 days",
-    lineup: "Line-up at 4:45 PM. Private party of 12 at table 40, shellfish allergy at seat 3.",
-    tonightCovers: "184 covers booked",
-    youAreUpToDate: "You are up to date",
-    confirmRules: "Rules", recognition: "Shifts without a warning",
-    signOut: "Sign out", changePassword: "Change password", notifications: "Notifications", on: "On",
-    request: "Request", water: "Water", clear: "Clear table", help: "Help", void: "Void", comp: "Comp", table: "Table",
-    whichTable: "Which table", item: "Item", amount: "Amount (USD)", reason: "Reason", sendRequest: "Send request",
-    sentTo: "Sent to", waitingManager: "Waiting for the manager", helpSent: "Help is on the way. The manager was notified.",
-    mySection: "My section", tableNotes: "Table notes", addNote: "Add note", requests: "Requests", approvals: "Approvals",
-    approve: "Approve", deny: "Deny", onIt: "I'm on it", markDone: "Done", openReq: "Open", claimedBy: "On it:", approved: "Approved", denied: "Denied",
-    weekly: "Weekly", level: "Level", compsCheck: "Approved comps and voids", posTyped: "Typed from the POS", difference: "Difference",
-    pay: "Pay", payNote: "Adjustments take effect only when switched ON by an approver. Pay is never reduced for a warning.",
-    proposedBy: "Proposed by", switchOn: "Switch ON", bonus: "Bonus", award: "Recognition award", levelNeeded: "Comps need level B or above",
-    r_wrong: "Wrong item", r_quality: "Quality", r_left: "Guest left", r_courtesy: "Manager courtesy", kind: "What do you need"
+    barList: "Bottles and bar items", low: "Low", out: "Out", reported: "Reported", restocked: "Restocked", ordered: "Ordered", markLow: "Running low", shortageSent: "Reported. The manager sees it now.",
+    request: "Request", water: "Water", clear: "Clear table", help: "Help", whichTable: "Which table", kind: "What do you need", sendRequest: "Send request",
+    helpSent: "Help is on the way. The manager was notified.", sentTo: "Sent to the runners and bussers of section B",
+    liveMap: "Live map", whoIsWhere: "Who is where", requests: "Requests", onIt: "I'm on it", markDone: "Done", openReq: "Open", claimedBy: "On it:",
+    proposeWarning: "Propose a warning", proposed: "Proposed. The manager decides.", person: "Person", severity: "Severity", note: "Note (optional)", chooseRule: "Choose the rule", send: "Send",
+    addNote: "Add a pre-shift note", publish86: "Mark 86", noteSaved: "Saved. Everyone on shift sees it.", marked86: "Marked 86. Everyone on shift was told.",
+    shiftOpen: "Dinner is open", openShift: "Open dinner", startClosing: "Start closing", liveSideWork: "Live side work", late: "Late",
+    shortages: "Bar shortages", proposals: "Warnings to issue", issue: "Issue", discard: "Discard", issued: "Issued. The person was notified.", logWarning: "Log a warning",
+    confirmations: "Schedule confirmations", notConfirmed: "Not confirmed yet", remind: "Remind them", reminded: "Reminder sent",
+    publish: "Publish changes", published: "Published version 2. Only the 2 people affected were notified.", coverage: "Coverage",
+    swapsToApprove: "Requests to approve", approve: "Approve", deny: "Deny", approved: "Approved", denied: "Denied",
+    newEvent: "New event", eventName: "Event name", date: "Date", required: "Positions needed", create: "Create", eventCreated: "Event created. The manager staffs it and publishes.",
+    recognition: "Shifts without a warning", stateLegend: "States count the last 30 days",
+    closeTitle: "Close dinner", incidents: "Incidents", attendance: "Late and no-shows", cleaning: "Cleaning", cleanOk: "Done", cleanPending: "Pending", nextShift: "Notes for the next shift",
+    openItems: "Still open", sideWorkOpen: "Side work open", submitClose: "Submit close", closed: "Dinner is closed. The close went to the owner and to tomorrow's pre-shift.",
+    closeIn: "Closed", closeMissing: "Close missing", open: "Open", schedConfirmed: "Schedule confirmed", sideOnTime: "Side work on time", inReview: "In review", thisWeek: "This week", back: "Back",
+    readBy: "Read by", requiresConfirm: "Please confirm you read this", readIt: "I read it", confirmed: "Confirmed",
+    to: "To", everyone: "Everyone at Venue 2", title: "Title", message: "Message", messageSent: "Message sent", sendMessage: "Send an announcement",
+    noMoney: "Management only: no sales, prices or pay in this system.",
+    company: "Company", org: "Organization", director: "Director of operations", onTrack: "On track", needsAttention: "Needs attention", actionRequired: "Action required",
+    r_closeMissing: "Last night's close is missing", r_unconfirmed: "People have not confirmed the schedule", r_shortage: "Bar shortages open", r_review: "One person is in Review", r_none: "Everything in order",
+    pending: "Pending", allConfirmed: "Everyone confirmed", complete: "Complete", missing: "Missing staff", onTime: "On time", behind: "Behind", done: "Done",
+    longestRun: "Longest runs without a warning", sideAll: "All side work done", sideOpen: "Side work still open", shortOpen: "Shortages open", shortNone: "No shortages", lateMarked: "Late marked",
+    readPending: "Read receipts", chain: "Chain of supervision", chainDown: "Instructions go down the chain. Reports, requests and warnings go up. No direct messages between employees.",
+    a_floor: "Floor", a_reception: "Reception", a_pass: "Pass", a_bar: "Bar and wine", a_kitchen: "Kitchen", a_mgmt: "Venue management", a_corp: "Corporate"
   },
   es: {
     seeAs: "Verlo como", language: "Idioma", view: "Vista", largeText: "Letra grande", dark: "Oscuro", light: "Claro",
-    demoNote: "Prototipo con datos de ejemplo del Venue 2. Todo funciona y se reinicia al recargar la página.",
-    today: "Hoy", tasks: "Tareas", menu: "Menú", messages: "Mensajes", me: "Yo", inventory: "Barra", shift: "Turno", team: "Equipo", close: "Cierre", venues: "Locales", settings: "Ajustes",
-    goodEvening: "Buenas noches", dinner: "Cena", venue: "Local",
-    nextTask: "Siguiente tarea", openingTasks: "Tus tareas de apertura", closingTasks: "Tus tareas de cierre", allDone: "Todo listo. Gracias.",
-    of: "de", doneWord: "listas", photoRequired: "Requiere foto", takePhoto: "Sacar foto", photoAdded: "Foto agregada",
-    unread: "sin leer", fromManager: "De tu manager", readIt: "Lo leí", confirmed: "Confirmado", requiresConfirm: "Confirma que lo leíste",
-    newNote: "Tienes una nota nueva de tu manager", openNote: "Abrir", shiftNotes: "Notas para hoy",
+    demoNote: "Prototipo con datos de ejemplo del Local 2, martes 20 de octubre. Todo funciona y se reinicia al recargar. Solo gestión: sin plata ni puntajes, solo estados.",
+    today: "Hoy", schedule: "Horario", section: "Sector", menu: "Menú", rules: "Reglas", me: "Yo", bar: "Barra", floor: "Salón", preshift: "Pre-shift",
+    shift: "Turno", team: "Equipo", close: "Cierre", messages: "Avisos", venues: "Locales", tasks: "Tareas",
+    goodEvening: "Buenas noches", dinner: "Cena", lunch: "Almuerzo", venue: "Local", untilClose: "cierre", preShiftAt: "Pre-shift",
+    toConfirm: "Para confirmar", schedOut: "Salió tu horario del 19 al 25 de octubre", sawIt: "Lo vi", confirmedAt: "Confirmado",
+    menuChanged: "Cambio en el menú", newItem: "Nuevo", rulesUpdated: "Se actualizaron las reglas de tu puesto",
+    yourShift: "Tu turno de hoy", yourSection: "Sector", captain: "Capitán", off: "Franco", double: "Doble",
+    preNotes: "Notas del pre-shift", eightySix: "86 de hoy", sideWork: "Tus tareas", openSideWork: "Abrir mis tareas",
+    of: "de", doneWord: "listas", photoRequired: "Requiere foto", photoAdded: "Foto agregada", weekly: "Semanal", allDone: "Todo listo. Gracias.",
+    unread: "sin leer", openNote: "Abrir", newNote: "Tienes una nota nueva de tu manager",
+    week: "Semana del 19 al 25 de octubre", event: "Evento", privateDinner: "Cena privada · 40 personas", swap: "Pedir un cambio", swapSent: "Pedido de cambio enviado a Ana L. Tu manager lo aprueba cuando ella acepte.",
+    openShifts: "Turnos libres", pickUp: "Tomarlo", pickedUp: "Pedido. Tu manager lo aprueba.", timeOff: "Pedir franco", timeOffSent: "Franco pedido. Tu manager te va a responder.",
+    tables: "Mesas", seats: "asientos", tableNotes: "Notas de mesa", allergy: "Alergia", occasion: "Ocasión", vip: "VIP",
     search: "Buscar en el menú", all: "Todo", starters: "Entradas", mains: "Principales", desserts: "Postres", cocktails: "Cócteles",
-    unavailableToday: "No disponible hoy", allergens: "Alérgenos", ingredients: "Ingredientes", price: "Precio", noResults: "No hay coincidencias. Prueba otra palabra.",
+    allergens: "Alérgenos", ingredients: "Ingredientes", pairing: "Maridaje", soldOut: "86 · agotado", noResults: "No hay coincidencias. Prueba otra palabra.", none: "Ninguno",
+    myRules: "Reglas de tu puesto", version: "Versión", confirmRules: "Confirmo que las leí",
     myRecord: "Mi registro", last30: "Últimos 30 días", noWarnings: "Sin notas en los últimos 30 días.", rule: "Regla", whatHappened: "Qué pasó", howToDoIt: "Cómo hacerlo bien",
-    yourResponse: "Tu respuesta (opcional)", send: "Enviar", acknowledged: "Leído y confirmado", logged: "Registrado por", preferences: "Preferencias",
+    yourResponse: "Tu respuesta (opcional)", acknowledged: "Leído y confirmado", logged: "Emitido por", preferences: "Preferencias",
+    position: "Puesto", ladder: "Próximo paso", notifications: "Notificaciones", on: "Activas",
     state_up: "Al día", state_att: "Atención", state_fol: "Seguimiento", state_rev: "Revisión", minor: "Leve", major: "Grave",
-    countOpening: "Conteo de apertura", countClosing: "Conteo de cierre", bottles: "botellas", saveCount: "Guardar conteo", countSaved: "Conteo guardado",
-    lastClose: "Último cierre", expected: "Esperado", diff: "Diferencia",
-    liveProgress: "Progreso en vivo", openShift: "Abrir la cena", shiftOpen: "La cena está abierta", startClosing: "Empezar el cierre", late: "Atrasada", logWarning: "Registrar un warning", sendMessage: "Enviar un mensaje",
-    person: "Persona", severity: "Gravedad", note: "Nota (opcional)", chooseRule: "Elige la regla", warningSent: "Warning enviado. La persona fue notificada.",
-    to: "Para", everyone: "Todo el Venue 2", title: "Título", message: "Mensaje", messageSent: "Mensaje enviado",
-    closeTitle: "Cerrar la cena", covers: "Cubiertos", netSales: "Ventas netas (USD)", comps: "Invitaciones (USD)", voids: "Anulaciones (USD)", incidents: "Incidentes", nextShift: "Notas para el próximo turno",
-    summary: "Resumen", lateRuns: "Checklists atrasadas", shortages: "Faltantes de barra", warningsTonight: "Warnings de hoy", submitClose: "Enviar cierre", closed: "La cena está cerrada. El reporte llegó al dueño.",
-    tasksOnTime: "Tareas a tiempo", openReview: "En revisión", closeMissing: "Falta el cierre", closeIn: "Cerrado", open: "Abierto",
-    thisWeek: "Esta semana", venueDetail: "Detalle del local", back: "Volver",
-    readBy: "Leído por", stateLegend: "Los estados cuentan los últimos 30 días",
-    lineup: "Line-up a las 4:45 PM. Evento privado de 12 en la mesa 40, alergia a mariscos en el asiento 3.",
-    tonightCovers: "184 cubiertos reservados",
-    youAreUpToDate: "Estás al día",
-    confirmRules: "Reglas", recognition: "Turnos sin warnings",
-    signOut: "Cerrar sesión", changePassword: "Cambiar contraseña", notifications: "Notificaciones", on: "Activas",
-    request: "Pedir", water: "Agua", clear: "Levantar mesa", help: "Ayuda", void: "Anular", comp: "Invitar", table: "Mesa",
-    whichTable: "Qué mesa", item: "Ítem", amount: "Monto (USD)", reason: "Motivo", sendRequest: "Enviar pedido",
-    sentTo: "Enviado a", waitingManager: "Esperando al manager", helpSent: "La ayuda va en camino. El manager fue avisado.",
-    mySection: "Mi sector", tableNotes: "Notas de mesa", addNote: "Agregar nota", requests: "Pedidos", approvals: "Aprobaciones",
-    approve: "Aprobar", deny: "Rechazar", onIt: "Lo tomo", markDone: "Listo", openReq: "Abierto", claimedBy: "Lo toma:", approved: "Aprobado", denied: "Rechazado",
-    weekly: "Semanal", level: "Nivel", compsCheck: "Invitaciones y anulaciones aprobadas", posTyped: "Tipeado del POS", difference: "Diferencia",
-    pay: "Sueldos", payNote: "Los ajustes valen solo cuando un aprobador los pone en ON. Nunca se descuenta sueldo por un warning.",
-    proposedBy: "Propuesto por", switchOn: "Poner en ON", bonus: "Bono", award: "Premio por desempeño", levelNeeded: "Invitar requiere nivel B o más",
-    r_wrong: "Ítem equivocado", r_quality: "Calidad", r_left: "El cliente se fue", r_courtesy: "Cortesía del manager", kind: "Qué necesitas"
+    barList: "Botellas e insumos de barra", low: "Poco", out: "Sin stock", reported: "Avisado", restocked: "Repuesto", ordered: "Pedido", markLow: "Se está terminando", shortageSent: "Avisado. El manager ya lo ve.",
+    request: "Pedir", water: "Agua", clear: "Levantar mesa", help: "Ayuda", whichTable: "Qué mesa", kind: "Qué necesitas", sendRequest: "Enviar pedido",
+    helpSent: "La ayuda va en camino. El manager fue avisado.", sentTo: "Enviado a runners y bussers del sector B",
+    liveMap: "Mapa en vivo", whoIsWhere: "Quién está dónde", requests: "Pedidos", onIt: "Lo tomo", markDone: "Listo", openReq: "Abierto", claimedBy: "Lo toma:",
+    proposeWarning: "Proponer un warning", proposed: "Propuesto. El manager decide.", person: "Persona", severity: "Gravedad", note: "Nota (opcional)", chooseRule: "Elige la regla", send: "Enviar",
+    addNote: "Agregar nota al pre-shift", publish86: "Marcar 86", noteSaved: "Guardado. Todo el turno lo ve.", marked86: "Marcado 86. Se avisó a todo el turno.",
+    shiftOpen: "La cena está abierta", openShift: "Abrir la cena", startClosing: "Empezar el cierre", liveSideWork: "Tareas en vivo", late: "Atrasada",
+    shortages: "Faltantes de barra", proposals: "Warnings para emitir", issue: "Emitir", discard: "Descartar", issued: "Emitido. La persona fue notificada.", logWarning: "Registrar un warning",
+    confirmations: "Confirmaciones del horario", notConfirmed: "Todavía no confirmaron", remind: "Recordarles", reminded: "Recordatorio enviado",
+    publish: "Publicar cambios", published: "Publicada la versión 2. Solo se avisó a las 2 personas afectadas.", coverage: "Cobertura",
+    swapsToApprove: "Pedidos para aprobar", approve: "Aprobar", deny: "Rechazar", approved: "Aprobado", denied: "Rechazado",
+    newEvent: "Nuevo evento", eventName: "Nombre del evento", date: "Fecha", required: "Puestos necesarios", create: "Crear", eventCreated: "Evento creado. El manager arma el equipo y publica.",
+    recognition: "Turnos sin warnings", stateLegend: "Los estados cuentan los últimos 30 días",
+    closeTitle: "Cerrar la cena", incidents: "Incidentes", attendance: "Llegadas tarde y ausencias", cleaning: "Limpieza", cleanOk: "Lista", cleanPending: "Pendiente", nextShift: "Notas para el próximo turno",
+    openItems: "Queda abierto", sideWorkOpen: "Tareas abiertas", submitClose: "Enviar cierre", closed: "La cena está cerrada. El cierre llegó al dueño y al pre-shift de mañana.",
+    closeIn: "Cerrado", closeMissing: "Falta el cierre", open: "Abierto", schedConfirmed: "Horario confirmado", sideOnTime: "Tareas a tiempo", inReview: "En revisión", thisWeek: "Esta semana", back: "Volver",
+    readBy: "Leído por", requiresConfirm: "Confirma que lo leíste", readIt: "Lo leí", confirmed: "Confirmado",
+    to: "Para", everyone: "Todo el Local 2", title: "Título", message: "Mensaje", messageSent: "Aviso enviado", sendMessage: "Enviar un aviso",
+    noMoney: "Solo gestión: en este sistema no hay ventas, precios ni sueldos.",
+    company: "Compañía", org: "Organización", director: "Director de operaciones", onTrack: "En orden", needsAttention: "Requiere atención", actionRequired: "Acción necesaria",
+    r_closeMissing: "Falta el cierre de anoche", r_unconfirmed: "Hay personas sin confirmar el horario", r_shortage: "Faltantes de barra abiertos", r_review: "Una persona está en Revisión", r_none: "Todo en orden",
+    pending: "Pendiente", allConfirmed: "Todos confirmaron", complete: "Completo", missing: "Falta personal", onTime: "A tiempo", behind: "Atrasado", done: "Listo",
+    longestRun: "Más turnos seguidos sin warnings", sideAll: "Todas las tareas listas", sideOpen: "Quedan tareas abiertas", shortOpen: "Faltantes abiertos", shortNone: "Sin faltantes", lateMarked: "Llegadas tarde marcadas",
+    readPending: "Confirmaciones de lectura", chain: "Cadena de supervisión", chainDown: "Las instrucciones bajan por la cadena. Los reportes, pedidos y warnings suben. No hay mensajes directos entre empleados.",
+    a_floor: "Salón", a_reception: "Recepción", a_pass: "Pase", a_bar: "Barra y vinos", a_kitchen: "Cocina", a_mgmt: "Gerencia del local", a_corp: "Dirección"
   }
 };
 
 /* ---------- demo data ---------- */
 const L = (en, es) => ({ en, es });
-const RULES = [
-  { id: "r1", roles: ["server", "runner", "captain"], title: L("Confirm allergies with the kitchen", "Confirmar alérgenos con cocina"), how: L("Ask every table about allergies before the first course and tell the kitchen on the ticket.", "Pregunta en cada mesa por alergias antes del primer plato y avisa a cocina en la comanda.") },
-  { id: "r2", roles: ["server", "bartender", "barback"], title: L("Check ID for alcohol", "Pedir identificación para alcohol"), how: L("Ask for ID from anyone who looks under 30. Nobody under 21 is served.", "Pide identificación a quien parezca menor de 30. A menores de 21 no se les sirve.") },
-  { id: "r3", roles: ["server", "runner", "busser", "bartender", "barback"], title: L("Phones away on the floor", "Celular guardado en el salón"), how: L("Use your phone on the floor only to open The First.", "Usa el celular en el salón solo para abrir The First.") },
-  { id: "r4", roles: ["server", "runner", "busser", "bartender", "barback", "captain"], title: L("Uniform to the house standard", "Uniforme según el estándar"), how: L("Black apron, pressed shirt and clean shoes at line-up.", "Delantal negro, camisa planchada y zapatos limpios en el line-up.") },
-  { id: "r5", roles: ["busser", "runner", "server"], title: L("Report spills and broken glass", "Avisar derrames y vidrio roto"), how: L("Mark the area and tell the closest manager right away.", "Marca la zona y avisa al manager más cercano en el momento.") },
-  { id: "r6", roles: ["bartender", "barback"], title: L("Bottles leave the bar with a count", "Las botellas salen con conteo"), how: L("Enter every bottle that leaves the bar in the count before it moves.", "Carga cada botella que sale de la barra en el conteo antes de moverla.") },
-  { id: "r7", roles: ["server", "runner", "busser", "bartender", "barback"], title: L("Closing tasks before clocking out", "Tareas de cierre antes de salir"), how: L("Finish your closing checklist before you clock out.", "Termina tu checklist de cierre antes de marcar la salida.") }
-];
+const POS = {
+  polisher: L("Polisher", "Polisher"), busser: L("Busser", "Busser"), barback: L("Barback", "Barback"), runner: L("Food runner", "Runner"),
+  expo: L("Expo", "Expo"), server: L("Server", "Mesero"), bartender: L("Bartender", "Bartender"), captain: L("Captain", "Capitán"),
+  host: L("Host", "Host"), manager: L("Manager", "Manager"), owner: L("Owner", "Dueño"), director: L("Director of operations", "Director de operaciones")
+};
+const LADDER = { polisher: "busser", busser: "runner", runner: "expo", expo: "server", server: "captain", captain: "host", host: "manager", barback: "bartender", bartender: "manager" };
 const PEOPLE = [
-  { id: "p1", name: "Sofia R.", role: "server", initials: "SR", level: "B" },
-  { id: "p2", name: "Marcus T.", role: "server", initials: "MT", level: "C" },
-  { id: "p3", name: "Ana L.", role: "runner", initials: "AL", level: "A" },
-  { id: "p4", name: "Diego P.", role: "busser", initials: "DP", level: "B" },
-  { id: "p5", name: "Kenji M.", role: "bartender", initials: "KM", level: "A" },
-  { id: "p6", name: "Luis G.", role: "barback", initials: "LG", level: "C" },
-  { id: "p7", name: "Rachel K.", role: "captain", initials: "RK", level: "A" }
+  { id: "p1", name: "Sofia R.", pos: "server", initials: "SR" },
+  { id: "p2", name: "Marcus T.", pos: "server", initials: "MT" },
+  { id: "p3", name: "Ana L.", pos: "runner", initials: "AL" },
+  { id: "p4", name: "Diego P.", pos: "busser", initials: "DP" },
+  { id: "p5", name: "Kenji M.", pos: "bartender", initials: "KM" },
+  { id: "p6", name: "Luis G.", pos: "barback", initials: "LG" },
+  { id: "p7", name: "Rachel K.", pos: "captain", initials: "RK" },
+  { id: "p8", name: "Tomás V.", pos: "polisher", initials: "TV" },
+  { id: "p9", name: "Grace H.", pos: "expo", initials: "GH" }
 ];
-const ROLE_NAME = {
-  server: L("Server", "Mesero"), runner: L("Runner", "Runner"), busser: L("Busser", "Busser"),
-  bartender: L("Bartender", "Bartender"), barback: L("Barback", "Barback"), captain: L("Captain", "Capitán"),
-  manager: L("Manager", "Manager"), owner: L("Owner", "Dueño")
-};
-const TEMPLATES = {
-  server: { open: [L("Polish glassware, section B", "Pulir cristalería, sector B"), L("Read today's specials", "Leer los especiales del día"), L("Check table numbers 20 to 28", "Revisar números de mesa 20 a 28"), [L("Set tables 20 to 28", "Montar mesas 20 a 28"), true], L("Fold napkins for 40 covers", "Doblar servilletas para 40 cubiertos"), L("Confirm allergy notes with the chef", "Confirmar notas de alérgenos con el chef"), [L("Tuesday: polish the silverware stock", "Martes: pulir el stock de cubiertos"), false, true]],
-            close: [L("Clear and reset section B", "Levantar y reiniciar el sector B"), L("Return menus to the host stand", "Devolver menús al atril"), [L("Wipe and stack chairs", "Limpiar y subir sillas"), true]] },
-  bartender: { open: [L("Cut garnish for the night", "Cortar garnish para la noche"), L("Check ice bins", "Revisar el hielo"), L("Opening bottle count", "Conteo de botellas de apertura"), [L("Set the back bar", "Armar la contrabarra"), true], [L("Tuesday: deep clean the wine fridge", "Martes: limpieza profunda de la heladera de vinos"), true, true]],
-               close: [L("Closing bottle count", "Conteo de botellas de cierre"), L("Clean taps and drains", "Limpiar canillas y desagües"), [L("Lock the spirits cabinet", "Cerrar el armario de destilados"), true]] }
-};
+const RULES = [
+  { id: "r1", pos: ["server", "runner", "captain", "expo"], title: L("Confirm allergies with the kitchen", "Confirmar alérgenos con cocina"), how: L("Ask every table about allergies before the first course and tell the expo.", "Pregunta en cada mesa por alergias antes del primer plato y avisa al expo.") },
+  { id: "r2", pos: ["runner", "expo"], title: L("No ticket, no plate", "Sin ticket no sale nada"), how: L("A plate leaves the pass only against its ticket, by table and seat.", "Un plato sale del pase solo contra su ticket, por mesa y asiento.") },
+  { id: "r3", pos: ["server", "busser", "runner", "bartender", "barback", "polisher"], title: L("Phones away on the floor", "Celular guardado en el salón"), how: L("Use your phone on the floor only to open The First.", "Usa el celular en el salón solo para abrir The First.") },
+  { id: "r4", pos: ["server", "busser", "runner", "bartender", "barback", "captain", "polisher"], title: L("Uniform to the house standard", "Uniforme según el estándar"), how: L("Black apron, pressed shirt and clean shoes at pre-shift.", "Delantal negro, camisa planchada y zapatos limpios en el pre-shift.") },
+  { id: "r5", pos: ["busser", "runner", "server"], title: L("Reset a table in under 3 minutes", "Resetear una mesa en menos de 3 minutos"), how: L("Clear, wipe, reset the cover and tell the host the table is ready.", "Levanta, limpia, monta el cubierto y avisa al host que la mesa está lista.") },
+  { id: "r6", pos: ["bartender", "barback"], title: L("Report a bottle before it runs out", "Avisar una botella antes de que se termine"), how: L("Mark it Low in The First when one bottle is left.", "Márcala como Poco en The First cuando queda una botella.") },
+  { id: "r7", pos: ["polisher", "busser"], title: L("Glassware by the stem", "La copa se toma del tallo"), how: L("Hold and polish every glass by the stem, never by the bowl.", "Toma y pule cada copa del tallo, nunca del cáliz.") }
+];
 const MENU = [
-  { id: "m1", cat: "starters", name: L("Seared scallops", "Vieiras selladas"), desc: L("Brown butter, celery root, toasted hazelnut.", "Manteca noisette, apio nabo, avellana tostada."), ing: L("Scallops, butter, celery root, hazelnut, lemon", "Vieiras, manteca, apio nabo, avellana, limón"), allergens: ["shellfish", "nuts", "dairy"], price: 3200, color: "#c66b3d", available: true },
-  { id: "m2", cat: "starters", name: L("Burrata", "Burrata"), desc: L("Heirloom tomato, basil oil, sourdough.", "Tomate reliquia, aceite de albahaca, pan de masa madre."), ing: L("Burrata, tomato, basil, olive oil, sourdough", "Burrata, tomate, albahaca, oliva, masa madre"), allergens: ["dairy", "gluten"], price: 2400, color: "#d9473b", available: true },
-  { id: "m3", cat: "mains", name: L("Dry-aged ribeye", "Ojo de bife madurado"), desc: L("28 days, bone marrow butter, charred onion.", "28 días, manteca de tuétano, cebolla quemada."), ing: L("Beef, bone marrow, butter, onion", "Carne, tuétano, manteca, cebolla"), allergens: ["dairy"], price: 7800, color: "#7a3324", available: true },
-  { id: "m4", cat: "mains", name: L("Black cod", "Bacalao negro"), desc: L("Miso glaze, bok choy, ginger broth.", "Glaseado de miso, bok choy, caldo de jengibre."), ing: L("Black cod, miso, soy, ginger, bok choy", "Bacalao negro, miso, soja, jengibre, bok choy"), allergens: ["fish", "soy"], price: 5200, color: "#b98a3e", available: true },
-  { id: "m5", cat: "mains", name: L("Wild mushroom risotto", "Risotto de hongos"), desc: L("Carnaroli, parmesan, thyme.", "Carnaroli, parmesano, tomillo."), ing: L("Rice, mushrooms, parmesan, butter, thyme", "Arroz, hongos, parmesano, manteca, tomillo"), allergens: ["dairy"], price: 3600, color: "#8a6a45", available: false },
-  { id: "m6", cat: "desserts", name: L("Olive oil cake", "Torta de aceite de oliva"), desc: L("Citrus, crème fraîche.", "Cítricos, crème fraîche."), ing: L("Flour, eggs, olive oil, orange, cream", "Harina, huevo, oliva, naranja, crema"), allergens: ["gluten", "eggs", "dairy"], price: 1600, color: "#d7b45a", available: true },
-  { id: "m7", cat: "cocktails", name: L("The First Martini", "Martini The First"), desc: L("Gin, dry vermouth, olive brine, lemon oil.", "Gin, vermut seco, salmuera de oliva, aceite de limón."), ing: L("Gin, vermouth, olive brine", "Gin, vermut, salmuera de oliva"), allergens: [], price: 2200, color: "#c9d1ae", glass: true, available: true },
-  { id: "m8", cat: "cocktails", name: L("Smoked Negroni", "Negroni ahumado"), desc: L("Gin, Campari, sweet vermouth, oak smoke.", "Gin, Campari, vermut rosso, humo de roble."), ing: L("Gin, Campari, vermouth", "Gin, Campari, vermut"), allergens: [], price: 2100, color: "#a8322a", glass: true, available: true }
+  { id: "m1", cat: "starters", name: L("Seared scallops", "Vieiras selladas"), desc: L("Brown butter, celery root, toasted hazelnut.", "Manteca noisette, apio nabo, avellana tostada."), ing: L("Scallops, butter, celery root, hazelnut, lemon", "Vieiras, manteca, apio nabo, avellana, limón"), pair: L("Chablis", "Chablis"), allergens: ["shellfish", "nuts", "dairy"], color: "#c66b3d", isNew: true },
+  { id: "m2", cat: "starters", name: L("Burrata", "Burrata"), desc: L("Heirloom tomato, basil oil, sourdough.", "Tomate reliquia, aceite de albahaca, masa madre."), ing: L("Burrata, tomato, basil, olive oil, sourdough", "Burrata, tomate, albahaca, oliva, masa madre"), pair: L("Vermentino", "Vermentino"), allergens: ["dairy", "gluten"], color: "#d9473b" },
+  { id: "m3", cat: "mains", name: L("Dry-aged ribeye", "Ojo de bife madurado"), desc: L("28 days, bone marrow butter, charred onion.", "28 días, manteca de tuétano, cebolla quemada."), ing: L("Beef, bone marrow, butter, onion", "Carne, tuétano, manteca, cebolla"), pair: L("Barolo", "Barolo"), allergens: ["dairy"], color: "#7a3324" },
+  { id: "m4", cat: "mains", name: L("Black cod", "Bacalao negro"), desc: L("Miso glaze, bok choy, ginger broth.", "Glaseado de miso, bok choy, caldo de jengibre."), ing: L("Black cod, miso, soy, ginger, bok choy", "Bacalao negro, miso, soja, jengibre, bok choy"), pair: L("Riesling", "Riesling"), allergens: ["fish", "soy"], color: "#b98a3e" },
+  { id: "m5", cat: "mains", name: L("Wild mushroom risotto", "Risotto de hongos"), desc: L("Carnaroli, parmesan, thyme.", "Carnaroli, parmesano, tomillo."), ing: L("Rice, mushrooms, parmesan, butter, thyme", "Arroz, hongos, parmesano, manteca, tomillo"), pair: L("Pinot noir", "Pinot noir"), allergens: ["dairy"], color: "#8a6a45" },
+  { id: "m6", cat: "desserts", name: L("Olive oil cake", "Torta de aceite de oliva"), desc: L("Citrus, crème fraîche.", "Cítricos, crème fraîche."), ing: L("Flour, eggs, olive oil, orange, cream", "Harina, huevo, oliva, naranja, crema"), pair: L("Moscato d'Asti", "Moscato d'Asti"), allergens: ["gluten", "eggs", "dairy"], color: "#d7b45a" },
+  { id: "m7", cat: "cocktails", name: L("The First Martini", "Martini The First"), desc: L("Gin, dry vermouth, olive brine, lemon oil.", "Gin, vermut seco, salmuera de oliva, aceite de limón."), ing: L("Gin, vermouth, olive brine", "Gin, vermut, salmuera de oliva"), allergens: [], color: "#c9d1ae", glass: true, isNew: true },
+  { id: "m8", cat: "cocktails", name: L("Smoked Negroni", "Negroni ahumado"), desc: L("Gin, Campari, sweet vermouth, oak smoke.", "Gin, Campari, vermut rosso, humo de roble."), ing: L("Gin, Campari, vermouth", "Gin, Campari, vermut"), allergens: [], color: "#a8322a", glass: true }
 ];
 const ALLERGEN = { shellfish: L("Shellfish", "Mariscos"), nuts: L("Nuts", "Frutos secos"), dairy: L("Dairy", "Lácteos"), gluten: L("Gluten", "Gluten"), fish: L("Fish", "Pescado"), soy: L("Soy", "Soja"), eggs: L("Eggs", "Huevo") };
 const BAR = [
-  { id: "b1", name: "Hendrick's Gin", open: 4.0, used: 1.6 },
-  { id: "b2", name: "Campari", open: 2.5, used: 0.6 },
-  { id: "b3", name: "Dolin Dry Vermouth", open: 3.0, used: 0.5 },
-  { id: "b4", name: "Casamigos Blanco", open: 3.5, used: 1.1 },
-  { id: "b5", name: "Macallan 12", open: 2.0, used: 0.4 },
-  { id: "b6", name: "Grey Goose", open: 5.0, used: 2.0 }
+  { id: "b1", name: "Hendrick's Gin" }, { id: "b2", name: "Campari" }, { id: "b3", name: "Dolin Dry Vermouth" },
+  { id: "b4", name: "Casamigos Blanco" }, { id: "b5", name: "Macallan 12" }, { id: "b6", name: "Grey Goose" },
+  { id: "b7", name: L("Fresh lime juice", "Jugo de lima") }, { id: "b8", name: L("Fever-Tree tonic", "Tónica Fever-Tree") }
 ];
+const SECTIONS = [
+  { id: "A", tables: [{ n: "10", s: 2 }, { n: "11", s: 2 }, { n: "12", s: 4 }, { n: "14", s: 4 }, { n: "15", s: 6 }], staff: ["p2"] },
+  { id: "B", tables: [{ n: "20", s: 2 }, { n: "21", s: 2 }, { n: "22", s: 4 }, { n: "24", s: 4 }, { n: "26", s: 6 }, { n: "27", s: 4 }], staff: ["p7", "p1", "p4", "p3"] },
+  { id: "C", tables: [{ n: "30", s: 4 }, { n: "31", s: 4 }, { n: "40", s: 12 }], staff: ["p8"] },
+  { id: "Bar", tables: [{ n: "B1", s: 1 }, { n: "B2", s: 1 }, { n: "B3", s: 1 }, { n: "B4", s: 1 }], staff: ["p5", "p6"] }
+];
+const DAYS = [L("Mon 19", "Lun 19"), L("Tue 20", "Mar 20"), L("Wed 21", "Mié 21"), L("Thu 22", "Jue 22"), L("Fri 23", "Vie 23"), L("Sat 24", "Sáb 24"), L("Sun 25", "Dom 25")];
+const TODAY = 1;
+/* shifts per person by day: [service, start, end] ; end null = until close */
+const WEEK = {
+  p4: [[], [["dinner", "4:30 PM", null]], [["dinner", "4:30 PM", null]], [], [["dinner", "4:30 PM", null, "ev1"]], [["lunch", "10:00 AM", "3:30 PM"], ["dinner", "4:30 PM", null]], []],
+  p1: [[["dinner", "4:30 PM", null]], [["dinner", "4:30 PM", null]], [], [["dinner", "4:30 PM", null]], [["dinner", "4:30 PM", null, "ev1"]], [["dinner", "4:30 PM", null]], []],
+  p5: [[], [["dinner", "4:00 PM", null]], [["dinner", "4:00 PM", null]], [["dinner", "4:00 PM", null]], [["dinner", "4:00 PM", null, "ev1"]], [], [["lunch", "10:30 AM", "4:00 PM"]]],
+  p7: [[["dinner", "4:15 PM", null]], [["dinner", "4:15 PM", null]], [["dinner", "4:15 PM", null]], [], [["dinner", "4:15 PM", null, "ev1"]], [["dinner", "4:15 PM", null]], []]
+};
+const TASKS = {
+  busser: { open: [L("Fill water carafes, section B", "Llenar jarras de agua, sector B"), L("Bread station stocked", "Estación de pan repuesta"), [L("Reset tables 20 to 27", "Montar mesas 20 a 27"), true], L("Coffee station ready", "Estación de café lista"), [L("Tuesday: polish the silverware stock", "Martes: pulir el stock de cubiertos"), false, true]],
+            close: [L("Clear and reset section B", "Levantar y resetear el sector B"), [L("Wipe and stack chairs", "Limpiar y subir sillas"), true], L("Empty coffee station", "Vaciar la estación de café")] },
+  server: { open: [L("Read today's pre-shift notes", "Leer las notas del pre-shift"), L("Check table numbers 20 to 27", "Revisar números de mesa 20 a 27"), L("Confirm allergy notes with the expo", "Confirmar notas de alérgenos con el expo"), L("Fold napkins for 40 covers", "Doblar servilletas para 40 cubiertos")],
+            close: [L("Return menus to the host stand", "Devolver menús al atril"), L("Hand over open tables to the closer", "Pasar mesas abiertas al que cierra")] },
+  bartender: { open: [L("Cut garnish for the night", "Cortar garnish para la noche"), L("Check ice bins", "Revisar el hielo"), [L("Set the back bar", "Armar la contrabarra"), true], [L("Tuesday: deep clean the wine fridge", "Martes: limpieza profunda de la heladera de vinos"), true, true]],
+               close: [L("Clean taps and drains", "Limpiar canillas y desagües"), [L("Lock the spirits cabinet", "Cerrar el armario de destilados"), true]] },
+  captain: { open: [L("Assign sections", "Asignar sectores"), L("Walk the floor with the host", "Recorrer el salón con el host"), L("Run pre-shift", "Dar el pre-shift")], close: [L("Hand over to the manager", "Pasar novedades al manager")] }
+};
 
-const now = Date.now();
-const day = 864e5;
+const now = Date.now(), day = 864e5;
 const state = {
-  role: store.get("role", "server"),
-  lang: store.get("lang", "en"),
-  large: store.get("large", false),
-  theme: store.get("theme", "light"),
-  tab: "today",
-  sheet: null,
-  toast: null,
-  menuCat: "all", menuQ: "",
-  shift: "open",               // open | closing | closed
-  runs: {},                    // personId -> {phase, done:[bool], photo:[bool]}
+  role: store.get("role12", "busser"), lang: store.get("lang", "en"), large: store.get("large", false), theme: store.get("theme", "light"),
+  tab: "today", sheet: null, toast: null, menuCat: "all", menuQ: "",
+  shift: "open", runs: {},
+  schedAck: { p1: true, p4: false, p5: true, p7: true },
+  menuAck: {}, rulesAck: { p1: true, p5: true, p7: true, p4: false },
+  eighty6: ["m5"],
+  preNotes: [L("Private party of 12 at table 40 at 7:30 PM. Rachel leads it.", "Grupo privado de 12 en la mesa 40 a las 7:30 PM. Lo lidera Rachel."), L("184 covers booked. Push the new Martini.", "184 cubiertos reservados. Recomendar el nuevo Martini.")],
+  tableNotes: [{ table: "24", seat: 2, kind: "allergy", text: L("Shellfish allergy", "Alergia a mariscos"), confirmed: true }, { table: "27", kind: "occasion", text: L("Anniversary, dessert with a candle", "Aniversario, postre con vela") }],
   messages: [
-    { id: "g1", from: "Daniel B.", at: now - 2 * 36e5, title: L("Private party tonight", "Evento privado hoy"), body: L("Party of 12 at table 40 at 7:30 PM. Shellfish allergy at seat 3. Rachel leads the table.", "Grupo de 12 en la mesa 40 a las 7:30 PM. Alergia a mariscos en el asiento 3. Rachel lidera la mesa."), confirm: true, read: false, confirmed: false, readBy: 9, total: 14 },
-    { id: "g2", from: "TFHG", at: now - 1.2 * day, title: L("New fall menu on Thursday", "Nuevo menú de otoño el jueves"), body: L("The new dishes are in the menu tab with photos. Tasting at line-up on Wednesday.", "Los platos nuevos ya están en el menú con fotos. Degustación en el line-up del miércoles."), confirm: false, read: true, confirmed: false, readBy: 41, total: 52 }
+    { id: "g1", from: "Daniel B.", at: now - 2 * 36e5, title: L("Private dinner on Friday", "Cena privada el viernes"), body: L("40 guests at 7:00 PM. Pre-shift at 6:15 PM. Black ties for captains.", "40 personas a las 7:00 PM. Pre-shift 6:15 PM. Corbata negra para capitanes."), confirm: true, read: false, confirmed: false, readBy: 9, total: 14 },
+    { id: "g2", from: "TFHG", at: now - 1.2 * day, title: L("Fall menu starts Thursday", "El menú de otoño empieza el jueves"), body: L("New dishes are in the menu with photos. Confirm each one before your next shift.", "Los platos nuevos ya están con fotos. Confirma cada uno antes de tu próximo turno."), confirm: false, read: true, readBy: 41, total: 52 }
   ],
   warnings: [
-    { id: "w1", personId: "p2", ruleId: "r3", sev: "minor", at: now - 6 * day, by: "Rachel K.", note: L("Phone out at table 22 during service.", "Celular afuera en la mesa 22 durante el servicio."), ack: true, response: L("Understood.", "Entendido.") },
-    { id: "w2", personId: "p4", ruleId: "r5", sev: "major", at: now - 3 * day, by: "Daniel B.", note: L("Broken glass by the pass was not reported.", "No avisó un vidrio roto junto al pase."), ack: true, response: L("", "") },
-    { id: "w3", personId: "p1", ruleId: "r4", sev: "minor", at: now - 2 * 36e5, by: "Rachel K.", note: L("No apron at line-up.", "Sin delantal en el line-up."), ack: false, response: L("", "") }
+    { id: "w1", personId: "p2", ruleId: "r3", sev: "minor", at: now - 6 * day, by: "Daniel B.", note: L("Phone out at table 12 during service.", "Celular afuera en la mesa 12 durante el servicio."), ack: true, response: L("Understood.", "Entendido.") },
+    { id: "w2", personId: "p4", ruleId: "r5", sev: "minor", at: now - 3 * day, by: "Daniel B.", note: L("Table 22 took 8 minutes to reset at 8 PM.", "La mesa 22 tardó 8 minutos en resetearse a las 8 PM."), ack: false, response: L("", "") },
+    { id: "w3", personId: "p6", ruleId: "r6", sev: "major", at: now - 9 * day, by: "Daniel B.", note: L("Campari ran out with no warning on Friday.", "Se terminó el Campari sin aviso el viernes."), ack: true, response: L("", "") },
+    { id: "w4", personId: "p6", ruleId: "r4", sev: "major", at: now - 2 * day, by: "Daniel B.", note: L("No apron at pre-shift.", "Sin delantal en el pre-shift."), ack: true, response: L("", "") }
   ],
-  counts: Object.fromEntries(BAR.map(b => [b.id, Math.round(b.open * 10)])),
-  countPhase: "open", countSaved: false,
-  close: { covers: "", sales: "", comps: "", voids: "", incidents: "", next: "" },
-  closedReport: null,
-  ownerVenue: null,
-  meWarningOpen: null,
-  reqDraft: { kind: "water", table: "24", item: "m1", amount: "32", reason: "r_quality" },
-  requests: [
-    { id: "q1", kind: "void", by: "Marcus T.", byId: "p2", table: "22", item: "m4", amount: 5200, reason: "r_wrong", status: "pending", at: now - 4 * 6e4 },
-    { id: "q2", kind: "water", by: "Sofia R.", byId: "p1", table: "26", status: "claimed", claimedBy: "Ana L.", at: now - 2 * 6e4 },
-    { id: "q3", kind: "comp", by: "Kenji M.", byId: "p5", table: "Bar 3", item: "m7", amount: 2200, reason: "r_courtesy", status: "approved", at: now - 40 * 6e4 }
-  ],
-  tableNotes: [
-    { table: "24", kind: "allergy", text: L("Seat 2: shellfish allergy", "Asiento 2: alergia a mariscos") },
-    { table: "27", kind: "occasion", text: L("Anniversary, dessert with a candle", "Aniversario, postre con vela") }
-  ],
-  adjustments: [
-    { id: "a1", person: "Ana L.", kind: "award", amount: 10000, by: "Daniel B. · Manager", on: false },
-    { id: "a2", person: "Kenji M.", kind: "bonus", amount: 15000, by: "Daniel B. · Manager", on: false },
-    { id: "a3", person: "Sofia R.", kind: "award", amount: 5000, by: "Rachel K. · Captain", on: true }
-  ]
+  proposals: [{ id: "pr1", personId: "p2", ruleId: "r1", sev: "minor", by: "Rachel K.", note: L("Did not ask table 12 about allergies.", "No preguntó por alergias en la mesa 12."), status: "open" }],
+  shortages: [{ id: "s1", item: "b2", level: "low", by: "Luis G.", status: "open", at: now - 50 * 6e4 }, { id: "s2", item: "b7", level: "out", by: "Kenji M.", status: "ordered", at: now - 26 * 36e5 }],
+  requests: [{ id: "q1", kind: "water", by: "Sofia R.", table: "26", status: "open", at: now - 1 * 6e4 }, { id: "q2", kind: "help", by: "Marcus T.", table: "12", status: "claimed", claimedBy: "Rachel K.", at: now - 4 * 6e4 }],
+  approvals: [{ id: "a1", kind: "swap", text: L("Marcus T. swaps Thu dinner with Sofia R. (accepted)", "Marcus T. cambia la cena del jueves con Sofia R. (aceptado)"), status: "open" }, { id: "a2", kind: "timeoff", text: L("Ana L. asks time off Sat 24", "Ana L. pide franco el sáb 24"), status: "open" }],
+  unconfirmed: ["Marcus T.", "Luis G.", "Diego P."],
+  events: [{ id: "ev1", name: L("Private dinner · 40 guests", "Cena privada · 40 personas"), day: 4, time: "7:00 PM", need: { captain: [1, 1], server: [3, 2], busser: [2, 2], bartender: [1, 1] } }],
+  draft: { kind: "water", table: "24" },
+  close: { incidents: "", next: "", cleaning: "ok", late: { p2: false, p6: true } },
+  closed: false, ownerVenue: null, published2: false, openShiftTaken: false
 };
-const SECTION = { name: "B", tables: ["20", "21", "22", "23", "24", "25", "26", "27", "28"] };
 
 /* ---------- helpers ---------- */
 const $ = s => document.querySelector(s);
 const t = k => (COPY[state.lang][k] ?? COPY.en[k] ?? k);
 const pick = f => (f && typeof f === "object" ? (f[state.lang] || f.en) : f);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const money = c => (c < 0 ? "−$" : "$") + (Math.abs(c) / 100).toLocaleString("en-US", { minimumFractionDigits: 0 });
-const ago = ts => { const h = Math.round((now - ts) / 36e5); if (h < 24) return state.lang === "es" ? `hace ${h} h` : `${h} h ago`; const d = Math.round(h / 24); return state.lang === "es" ? `hace ${d} d` : `${d} d ago`; };
+const ago = ts => { const m = Math.round((now - ts) / 6e4); if (m < 60) return state.lang === "es" ? `hace ${m} min` : `${m} min ago`; const h = Math.round(m / 60); if (h < 24) return state.lang === "es" ? `hace ${h} h` : `${h} h ago`; const d = Math.round(h / 24); return state.lang === "es" ? `hace ${d} d` : `${d} d ago`; };
+const person = id => PEOPLE.find(p => p.id === id);
 
-/* Pure rule, same as lib/domain/warnings.ts in the blueprint */
-const THRESHOLDS = { windowDays: 30, attentionMinor: 1, followUpMinor: 3, followUpMajor: 1, reviewMajor: 2 };
-function warningState(list, at, th = THRESHOLDS) {
-  const live = list.filter(w => !w.voided && at - w.at <= th.windowDays * day);
-  const minor = live.filter(w => w.sev === "minor").length;
-  const major = live.filter(w => w.sev === "major").length;
-  if (major >= th.reviewMajor) return "rev";
-  if (major >= th.followUpMajor || minor >= th.followUpMinor) return "fol";
-  if (minor >= th.attentionMinor) return "att";
+/* Pure rule, same as lib/domain/warnings.ts */
+const TH = { windowDays: 30, attentionMinor: 1, followUpMinor: 3, followUpMajor: 1, reviewMajor: 2 };
+function warningState(list, at) {
+  const live = list.filter(w => at - w.at <= TH.windowDays * day);
+  const minor = live.filter(w => w.sev === "minor").length, major = live.filter(w => w.sev === "major").length;
+  if (major >= TH.reviewMajor) return "rev";
+  if (major >= TH.followUpMajor || minor >= TH.followUpMinor) return "fol";
+  if (minor >= TH.attentionMinor) return "att";
   return "up";
 }
+const personWarnings = id => state.warnings.filter(w => w.personId === id);
 const stateBadge = s => `<span class="badge b-${s === "up" ? "ok" : s}">${ICON[s === "up" ? "check" : s === "rev" ? "alert" : "dot"]}${t("state_" + s)}</span>`;
-function personWarnings(id) { return state.warnings.filter(w => w.personId === id); }
 
-function runFor(personId, role) {
-  const tplRole = ["bartender", "barback"].includes(role) ? "bartender" : "server";
-  const phase = state.shift === "open" ? "open" : "close";
-  const key = personId + ":" + phase;
+function runFor(p) {
+  const tpl = TASKS[p.pos] || TASKS.busser; const phase = state.shift === "open" ? "open" : "close"; const key = p.id + ":" + phase;
   if (!state.runs[key]) {
-    const items = TEMPLATES[tplRole][phase];
-    // demo progress for the rest of the team
-    const seedDone = { p2: 4, p3: 6, p4: 2, p6: 2, p7: 6 }[personId] ?? (personId === "p1" ? 3 : personId === "p5" ? 1 : 0);
-    state.runs[key] = { phase, items: items.map((it, i) => ({ label: Array.isArray(it) ? it[0] : it, photo: Array.isArray(it) ? it[1] : false, weekly: Array.isArray(it) ? !!it[2] : false, done: phase === "open" ? i < seedDone : false, hasPhoto: false })) };
+    const seed = { p1: 2, p4: 2, p5: 1, p7: 3, p2: 4, p3: 3, p6: 1, p8: 2, p9: 2 }[p.id] || 0;
+    state.runs[key] = { phase, items: tpl[phase].map((it, i) => ({ label: Array.isArray(it) ? it[0] : it, photo: Array.isArray(it) ? !!it[1] : false, weekly: Array.isArray(it) ? !!it[2] : false, done: phase === "open" ? i < seed : false, hasPhoto: false })) };
   }
   return state.runs[key];
 }
 const progress = r => { const d = r.items.filter(i => i.done).length; return { d, n: r.items.length, pct: Math.round(100 * d / r.items.length) }; };
 
-/* ---------- icons (Phosphor-style, inline) ---------- */
+/* ---------- icons ---------- */
 const ICON = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   dot: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>',
@@ -502,383 +541,402 @@ const ICON = {
   hand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12V6.5a1.5 1.5 0 013 0V11M11 10V5a1.5 1.5 0 013 0v6M14 10.5V7a1.5 1.5 0 013 0v7c0 3.5-2.5 6-6 6-2.5 0-4-1.2-5.5-3.5L4 13.5a1.5 1.5 0 012.5-1.6L8 14"/></svg>',
   undo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7L4 12l5 5"/><path d="M4 12h10a6 6 0 010 12h-2"/></svg>',
   gift: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="1.5"/><path d="M3 7h18v3H3zM12 7v13M12 7c-1-3-5-3-5-1s3 1 5 1c2 0 5 1 5-1s-4-2-5 1"/></svg>',
-  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M15 6l-6 6 6 6"/></svg>'
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="20" height="20"><path d="M15 6l-6 6 6 6"/></svg>',
+  calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="14.5" rx="2.5"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" stroke-linecap="round"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5h10.5a3 3 0 013 3V20H8a3 3 0 01-3-3z"/><path d="M5 17a3 3 0 013-3h10.5"/></svg>',
+  megaphone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 10v4h3l8 4V6L7 10z"/><path d="M18 9.5a3.5 3.5 0 010 5" stroke-linecap="round"/></svg>'
 };
 const MARK = `<!--MARK_BRAND-->`;
 
 /* ---------- roles and tabs ---------- */
 const ROLES = [
-  { key: "server", person: "p1", tabs: ["today", "tasks", "menu", "messages", "me"] },
-  { key: "bartender", person: "p5", tabs: ["today", "tasks", "inventory", "messages", "me"] },
-  { key: "manager", person: null, tabs: ["shift", "requests", "team", "close", "messages"] },
-  { key: "owner", person: null, tabs: ["venues", "pay", "messages"] }
+  { key: "busser", person: "p4", tabs: ["today", "schedule", "section", "rules", "me"] },
+  { key: "server", person: "p1", tabs: ["today", "schedule", "section", "menu", "me"] },
+  { key: "bartender", person: "p5", tabs: ["today", "schedule", "bar", "menu", "me"] },
+  { key: "captain", person: "p7", tabs: ["floor", "schedule", "preshift", "menu", "me"] },
+  { key: "manager", person: null, tabs: ["shift", "schedule", "team", "close", "messages"] },
+  { key: "director", person: null, tabs: ["company", "org", "schedule", "messages"] }
 ];
-const TAB_ICON = { requests: "bell", pay: "wallet", today: "home", tasks: "list", menu: "menu", messages: "chat", me: "user", inventory: "bottle", shift: "pulse", team: "team", close: "lock", venues: "grid" };
+const EXTRA_TABS = ["tasks", "messages", "rules"];
+const TAB_ICON = { company: "grid", org: "team", today: "home", schedule: "calendar", section: "grid", rules: "book", me: "user", menu: "menu", bar: "bottle", floor: "grid", preshift: "megaphone", shift: "pulse", team: "team", close: "lock", messages: "chat", venues: "grid", tasks: "list" };
 const role = () => ROLES.find(r => r.key === state.role);
-const me = () => PEOPLE.find(p => p.id === role().person);
+const me = () => role().person ? person(role().person) : null;
+const unreadCount = () => state.messages.filter(m => !m.read).length;
+const pendingWarnings = () => { const p = me(); return p ? state.warnings.filter(w => w.personId === p.id && !w.ack) : []; };
+const pendingMenu = () => MENU.filter(m => m.isNew && !state.menuAck[m.id]);
+function pendingCount() {
+  const p = me(); if (!p) return 0;
+  return (state.schedAck[p.id] ? 0 : 1) + (["server", "bartender", "captain"].includes(p.pos) ? pendingMenu().length : 0) + (state.rulesAck[p.id] ? 0 : 1) + pendingWarnings().length;
+}
 
-function unreadCount() { return state.messages.filter(m => !m.read).length; }
-function pendingWarnings() { const p = me(); return p ? state.warnings.filter(w => w.personId === p.id && !w.ack) : []; }
-
-/* ---------- screens ---------- */
+/* ---------- chrome ---------- */
 function topbar() {
-  const r = state.role;
-  const name = r === "manager" ? "Daniel B." : r === "owner" ? "TFHG" : me().name;
-  const sub = r === "owner" ? (state.lang === "es" ? "4 locales" : "4 venues") : `${t("venue")} 2 · ${t("dinner")}`;
-  return `<header class="topbar"><svg class="mark" viewBox="0 0 64 64" role="img" aria-label="The First Hospitality Group">${MARK}</svg>
-    <div class="who"><b>${esc(name)} · ${pick(ROLE_NAME[r])}${me() ? `<span class="lvl" title="${t("level")}">${me().level}</span>` : ""}</b><span>${sub}</span></div></header>`;
+  const p = me(); const name = p ? p.name : state.role === "manager" ? "Daniel B." : "Alex M.";
+  const sub = state.role === "director" ? (state.lang === "es" ? "4 locales" : "4 venues") : `${t("venue")} 2 · ${t("dinner")}`;
+  return `<header class="topbar"><svg class="mark" viewBox="0 0 512 512" role="img" aria-label="The First Hospitality Group">${MARK}</svg>
+    <div class="who"><b>${esc(name)} · ${pick(POS[state.role])}</b><span>${sub}</span></div></header>`;
 }
 function mobileDemo() {
-  return `<div class="mobile-demo" role="group" aria-label="${t("seeAs")}">${ROLES.map(r => `<button data-role="${r.key}" aria-pressed="${state.role === r.key}">${pick(ROLE_NAME[r.key])}</button>`).join("")}
-  <button data-lang="${state.lang === "en" ? "es" : "en"}">${state.lang === "en" ? "ES" : "EN"}</button>
-  <button data-large aria-pressed="${state.large}">${t("largeText")}</button></div>`;
+  return `<div class="mobile-demo" role="group" aria-label="${t("seeAs")}">${ROLES.map(r => `<button data-role="${r.key}" aria-pressed="${state.role === r.key}">${pick(POS[r.key])}</button>`).join("")}
+  <button data-lang="${state.lang === "en" ? "es" : "en"}">${state.lang === "en" ? "ES" : "EN"}</button><button data-large aria-pressed="${state.large}">${t("largeText")}</button></div>`;
 }
 function tabsBar() {
   return `<nav class="tabs" aria-label="Main">${role().tabs.map(k => {
-    const pendReq = state.requests.filter(q => q.status === "pending").length;
-    const dot = k === "messages" && unreadCount() ? `<span class="dot">${unreadCount()}</span>` : (k === "me" && pendingWarnings().length ? `<span class="dot">1</span>` : (k === "requests" && pendReq ? `<span class="dot">${pendReq}</span>` : ""));
-    return `<button data-tab="${k}" ${state.tab === k ? 'aria-current="page"' : ""}>${ICON[TAB_ICON[k]]}<span>${t(k)}</span>${dot}</button>`;
+    let n = 0;
+    if (k === "messages") n = unreadCount();
+    if (k === "today") n = pendingCount();
+    if (k === "schedule" && ["manager"].includes(state.role)) n = state.approvals.filter(a => a.status === "open").length;
+    if (k === "shift") n = state.proposals.filter(x => x.status === "open").length + state.shortages.filter(s => s.status === "open").length;
+    return `<button data-tab="${k}" ${state.tab === k ? 'aria-current="page"' : ""}>${ICON[TAB_ICON[k]]}<span>${t(k)}</span>${n ? `<span class="dot" aria-label="${t("pending")}"></span>` : ""}</button>`;
   }).join("")}</nav>`;
 }
+const backBtn = to => `<button class="btn quiet" data-tab="${to}">${ICON.back}${t("back")}</button>`;
 
+/* ---------- staff screens ---------- */
+function shiftLine(s) { return `${t(s[0])} · ${s[1]}–${s[2] || t("untilClose")}`; }
 function screenToday() {
-  const p = me(); const run = runFor(p.id, p.role); const pr = progress(run);
-  const next = run.items.find(i => !i.done);
-  const pend = pendingWarnings();
+  const p = me(); const run = runFor(p); const pr = progress(run); const next = run.items.find(i => !i.done);
+  const todays = (WEEK[p.id] || [])[TODAY] || [];
+  const sec = SECTIONS.find(s => s.staff.includes(p.id));
+  let h = `<div class="stack"><p class="muted small">${t("goodEvening")}, ${esc(p.name.split(" ")[0])}</p><h1 class="h1">${t("today")}</h1></div>`;
+  const conf = [];
+  if (!state.schedAck[p.id]) conf.push(`<div class="item"><span class="grow"><b class="small">${t("schedOut")}</b></span><button class="btn primary" style="width:auto;min-height:44px" data-ack-sched>${t("sawIt")}</button></div>`);
+  if (!state.rulesAck[p.id]) conf.push(`<button class="item" data-tab="rules"><span class="grow"><b class="small">${t("rulesUpdated")}</b></span>${ICON.chev}</button>`);
+  if (["server", "bartender", "captain"].includes(p.pos)) pendingMenu().forEach(m => conf.push(`<button class="item" data-dish="${m.id}"><span class="grow"><b class="small">${t("menuChanged")}: ${esc(pick(m.name))}</b></span><span class="badge b-info">${t("newItem")}</span>${ICON.chev}</button>`));
+  pendingWarnings().forEach(w => conf.push(`<button class="item" data-open-warning="${w.id}"><span class="grow"><b class="small">${t("newNote")}</b></span><span class="badge b-att">${ICON.dot}</span>${ICON.chev}</button>`));
+  if (conf.length) h += `<div class="card" style="border-color:var(--brand)"><span class="label">${t("toConfirm")}</span><div class="group">${conf.join("")}</div></div>`;
+  h += `<div class="card"><span class="label">${t("yourShift")}</span><p class="h2">${todays.map(shiftLine).join(" + ") || t("off")}</p>
+    <div class="kv"><span>${t("preShiftAt")}</span><b>4:45 PM</b></div>${sec ? `<div class="kv"><span>${t("yourSection")}</span><b>${sec.id}</b></div><div class="kv"><span>${t("captain")}</span><b style="font-family:var(--sans)">Rachel K.</b></div>` : ""}</div>`;
+  if (state.shift !== "closed") {
+    h += `<div class="card lift"><span class="label">${t("sideWork")}</span><div class="prog"><i style="width:${pr.pct}%"></i></div>
+      ${next ? `<p class="h2">${esc(pick(next.label))}</p>${next.photo ? `<span class="badge b-info">${ICON.camera}${t("photoRequired")}</span>` : ""}` : `<p class="h2">${t("allDone")}</p>`}
+      <button class="btn primary" data-tab="tasks">${t("openSideWork")}</button></div>`;
+  } else h += `<div class="locked">${ICON.lock}<p>${t("closed")}</p></div>`;
+  h += `<div class="card"><span class="label">${t("preNotes")}</span>${state.preNotes.map(n => `<p class="small">${esc(pick(n))}</p>`).join("")}</div>`;
+  if (state.eighty6.length && p.pos !== "busser") h += `<div class="card"><span class="label">${t("eightySix")}</span><div class="allergens">${state.eighty6.map(id => `<span class="badge b-rev">${esc(pick(MENU.find(m => m.id === id).name))}</span>`).join("")}</div></div>`;
   const unread = state.messages.filter(m => !m.read);
-  let html = `<div class="stack"><p class="muted small">${t("goodEvening")}, ${esc(p.name.split(" ")[0])}</p>
-    <h1 class="h1">${run.phase === "open" ? t("openingTasks") : t("closingTasks")}</h1>
-    <div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pr.pct}"><i style="width:${pr.pct}%"></i></div>
-    <p class="small muted">${pr.d} ${t("of")} ${pr.n} ${t("doneWord")}</p></div>`;
-  if (state.shift === "closed") html += `<div class="locked">${ICON.lock}<p>${t("closed")}</p></div>`;
-  else if (next) html += `<div class="card lift"><span class="label">${t("nextTask")}</span><p class="h2">${esc(pick(next.label))}</p>${next.photo ? `<span class="badge b-info">${ICON.camera}${t("photoRequired")}</span>` : ""}<button class="btn primary" data-tab="tasks">${t("nextTask")}</button></div>`;
-  else html += `<div class="card"><p class="h2">${t("allDone")}</p></div>`;
-  if (pend.length) html += `<button class="card venue" data-open-warning="${pend[0].id}" style="border-color:var(--att-fg)"><span class="badge b-att">${ICON.dot}${t("newNote")}</span><span class="row between"><span class="small">${t("openNote")}</span>${ICON.chev}</span></button>`;
-  if (unread.length) html += `<button class="card venue" data-tab="messages"><span class="label">${t("messages")} · ${unread.length} ${t("unread")}</span><span class="h2">${esc(pick(unread[0].title))}</span><span class="small muted">${esc(unread[0].from)} · ${ago(unread[0].at)}</span></button>`;
-  if (state.role === "server") html += `<div class="card"><div class="row between"><span class="label">${t("mySection")} ${SECTION.name}</span><span class="cap mono muted">${SECTION.tables[0]}–${SECTION.tables[SECTION.tables.length - 1]}</span></div>
-    <span class="label" style="margin-top:4px">${t("tableNotes")}</span>${state.tableNotes.map(n => `<div class="kv"><span>${t("table")} ${n.table} · ${esc(pick(n.text))}</span>${n.kind === "allergy" ? `<span class="badge b-rev">${ICON.alert}${pick(ALLERGEN.shellfish)}</span>` : `<span class="badge b-info">${state.lang === "es" ? "Ocasión" : "Occasion"}</span>`}</div>`).join("")}</div>`;
-  html += `<div class="card"><span class="label">${t("shiftNotes")}</span><p class="small">${t("lineup")}</p><p class="small muted">${t("tonightCovers")}</p></div>`;
-  return html;
+  if (unread.length) h += `<button class="card venue" data-tab="messages"><span class="label">${t("messages")} · ${unread.length} ${t("unread")}</span><span class="h2">${esc(pick(unread[0].title))}</span><span class="small muted">${esc(unread[0].from)} · ${ago(unread[0].at)}</span></button>`;
+  return h;
 }
-
 function screenTasks() {
-  const p = me(); const run = runFor(p.id, p.role); const pr = progress(run);
-  if (state.shift === "closed") return `<h1 class="h1">${t("tasks")}</h1><div class="locked">${ICON.lock}<p>${t("closed")}</p></div>`;
-  return `<div class="stack"><h1 class="h1">${run.phase === "open" ? t("openingTasks") : t("closingTasks")}</h1>
-    <div class="prog"><i style="width:${pr.pct}%"></i></div><p class="small muted">${pr.d} ${t("of")} ${pr.n} ${t("doneWord")}</p></div>
-    <div class="group" role="list">${run.items.map((it, i) => `<button role="listitem" class="item ${it.done ? "done" : ""}" data-check="${i}" aria-pressed="${it.done}">
-      <span class="check">${ICON.check}</span><span class="grow"><span class="task-label">${esc(pick(it.label))}</span>
-      ${it.weekly ? `<br><span class="badge b-neutral" style="margin-top:6px">${t("weekly")}</span>` : ""}${it.photo ? ` <span class="badge ${it.hasPhoto ? "b-ok" : "b-info"}" style="margin-top:6px">${ICON.camera}${it.hasPhoto ? t("photoAdded") : t("photoRequired")}</span>` : ""}</span></button>`).join("")}</div>
+  const p = me(); const run = runFor(p); const pr = progress(run);
+  if (state.shift === "closed") return `${backBtn("today")}<div class="locked">${ICON.lock}<p>${t("closed")}</p></div>`;
+  return `${backBtn(role().tabs[0])}<div class="stack"><h1 class="h1">${t("sideWork")}</h1><div class="prog" role="progressbar" aria-valuenow="${pr.pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pr.pct}%"></i></div></div>
+    <div class="group" role="list">${run.items.map((it, i) => `<button role="listitem" class="item ${it.done ? "done" : ""}" data-check="${i}" aria-pressed="${it.done}"><span class="check">${ICON.check}</span>
+      <span class="grow"><span class="task-label">${esc(pick(it.label))}</span>${it.weekly || it.photo ? "<br>" : ""}${it.weekly ? `<span class="badge b-neutral" style="margin-top:6px">${t("weekly")}</span> ` : ""}${it.photo ? `<span class="badge ${it.hasPhoto ? "b-ok" : "b-info"}" style="margin-top:6px">${ICON.camera}${it.hasPhoto ? t("photoAdded") : t("photoRequired")}</span>` : ""}</span></button>`).join("")}</div>
     ${pr.d === pr.n ? `<div class="card"><p class="h2">${t("allDone")}</p></div>` : ""}`;
 }
-
+function myWeek(p) {
+  const wk = WEEK[p.id] || WEEK.p4;
+  return `<div class="stack">${DAYS.map((d, i) => { const sh = wk[i]; const ev = state.events.find(e => e.day === i && sh.some(s => s[3] === e.id));
+    return `<div class="day ${i === TODAY ? "is-today" : ""} ${sh.length ? "" : "is-off"}"><span class="dname">${pick(d)}</span><span class="grow">${sh.length ? sh.map(s => `<span class="block">${shiftLine(s)}</span>`).join("") : `<span class="muted small">${t("off")}</span>`}
+      ${sh.length > 1 ? `<span class="badge b-neutral">${t("double")}</span>` : ""}${ev ? `<span class="badge b-info">${t("event")}: ${esc(pick(ev.name))} · ${ev.time}</span>` : ""}</span></div>`; }).join("")}</div>`;
+}
+function screenSchedule() {
+  if (["manager", "director"].includes(state.role)) return screenScheduleManage();
+  const p = me();
+  return `<h1 class="h1">${t("schedule")}</h1><p class="small muted">${t("week")}</p>
+    ${state.schedAck[p.id] ? `<span class="badge b-ok">${ICON.check}${t("confirmedAt")} · v1</span>` : `<div class="card" style="border-color:var(--brand)"><p class="h2">${t("schedOut")}</p><button class="btn primary" data-ack-sched>${t("sawIt")}</button></div>`}
+    ${myWeek(p)}
+    <div class="card"><span class="label">${t("openShifts")}</span><div class="item"><span class="grow"><b class="small">${pick(DAYS[6])} · ${t("lunch")} · ${pick(POS[p.pos])}</b><br><span class="cap muted">10:00 AM–3:30 PM</span></span>
+      ${state.openShiftTaken ? `<span class="badge b-att">${state.lang === "es" ? "Pendiente" : "Pending"}</span>` : `<button class="btn secondary" style="width:auto;min-height:44px" data-pickup>${t("pickUp")}</button>`}</div></div>
+    <div class="row wrap"><button class="btn secondary" style="flex:1;min-width:150px" data-swap>${t("swap")}</button><button class="btn secondary" style="flex:1;min-width:150px" data-timeoff>${t("timeOff")}</button></div>`;
+}
+function screenSection() {
+  const p = me(); const sec = SECTIONS.find(s => s.staff.includes(p.id)) || SECTIONS[1];
+  return `<h1 class="h1">${t("yourSection")} ${sec.id}</h1>
+    <div class="plan">${SECTIONS.map(s => `<div class="sec ${s.id === sec.id ? "mine" : ""}"><span class="cap">${s.id}</span><div class="tbls">${s.tables.map(tb => `<span class="tb" title="${tb.s} ${t("seats")}"><b>${tb.n}</b><i>${tb.s}</i></span>`).join("")}</div></div>`).join("")}</div>
+    <div class="card"><span class="label">${t("whoIsWhere")}</span>${sec.staff.map(id => { const q = person(id); return `<div class="kv"><span>${esc(q.name)}</span><span class="cap muted">${pick(POS[q.pos])}</span></div>`; }).join("")}</div>
+    <div class="card"><span class="label">${t("tableNotes")}</span>${state.tableNotes.map(n => `<div class="kv"><span>${t("tables").slice(0, -1)} ${n.table}${n.seat ? ` · ${state.lang === "es" ? "asiento" : "seat"} ${n.seat}` : ""} · ${esc(pick(n.text))}</span>${n.kind === "allergy" ? `<span class="badge b-rev">${ICON.alert}${t("allergy")}</span>` : `<span class="badge b-info">${t(n.kind)}</span>`}</div>`).join("")}</div>`;
+}
 function photoArt(m) {
-  return m.glass ? `<div class="photo"><div class="glass" style="background:${m.color}"></div></div>`
-                 : `<div class="photo"><div class="plate"><div class="food" style="background:radial-gradient(circle at 35% 35%, ${m.color}, #2a1a12)"></div></div></div>`;
+  return m.glass ? `<div class="photo"><div class="glass" style="background:${m.color}"></div></div>` : `<div class="photo"><div class="plate"><div class="food" style="background:radial-gradient(circle at 35% 35%, ${m.color}, #2a1a12)"></div></div></div>`;
 }
 function screenMenu() {
-  const cats = ["all", "starters", "mains", "desserts", "cocktails"];
-  const q = state.menuQ.trim().toLowerCase();
+  const cats = ["all", "starters", "mains", "desserts", "cocktails"]; const q = state.menuQ.trim().toLowerCase();
   const list = MENU.filter(m => (state.menuCat === "all" || m.cat === state.menuCat) && (!q || (pick(m.name) + " " + pick(m.ing)).toLowerCase().includes(q)));
   return `<h1 class="h1">${t("menu")}</h1>
     <div class="searchwrap">${ICON.search}<input class="search" id="menu-q" type="search" placeholder="${t("search")}" aria-label="${t("search")}" value="${esc(state.menuQ)}" enterkeyhint="search"></div>
-    <div class="pills" role="group" aria-label="${t("menu")}">${cats.map(c => `<button class="pill" data-cat="${c}" aria-pressed="${state.menuCat === c}">${t(c)}</button>`).join("")}</div>
-    ${list.length ? `<div class="menu-grid">${list.map(m => `<button class="dish ${m.available ? "" : "unavailable"}" data-dish="${m.id}">${photoArt(m)}
-      <b>${esc(pick(m.name))}</b>${m.available ? `<span class="allergens">${m.allergens.slice(0, 2).map(a => `<span class="badge b-rev">${pick(ALLERGEN[a])}</span>`).join("")}</span>` : `<span class="badge b-neutral">${t("unavailableToday")}</span>`}</button>`).join("")}</div>`
-      : `<div class="empty">${ICON.search}<p>${t("noResults")}</p></div>`}`;
+    <div class="pills" role="group">${cats.map(c => `<button class="pill" data-cat="${c}" aria-pressed="${state.menuCat === c}">${t(c)}</button>`).join("")}</div>
+    ${list.length ? `<div class="menu-grid">${list.map(m => { const s86 = state.eighty6.includes(m.id); return `<button class="dish ${s86 ? "unavailable" : ""}" data-dish="${m.id}">${photoArt(m)}<b>${esc(pick(m.name))}</b>
+      <span class="allergens">${s86 ? `<span class="badge b-rev">${t("soldOut")}</span>` : m.isNew && !state.menuAck[m.id] ? `<span class="badge b-info">${t("newItem")}</span>` : m.allergens.slice(0, 2).map(a => `<span class="badge b-rev">${pick(ALLERGEN[a])}</span>`).join("")}</span></button>`; }).join("")}</div>` : `<div class="empty">${ICON.search}<p>${t("noResults")}</p></div>`}
+    <p class="cap muted">${t("noMoney")}</p>`;
 }
 function sheetDish(id) {
-  const m = MENU.find(x => x.id === id);
-  return `<div class="grab"></div>${photoArt(m)}<div class="row between"><h2 class="h1" style="font-size:var(--t-lead)">${esc(pick(m.name))}</h2><span class="mono">${money(m.price)}</span></div>
-    ${m.available ? "" : `<span class="badge b-neutral">${t("unavailableToday")}</span>`}
-    <p>${esc(pick(m.desc))}</p>
-    <div><p class="label">${t("allergens")}</p><div class="allergens" style="margin-top:8px">${m.allergens.length ? m.allergens.map(a => `<span class="badge b-rev">${ICON.alert}${pick(ALLERGEN[a])}</span>`).join("") : `<span class="badge b-ok">${ICON.check}${state.lang === "es" ? "Ninguno" : "None"}</span>`}</div></div>
+  const m = MENU.find(x => x.id === id); const needs = m.isNew && !state.menuAck[m.id] && me();
+  return `<div class="grab"></div>${photoArt(m)}<h2 class="h1" style="font-size:var(--t-lead)">${esc(pick(m.name))}</h2>
+    ${state.eighty6.includes(m.id) ? `<span class="badge b-rev">${t("soldOut")}</span>` : ""}<p>${esc(pick(m.desc))}</p>
+    <div><p class="label">${t("allergens")}</p><div class="allergens" style="margin-top:8px">${m.allergens.length ? m.allergens.map(a => `<span class="badge b-rev">${ICON.alert}${pick(ALLERGEN[a])}</span>`).join("") : `<span class="badge b-ok">${ICON.check}${t("none")}</span>`}</div></div>
     <div><p class="label">${t("ingredients")}</p><p class="small" style="margin-top:6px">${esc(pick(m.ing))}</p></div>
+    ${m.pair ? `<div class="kv"><span>${t("pairing")}</span><b style="font-family:var(--sans)">${esc(pick(m.pair))}</b></div>` : ""}
+    ${needs ? `<button class="btn primary" data-ack-menu="${m.id}">${t("sawIt")}</button>` : `<button class="btn secondary" data-close-sheet>${t("back")}</button>`}`;
+}
+function screenRules() {
+  const p = me(); const list = RULES.filter(r => r.pos.includes(p.pos));
+  return `${role().tabs.includes("rules") ? "" : backBtn(role().tabs[0])}<h1 class="h1">${t("rules")}</h1><p class="small muted">${t("myRules")} · ${t("version")} 4</p>
+    <div class="stack">${list.map((r, i) => `<div class="card"><span class="label">${i + 1}</span><p class="h2">${esc(pick(r.title))}</p><p class="small">${esc(pick(r.how))}</p></div>`).join("")}</div>
+    ${state.rulesAck[p.id] ? `<span class="badge b-ok">${ICON.check}${t("confirmed")}</span>` : `<button class="btn primary" data-ack-rules>${t("confirmRules")}</button>`}`;
+}
+function screenMe() {
+  const p = me(); const list = personWarnings(p.id); const s = warningState(list, now); const nxt = LADDER[p.pos];
+  return `<h1 class="h1">${t("me")}</h1>
+    <div class="card"><div class="kv"><span>${t("position")}</span><b style="font-family:var(--sans)">${pick(POS[p.pos])}</b></div>${nxt ? `<div class="kv"><span>${t("ladder")}</span><b style="font-family:var(--sans)">${pick(POS[nxt])}</b></div>` : ""}</div>
+    <div class="card"><div class="row between"><span class="label">${t("myRecord")}</span>${stateBadge(s)}</div><p class="cap muted">${t("stateLegend")}</p>
+    ${list.length ? `<div class="group">${list.map(w => { const r = RULES.find(x => x.id === w.ruleId); return `<button class="item" data-open-warning="${w.id}"><span class="grow"><b class="small">${esc(pick(r.title))}</b><br><span class="cap muted">${t(w.sev)} · ${ago(w.at)}</span></span>${w.ack ? `<span class="badge b-ok">${ICON.check}</span>` : `<span class="badge b-att">${t("newItem")}</span>`}${ICON.chev}</button>`; }).join("")}</div>` : `<p class="small">${t("noWarnings")}</p>`}</div>
+    <div class="card"><span class="label">${t("preferences")}</span>
+      <div class="field"><label>${t("language")}</label><div class="seg"><button data-lang="en" aria-pressed="${state.lang === "en"}">English</button><button data-lang="es" aria-pressed="${state.lang === "es"}">Español</button></div></div>
+      <div class="field"><label>${t("largeText")}</label><div class="seg"><button data-large-set="0" aria-pressed="${!state.large}">A</button><button data-large-set="1" aria-pressed="${state.large}" style="font-size:20px">A</button></div></div>
+      <div class="field"><label>${t("view")}</label><div class="seg"><button data-theme-set="light" aria-pressed="${state.theme === "light"}">${t("light")}</button><button data-theme-set="dark" aria-pressed="${state.theme === "dark"}">${t("dark")}</button></div></div>
+      <div class="kv"><span>${t("notifications")}</span><b>${t("on")}</b></div></div>`;
+}
+function sheetWarning(id) {
+  const w = state.warnings.find(x => x.id === id); const r = RULES.find(x => x.id === w.ruleId); const mine = me() && w.personId === me().id;
+  return `<div class="grab"></div><div class="row between"><span class="label">${t(w.sev)} · ${ago(w.at)}</span><span class="cap muted">${t("logged")} ${esc(w.by)}</span></div>
+    <div><p class="label">${t("rule")}</p><p class="h2" style="margin-top:4px">${esc(pick(r.title))}</p></div>
+    ${pick(w.note) ? `<div><p class="label">${t("whatHappened")}</p><p class="small" style="margin-top:4px">${esc(pick(w.note))}</p></div>` : ""}
+    <div class="card" style="background:var(--surface);border:0"><p class="label">${t("howToDoIt")}</p><p class="small">${esc(pick(r.how))}</p></div>
+    ${mine && !w.ack ? `<div class="field"><label for="w-resp">${t("yourResponse")}</label><textarea id="w-resp" maxlength="500"></textarea></div><button class="btn primary" data-ack="${w.id}">${t("readIt")}</button>` : `<span class="badge b-ok">${ICON.check}${t("acknowledged")}</span>${pick(w.response) ? `<p class="small muted">"${esc(pick(w.response))}"</p>` : ""}`}
     <button class="btn secondary" data-close-sheet>${t("back")}</button>`;
 }
-
+function screenBar() {
+  const mine = state.shortages;
+  return `<h1 class="h1">${t("bar")}</h1><p class="small muted">${t("barList")}</p>
+    <div>${BAR.map(b => { const s = mine.find(x => x.item === b.id && x.status !== "restocked");
+      return `<div class="count"><div><b class="small">${esc(pick(b.name))}</b>${s ? `<br><span class="badge ${s.level === "out" ? "b-rev" : "b-att"}" style="margin-top:4px">${t(s.level)} · ${s.status === "ordered" ? t("ordered") : t("reported")}</span>` : ""}</div>
+        <div class="row"><button class="btn secondary" style="width:auto;min-height:44px;padding:0 14px" data-short="${b.id}" data-level="low">${t("low")}</button><button class="btn deny" style="width:auto;min-height:44px;padding:0 14px" data-short="${b.id}" data-level="out">${t("out")}</button></div></div>`; }).join("")}</div>`;
+}
 function screenMessages() {
-  const canSend = ["manager", "owner"].includes(state.role);
-  return `<div class="row between"><h1 class="h1">${t("messages")}</h1></div>
-    ${canSend ? `<button class="btn primary" data-sheet="compose">${t("sendMessage")}</button>` : ""}
-    <div class="group">${state.messages.map(m => `<button class="item" data-msg="${m.id}"><span class="grow">
-      <span class="row between"><b class="small">${esc(pick(m.title))}</b>${!m.read ? `<span class="badge b-info">${state.lang === "es" ? "Nuevo" : "New"}</span>` : ""}</span>
-      <span class="cap muted">${esc(m.from)} · ${ago(m.at)}${canSend ? ` · ${t("readBy")} ${m.readBy}/${m.total}` : ""}</span></span>${ICON.chev}</button>`).join("")}</div>`;
+  const canSend = ["manager", "director"].includes(state.role);
+  return `${role().tabs.includes("messages") ? "" : backBtn(role().tabs[0])}<h1 class="h1">${t("messages")}</h1>${canSend ? `<button class="btn primary" data-sheet="compose">${t("sendMessage")}</button>` : ""}
+    <div class="group">${state.messages.map(m => `<button class="item" data-msg="${m.id}"><span class="grow"><span class="row between"><b class="small">${esc(pick(m.title))}</b>${!m.read ? `<span class="badge b-info">${t("newItem")}</span>` : ""}</span>
+      <span class="cap muted">${esc(m.from)} · ${ago(m.at)}</span></span>${ICON.chev}</button>`).join("")}</div>`;
 }
 function sheetMessage(id) {
-  const m = state.messages.find(x => x.id === id); m.read = true;
+  const m = state.messages.find(x => x.id === id); m.read = true; const staff = !["manager", "director"].includes(state.role);
   return `<div class="grab"></div><span class="label">${esc(m.from)} · ${ago(m.at)}</span><h2 class="h1" style="font-size:var(--t-lead)">${esc(pick(m.title))}</h2><p>${esc(pick(m.body))}</p>
-    ${m.confirm && !["manager", "owner"].includes(state.role) ? (m.confirmed ? `<span class="badge b-ok">${ICON.check}${t("confirmed")}</span>` : `<p class="small muted">${t("requiresConfirm")}</p><button class="btn primary" data-confirm-msg="${m.id}">${t("readIt")}</button>`) : ""}
-    ${["manager", "owner"].includes(state.role) ? `<div class="kv"><span>${t("readBy")}</span><b>${m.readBy}/${m.total}</b></div>` : ""}
-    <button class="btn secondary" data-close-sheet>${t("back")}</button>`;
+    ${m.confirm && staff ? (m.confirmed ? `<span class="badge b-ok">${ICON.check}${t("confirmed")}</span>` : `<p class="small muted">${t("requiresConfirm")}</p><button class="btn primary" data-confirm-msg="${m.id}">${t("readIt")}</button>`) : ""}
+    ${!staff ? `<div class="kv"><span>${t("readPending")}</span><span class="small">${t("pending")}: Marcus T., Luis G.</span></div>` : ""}<button class="btn secondary" data-close-sheet>${t("back")}</button>`;
 }
 function sheetCompose() {
   return `<div class="grab"></div><h2 class="h1" style="font-size:var(--t-lead)">${t("sendMessage")}</h2>
-    <div class="field"><label for="c-to">${t("to")}</label><select id="c-to"><option>${t("everyone")}</option><option>${pick(ROLE_NAME.server)}s</option><option>${pick(ROLE_NAME.bartender)}s</option></select></div>
+    <div class="field"><label for="c-to">${t("to")}</label><select id="c-to"><option>${t("everyone")}</option><option>${pick(POS.server)}</option><option>${pick(POS.bartender)}</option><option>${pick(POS.busser)}</option></select></div>
     <div class="field"><label for="c-title">${t("title")}</label><input id="c-title" maxlength="80"></div>
     <div class="field"><label for="c-body">${t("message")}</label><textarea id="c-body" maxlength="600"></textarea></div>
     <label class="row small"><input type="checkbox" id="c-confirm" style="width:24px;height:24px"> ${t("requiresConfirm")}</label>
     <button class="btn primary" data-send-msg>${t("send")}</button>`;
 }
 
-function screenMe() {
-  const p = me(); const list = personWarnings(p.id); const s = warningState(list, now);
-  return `<h1 class="h1">${t("me")}</h1>
-    <div class="card"><div class="row between"><span class="label">${t("myRecord")}</span>${stateBadge(s)}</div><p class="cap muted">${t("stateLegend")}</p>
-    ${list.length ? `<div class="group">${list.map(w => { const r = RULES.find(x => x.id === w.ruleId); return `<button class="item" data-open-warning="${w.id}"><span class="grow"><b class="small">${esc(pick(r.title))}</b><br><span class="cap muted">${t(w.sev)} · ${ago(w.at)}</span></span>${w.ack ? `<span class="badge b-ok">${ICON.check}</span>` : `<span class="badge b-att">${state.lang === "es" ? "Nuevo" : "New"}</span>`}${ICON.chev}</button>`; }).join("")}</div>` : `<p class="small">${t("noWarnings")}</p>`}</div>
-    <div class="card"><span class="label">${t("preferences")}</span>
-      <div class="field"><label>${t("language")}</label><div class="seg"><button data-lang="en" aria-pressed="${state.lang === "en"}">English</button><button data-lang="es" aria-pressed="${state.lang === "es"}">Español</button></div></div>
-      <div class="field"><label>${t("largeText")}</label><div class="seg"><button data-large-set="0" aria-pressed="${!state.large}">A</button><button data-large-set="1" aria-pressed="${state.large}" style="font-size:20px">A</button></div></div>
-      <div class="field"><label>${t("view")}</label><div class="seg"><button data-theme-set="light" aria-pressed="${state.theme === "light"}">${t("light")}</button><button data-theme-set="dark" aria-pressed="${state.theme === "dark"}">${t("dark")}</button></div></div>
-      <div class="kv"><span>${t("notifications")}</span><b>${t("on")}</b></div>
-    </div>`;
+/* ---------- requests ---------- */
+const REQ_ICON = { water: "water", clear: "clear", help: "hand" };
+function sheetRequest() {
+  const d = state.draft; const sec = SECTIONS[1];
+  return `<div class="grab"></div><h2 class="h1" style="font-size:var(--t-lead)">${t("kind")}</h2>
+    <div class="kinds" role="group"><button class="kind help" data-kind="help" aria-pressed="${d.kind === "help"}">${ICON.hand}${t("help")}</button>${["water", "clear"].map(k => `<button class="kind" data-kind="${k}" aria-pressed="${d.kind === k}">${ICON[REQ_ICON[k]]}${t(k)}</button>`).join("")}</div>
+    <div class="field"><label>${t("whichTable")}</label><div class="tables" role="group">${sec.tables.map(tb => `<button class="tbl" data-table="${tb.n}" aria-pressed="${d.table === tb.n}">${tb.n}</button>`).join("")}</div></div>
+    <button class="btn primary" data-send-request>${t("sendRequest")}</button>`;
 }
-function sheetWarning(id) {
-  const w = state.warnings.find(x => x.id === id); const r = RULES.find(x => x.id === w.ruleId);
-  const mine = me() && w.personId === me().id;
-  return `<div class="grab"></div><div class="row between"><span class="label">${t(w.sev)} · ${ago(w.at)}</span><span class="cap muted">${t("logged")} ${esc(w.by)}</span></div>
-    <div><p class="label">${t("rule")}</p><p class="h2" style="margin-top:4px">${esc(pick(r.title))}</p></div>
-    ${pick(w.note) ? `<div><p class="label">${t("whatHappened")}</p><p class="small" style="margin-top:4px">${esc(pick(w.note))}</p></div>` : ""}
-    <div class="card" style="background:var(--surface);border:0"><p class="label">${t("howToDoIt")}</p><p class="small">${esc(pick(r.how))}</p></div>
-    ${mine && !w.ack ? `<div class="field"><label for="w-resp">${t("yourResponse")}</label><textarea id="w-resp" maxlength="500"></textarea></div><button class="btn primary" data-ack="${w.id}">${t("readIt")}</button>`
-      : `<span class="badge b-ok">${ICON.check}${t("acknowledged")}</span>${pick(w.response) ? `<p class="small muted">"${esc(pick(w.response))}"</p>` : ""}`}
-    <button class="btn secondary" data-close-sheet>${t("back")}</button>`;
+function reqLine(q) {
+  const st = q.status === "claimed" ? `<span class="badge b-info">${t("claimedBy")} ${esc(q.claimedBy)}</span>` : q.status === "done" ? `<span class="badge b-ok">${ICON.check}${t("markDone")}</span>` : `<span class="badge ${q.kind === "help" ? "b-rev" : "b-att"}">${t("openReq")}</span>`;
+  return `<div class="req"><div class="row between"><b class="small">${t(q.kind)} · ${t("tables").slice(0, -1)} ${esc(q.table)}</b>${st}</div><span class="cap muted">${esc(q.by)} · ${ago(q.at)}</span>
+    ${q.status === "open" ? `<div class="actions"><button class="btn secondary" data-claim="${q.id}">${t("onIt")}</button></div>` : q.status === "claimed" ? `<div class="actions"><button class="btn secondary" data-done="${q.id}">${t("markDone")}</button></div>` : ""}</div>`;
 }
 
-function screenInventory() {
-  const phase = state.shift === "open" ? "open" : "close";
-  return `<h1 class="h1">${phase === "open" ? t("countOpening") : t("countClosing")}</h1>
-    <p class="small muted">${state.lang === "es" ? "En décimas de botella" : "In tenths of a bottle"}</p>
-    <div>${BAR.map(b => `<div class="count"><div><b class="small">${esc(b.name)}</b><br><span class="cap muted mono">${t("expected")} ${(phase === "open" ? b.open : b.open - b.used).toFixed(1)}</span></div>
-      <div class="stepper" role="group" aria-label="${esc(b.name)}"><button data-step="${b.id}" data-d="-1" aria-label="-0.1">−</button><output>${(state.counts[b.id] / 10).toFixed(1)}</output><button data-step="${b.id}" data-d="1" aria-label="+0.1">+</button></div></div>`).join("")}</div>
-    <button class="btn primary" data-save-count>${t("saveCount")}</button>
-    ${state.countSaved ? `<span class="badge b-ok">${ICON.check}${t("countSaved")}</span>` : ""}`;
+/* ---------- captain ---------- */
+function screenFloor() {
+  return `<h1 class="h1">${t("liveMap")}</h1>
+    <div class="plan">${SECTIONS.map(s => `<div class="sec"><span class="cap">${s.id} · ${s.staff.map(id => esc(person(id).name.split(" ")[0])).join(", ")}</span><div class="tbls">${s.tables.map(tb => `<span class="tb ${state.tableNotes.some(n => n.table === tb.n && n.kind === "allergy") ? "flag" : ""}"><b>${tb.n}</b><i>${tb.s}</i></span>`).join("")}</div></div>`).join("")}</div>
+    <div><p class="label">${t("requests")}</p>${state.requests.map(reqLine).join("")}</div>
+    <button class="btn secondary" data-sheet="propose">${t("proposeWarning")}</button>`;
 }
+function screenPreshift() {
+  return `<h1 class="h1">${t("preshift")}</h1>
+    <div class="card"><span class="label">${t("preNotes")}</span>${state.preNotes.map(n => `<p class="small">${esc(pick(n))}</p>`).join("")}
+      <div class="field"><label for="pn">${t("addNote")}</label><textarea id="pn" maxlength="280"></textarea></div><button class="btn primary" data-add-note>${t("send")}</button></div>
+    <div class="card"><span class="label">${t("eightySix")}</span>${MENU.map(m => `<div class="kv"><span>${esc(pick(m.name))}</span>${state.eighty6.includes(m.id) ? `<button class="badge b-rev" data-86="${m.id}">${t("soldOut")}</button>` : `<button class="btn quiet" style="min-height:40px" data-86="${m.id}">${t("publish86")}</button>`}</div>`).join("")}</div>`;
+}
+function sheetPropose(issueDirect) {
+  const opts = PEOPLE.filter(p => !["captain"].includes(p.pos));
+  return `<div class="grab"></div><h2 class="h1" style="font-size:var(--t-lead)">${issueDirect ? t("logWarning") : t("proposeWarning")}</h2>
+    <div class="field"><label for="wf-person">${t("person")}</label><select id="wf-person">${opts.map(p => `<option value="${p.id}">${esc(p.name)} · ${pick(POS[p.pos])}</option>`).join("")}</select></div>
+    <div class="field"><label for="wf-rule">${t("chooseRule")}</label><select id="wf-rule"></select></div>
+    <div class="field"><label>${t("severity")}</label><div class="seg" role="group"><button data-sev="minor" aria-pressed="true">${t("minor")}</button><button data-sev="major" aria-pressed="false">${t("major")}</button></div></div>
+    <div class="field"><label for="wf-note">${t("note")}</label><textarea id="wf-note" maxlength="300"></textarea></div>
+    <button class="btn primary" data-submit-warn="${issueDirect ? "issue" : "propose"}">${t("send")}</button>`;
+}
+function fillRules() { const sel = $("#wf-rule"); if (!sel) return; const p = person($("#wf-person").value); sel.innerHTML = RULES.filter(r => r.pos.includes(p.pos)).map(r => `<option value="${r.id}">${esc(pick(r.title))}</option>`).join(""); }
 
-/* Manager */
+/* ---------- manager ---------- */
 function screenShift() {
-  const team = PEOPLE.map(p => ({ p, pr: progress(runFor(p.id, p.role)) }));
-  const lateIds = state.shift === "open" ? ["p4", "p6"] : [];
-  const head = state.shift === "closed" ? `<div class="locked">${ICON.lock}<p>${t("closed")}</p></div>`
-    : `<div class="card brand"><span class="label" style="color:inherit;opacity:.85">${state.shift === "open" ? t("shiftOpen") : t("startClosing")}</span><p class="h2">${t("tonightCovers")}</p></div>`;
+  const team = PEOPLE.map(p => ({ p, pr: progress(runFor(p)) })); const open = state.shortages.filter(s => s.status !== "restocked");
+  const props = state.proposals.filter(x => x.status === "open");
+  const head = state.closed ? `<div class="locked">${ICON.lock}<p>${t("closed")}</p></div>` : `<div class="card brand"><span class="label" style="color:inherit;opacity:.85">${state.shift === "open" ? t("shiftOpen") : t("startClosing")}</span><p class="h2">${pick(state.preNotes[1])}</p></div>`;
   return `<h1 class="h1">${t("shift")}</h1>${head}
-    <div class="row wrap"><button class="btn secondary" style="flex:1;min-width:150px" data-sheet="warn">${t("logWarning")}</button>
-    ${state.shift === "open" ? `<button class="btn secondary" style="flex:1;min-width:150px" data-start-closing>${t("startClosing")}</button>` : ""}</div>
-    <div><p class="label">${t("liveProgress")}</p>${team.map(({ p, pr }) => `<div class="person"><span class="avatar">${p.initials}</span><span><b class="small">${esc(p.name)}</b> <span class="cap muted">${pick(ROLE_NAME[p.role])}</span><div class="mini"><i style="width:${pr.pct}%"></i></div></span>
-      <span class="cap mono">${pr.d}/${pr.n} ${lateIds.includes(p.id) ? `<br><span class="badge b-att">${t("late")}</span>` : ""}</span></div>`).join("")}</div>`;
+    ${props.length ? `<div class="card" style="border-color:var(--att-fg)"><span class="label">${t("proposals")}</span>${props.map(x => { const r = RULES.find(y => y.id === x.ruleId); return `<div class="req"><b class="small">${esc(person(x.personId).name)} · ${esc(pick(r.title))}</b><span class="cap muted">${t(x.sev)} · ${esc(x.by)} · ${esc(pick(x.note))}</span><div class="actions"><button class="btn primary" data-issue="${x.id}">${t("issue")}</button><button class="btn secondary" data-discard="${x.id}">${t("discard")}</button></div></div>`; }).join("")}</div>` : ""}
+    <div class="card"><span class="label">${t("shortages")}</span>${open.length ? open.map(s => { const b = BAR.find(x => x.id === s.item); return `<div class="req"><div class="row between"><b class="small">${esc(pick(b.name))}</b><span class="badge ${s.level === "out" ? "b-rev" : "b-att"}">${t(s.level)}</span></div><span class="cap muted">${esc(s.by)} · ${ago(s.at)}${s.status === "ordered" ? ` · ${t("ordered")}` : ""}</span>
+      <div class="actions"><button class="btn primary" data-resolve="${s.id}" data-v="restocked">${t("restocked")}</button>${s.status !== "ordered" ? `<button class="btn secondary" data-resolve="${s.id}" data-v="ordered">${t("ordered")}</button>` : ""}</div></div>`; }).join("") : `<p class="small muted">${t("shortNone")}</p>`}</div>
+    <div class="row wrap"><button class="btn secondary" style="flex:1;min-width:150px" data-sheet="issue">${t("logWarning")}</button>${state.shift === "open" && !state.closed ? `<button class="btn secondary" style="flex:1;min-width:150px" data-start-closing>${t("startClosing")}</button>` : ""}</div>
+    <div><p class="label">${t("liveSideWork")}</p>${team.map(({ p, pr }) => `<div class="person"><span class="avatar">${p.initials}</span><span><b class="small">${esc(p.name)}</b> <span class="cap muted">${pick(POS[p.pos])}</span><div class="mini"><i style="width:${pr.pct}%"></i></div></span>${pr.d === pr.n ? `<span class="badge b-ok">${ICON.check}${t("done")}</span>` : pr.pct < 40 && state.shift === "open" ? `<span class="badge b-att">${t("behind")}</span>` : `<span class="badge b-info">${t("onTime")}</span>`}</div>`).join("")}</div>`;
+}
+function screenScheduleManage() {
+  const ev = state.events[0]; const isOwner = state.role === "director";
+  return `<h1 class="h1">${t("schedule")}</h1><p class="small muted">${t("week")} · v${state.published2 ? 2 : 1}</p>
+    ${isOwner ? `<button class="btn primary" data-sheet="event">${t("newEvent")}</button>` : ""}
+    ${state.events.map(e => `<div class="card"><div class="row between"><span class="label">${t("event")} · ${pick(DAYS[e.day])} · ${e.time}</span></div><p class="h2">${esc(pick(e.name))}</p>
+      <span class="label" style="margin-top:4px">${t("coverage")}</span>${Object.entries(e.need).map(([pos, [req, fill]]) => `<div class="kv"><span>${pick(POS[pos])}</span>${fill < req ? `<span class="badge b-att">${t("missing")}</span>` : `<span class="badge b-ok">${ICON.check}${t("complete")}</span>`}</div>`).join("")}</div>`).join("")}
+    ${!isOwner ? `<div class="card"><span class="label">${t("confirmations")}</span>${state.unconfirmed.length ? "" : `<span class="badge b-ok">${ICON.check}${t("allConfirmed")}</span>`}
+      ${state.unconfirmed.length ? `<p class="small"><b>${t("notConfirmed")}:</b> ${state.unconfirmed.map(esc).join(", ")}</p><button class="btn secondary" data-remind>${t("remind")}</button>` : ""}</div>
+    <div class="card"><span class="label">${t("swapsToApprove")}</span>${state.approvals.map(a => `<div class="req"><b class="small">${esc(pick(a.text))}</b>${a.status === "open" ? `<div class="actions"><button class="btn primary" data-approve="${a.id}" data-v="approved">${t("approve")}</button><button class="btn deny" data-approve="${a.id}" data-v="denied">${t("deny")}</button></div>` : `<span class="badge ${a.status === "approved" ? "b-ok" : "b-rev"}">${t(a.status)}</span>`}</div>`).join("")}</div>
+    <button class="btn primary" data-publish ${state.published2 ? "disabled" : ""}>${t("publish")}</button>` : ""}`;
+}
+function sheetEvent() {
+  return `<div class="grab"></div><h2 class="h1" style="font-size:var(--t-lead)">${t("newEvent")}</h2>
+    <div class="field"><label for="ev-name">${t("eventName")}</label><input id="ev-name" value="${state.lang === "es" ? "Degustación de vinos" : "Wine tasting"}"></div>
+    <div class="field"><label for="ev-day">${t("date")}</label><select id="ev-day">${DAYS.map((d, i) => `<option value="${i}" ${i === 5 ? "selected" : ""}>${pick(d)}</option>`).join("")}</select></div>
+    <p class="label">${t("required")}</p>${["captain", "server", "busser", "bartender"].map(p => `<div class="kv"><span>${pick(POS[p])}</span><b>${p === "server" ? 2 : 1}</b></div>`).join("")}
+    <button class="btn primary" data-create-event>${t("create")}</button>`;
 }
 function screenTeam() {
   return `<h1 class="h1">${t("team")}</h1><p class="cap muted">${t("stateLegend")}</p>
-    <div>${PEOPLE.map(p => { const s = warningState(personWarnings(p.id), now); const n = personWarnings(p.id).length; return `<div class="person"><span class="avatar">${p.initials}</span><span><b class="small">${esc(p.name)}</b><br><span class="cap muted">${pick(ROLE_NAME[p.role])} · ${n} ${state.lang === "es" ? "en 30 días" : "in 30 days"}</span></span>${stateBadge(s)}</div>`; }).join("")}</div>
-    <div class="card"><span class="label">${t("recognition")}</span><div class="kv"><span>Ana L.</span><b>24</b></div><div class="kv"><span>Rachel K.</span><b>19</b></div><div class="kv"><span>Kenji M.</span><b>15</b></div></div>
-    <button class="btn primary" data-sheet="warn">${t("logWarning")}</button>`;
-}
-function sheetWarn() {
-  const opts = PEOPLE.filter(p => p.role !== "captain");
-  return `<div class="grab"></div><h2 class="h1" style="font-size:var(--t-lead)">${t("logWarning")}</h2>
-    <div class="field"><label for="wf-person">${t("person")}</label><select id="wf-person">${opts.map(p => `<option value="${p.id}">${esc(p.name)} · ${pick(ROLE_NAME[p.role])}</option>`).join("")}</select></div>
-    <div class="field"><label for="wf-rule">${t("chooseRule")}</label><select id="wf-rule"></select><span class="hint">${state.lang === "es" ? "Solo reglas del rol de la persona" : "Only rules for the person's role"}</span></div>
-    <div class="field"><label>${t("severity")}</label><div class="seg" role="group"><button data-sev="minor" aria-pressed="true">${t("minor")}</button><button data-sev="major" aria-pressed="false">${t("major")}</button></div></div>
-    <div class="field"><label for="wf-note">${t("note")}</label><textarea id="wf-note" maxlength="300"></textarea></div>
-    <button class="btn primary" data-submit-warn>${t("send")}</button>`;
-}
-function fillRules() {
-  const sel = $("#wf-rule"); if (!sel) return;
-  const p = PEOPLE.find(x => x.id === $("#wf-person").value);
-  sel.innerHTML = RULES.filter(r => r.roles.includes(p.role)).map(r => `<option value="${r.id}">${esc(pick(r.title))}</option>`).join("");
-}
-function shortages() {
-  return BAR.map(b => { const expected = Math.round((b.open - b.used) * 10); const counted = state.counts[b.id]; return { b, diff: (counted - expected) / 10 }; }).filter(x => x.diff <= -0.3);
+    <div>${PEOPLE.map(p => { const s = warningState(personWarnings(p.id), now); return `<div class="person"><span class="avatar">${p.initials}</span><span><b class="small">${esc(p.name)}</b><br><span class="cap muted">${pick(POS[p.pos])}${LADDER[p.pos] ? ` → ${pick(POS[LADDER[p.pos]])}` : ""}</span></span>${stateBadge(s)}</div>`; }).join("")}</div>
+    <div class="card"><span class="label">${t("longestRun")}</span><div class="kv"><span>Ana L.</span></div><div class="kv"><span>Rachel K.</span></div><div class="kv"><span>Kenji M.</span></div></div>
+    <button class="btn primary" data-sheet="issue">${t("logWarning")}</button>`;
 }
 function screenClose() {
-  if (state.closedReport) {
-    const r = state.closedReport;
-    return `<h1 class="h1">${t("close")}</h1><div class="locked">${ICON.lock}<p>${t("closed")}</p></div>
-      <div class="card"><span class="label">${t("summary")}</span>
-      <div class="kv"><span>${t("covers")}</span><b>${r.covers}</b></div><div class="kv"><span>${t("netSales")}</span><b>${money(r.sales)}</b></div>
-      <div class="kv"><span>${t("comps")}</span><b>${money(r.comps)}</b></div><div class="kv"><span>${t("voids")}</span><b>${money(r.voids)}</b></div>
-      ${r.short.map(s => `<div class="kv flag"><span>${esc(s.b.name)}</span><b>${s.diff.toFixed(1)}</b></div>`).join("")}</div>`;
-  }
-  const c = state.close; const sh = shortages(); const tonight = state.warnings.filter(w => now - w.at < day).length;
-  const ok = c.covers !== "" && c.sales !== "";
-  return `<h1 class="h1">${t("closeTitle")}</h1>
-    <div class="kpis"><div class="kpi"><span class="cap muted">${t("lateRuns")}</span><b>${state.shift === "open" ? 2 : 0}</b></div><div class="kpi"><span class="cap muted">${t("warningsTonight")}</span><b>${tonight}</b></div></div>
-    <div class="field"><label for="cl-covers">${t("covers")}</label><input id="cl-covers" inputmode="numeric" value="${esc(c.covers)}" data-close-field="covers"></div>
-    <div class="field"><label for="cl-sales">${t("netSales")}</label><input id="cl-sales" inputmode="decimal" value="${esc(c.sales)}" data-close-field="sales"></div>
-    <div class="row"><div class="field" style="flex:1"><label for="cl-comps">${t("comps")}</label><input id="cl-comps" inputmode="decimal" value="${esc(c.comps)}" data-close-field="comps" data-rerender></div>
-    <div class="field" style="flex:1"><label for="cl-voids">${t("voids")}</label><input id="cl-voids" inputmode="decimal" value="${esc(c.voids)}" data-close-field="voids" data-rerender></div></div>
+  const openShort = state.shortages.filter(s => s.status !== "restocked"); const c = state.close;
+  if (state.closed) return `<h1 class="h1">${t("close")}</h1><div class="locked">${ICON.lock}<p>${t("closed")}</p></div>
+    <div class="card"><span class="label">${t("openItems")}</span><div class="kv"><span>${t("shortages")}</span>${openShort.length ? `<span class="badge b-att">${t("shortOpen")}</span>` : `<span class="badge b-ok">${t("shortNone")}</span>`}</div><div class="kv"><span>${t("attendance")}</span>${Object.values(c.late).some(Boolean) ? `<span class="badge b-att">${t("lateMarked")}</span>` : `<span class="badge b-ok">${ICON.check}</span>`}</div></div>`;
+  const sideOpen = PEOPLE.reduce((a, p) => a + (progress(runFor(p)).n - progress(runFor(p)).d), 0);
+  return `<h1 class="h1">${t("closeTitle")}</h1><p class="cap muted">${t("noMoney")}</p>
+    <div class="row wrap">${sideOpen ? `<span class="badge b-att">${t("sideOpen")}</span>` : `<span class="badge b-ok">${t("sideAll")}</span>`}${openShort.length ? `<span class="badge b-att">${t("shortOpen")}</span>` : `<span class="badge b-ok">${t("shortNone")}</span>`}</div>
     <div class="field"><label for="cl-inc">${t("incidents")}</label><textarea id="cl-inc" data-close-field="incidents">${esc(c.incidents)}</textarea></div>
+    <div class="card"><span class="label">${t("attendance")}</span>${["p2", "p6"].map(id => `<label class="kv"><span>${esc(person(id).name)}</span><input type="checkbox" data-late="${id}" ${c.late[id] ? "checked" : ""} style="width:24px;height:24px"></label>`).join("")}</div>
+    <div class="field"><label>${t("cleaning")}</label><div class="seg"><button data-clean="ok" aria-pressed="${c.cleaning === "ok"}">${t("cleanOk")}</button><button data-clean="pending" aria-pressed="${c.cleaning === "pending"}">${t("cleanPending")}</button></div></div>
+    <div class="card"><span class="label">${t("openItems")}</span>${openShort.map(s => `<div class="kv flag"><span>${esc(pick(BAR.find(b => b.id === s.item).name))}</span><b>${t(s.level)}</b></div>`).join("")}${state.eighty6.map(id => `<div class="kv"><span>86 · ${esc(pick(MENU.find(m => m.id === id).name))}</span></div>`).join("")}</div>
     <div class="field"><label for="cl-next">${t("nextShift")}</label><textarea id="cl-next" data-close-field="next">${esc(c.next)}</textarea></div>
-    <div class="card"><span class="label">${t("shortages")}</span>${sh.length ? sh.map(s => `<div class="kv flag"><span>${esc(s.b.name)}</span><b>${s.diff.toFixed(1)}</b></div>`).join("") : `<p class="small muted">0</p>`}</div>
-    ${(() => { const typed = Math.round((parseFloat(c.comps || "0") + parseFloat(c.voids || "0")) * 100) || 0; const ap = approvedTotal(); const diff = typed - ap; return `<div class="card"><span class="label">${t("compsCheck")}</span><div class="kv"><span>${t("approved")}</span><b>${money(ap)}</b></div><div class="kv"><span>${t("posTyped")}</span><b>${money(typed)}</b></div><div class="kv ${Math.abs(diff) > 100 ? "flag" : ""}"><span>${t("difference")}</span><b>${money(diff)}</b></div></div>`; })()}
-    <button class="btn primary" data-submit-close ${ok ? "" : "disabled"}>${t("submitClose")}</button>`;
+    <button class="btn primary" data-submit-close>${t("submitClose")}</button>`;
 }
 
-/* Owner */
-function venueCards() {
-  const v2 = state.closedReport;
+/* ---------- director ---------- */
+function venueState(v) {
+  const reasons = [];
+  if (v.close === "missing") reasons.push(t("r_closeMissing"));
+  if (v.unconfirmed) reasons.push(t("r_unconfirmed"));
+  if (v.short) reasons.push(t("r_shortage"));
+  if (v.review) reasons.push(t("r_review"));
+  const state_ = v.close === "missing" || v.review ? "actionRequired" : reasons.length ? "needsAttention" : "onTrack";
+  return { state: state_, reasons: reasons.length ? reasons : [t("r_none")] };
+}
+function venues() {
   return [
-    { id: 1, status: "closed", covers: 212, sales: 2384000, short: 0, review: 0, onTime: 97 },
-    { id: 2, status: v2 ? "closed" : "open", covers: v2 ? v2.covers : 184, sales: v2 ? v2.sales : null, short: v2 ? v2.short.length : shortages().length, review: PEOPLE.filter(p => warningState(personWarnings(p.id), now) === "rev").length, onTime: 94 },
-    { id: 3, status: "missing", covers: 156, sales: 1712000, short: 2, review: 1, onTime: 88 },
-    { id: 4, status: "closed", covers: 98, sales: 1290500, short: 0, review: 0, onTime: 99 }
+    { id: 1, close: "done", unconfirmed: false, short: false, review: false },
+    { id: 2, close: state.closed ? "done" : "open", unconfirmed: state.unconfirmed.length > 0, short: state.shortages.some(s => s.status !== "restocked"), review: PEOPLE.some(p => warningState(personWarnings(p.id), now) === "rev") },
+    { id: 3, close: "missing", unconfirmed: true, short: true, review: false },
+    { id: 4, close: "done", unconfirmed: false, short: false, review: false }
   ];
 }
-function screenVenues() {
-  if (state.ownerVenue) return screenVenueDetail(state.ownerVenue);
-  return `<h1 class="h1">${t("venues")}</h1><p class="small muted">${t("thisWeek")}</p>
-    ${venueCards().map(v => `<button class="card venue" data-venue="${v.id}"><span class="row between"><b class="h2">${t("venue")} ${v.id}</b>
-      ${v.status === "missing" ? `<span class="badge b-rev">${ICON.alert}${t("closeMissing")}</span>` : v.status === "open" ? `<span class="badge b-info">${ICON.dot}${t("open")}</span>` : `<span class="badge b-ok">${ICON.check}${t("closeIn")}</span>`}</span>
-      <span class="kpis"><span class="kpi"><span class="cap muted">${t("covers")}</span><b>${v.covers}</b></span><span class="kpi"><span class="cap muted">${t("netSales")}</span><b>${v.sales ? money(v.sales) : "—"}</b></span>
-      <span class="kpi"><span class="cap muted">${t("shortages")}</span><b style="color:${v.short ? "var(--rev-fg)" : "inherit"}">${v.short}</b></span><span class="kpi"><span class="cap muted">${t("tasksOnTime")}</span><b>${v.onTime} %</b></span></span>
-      ${v.review ? `<span class="badge b-rev">${v.review} ${t("openReview")}</span>` : ""}</button>`).join("")}`;
+const STATE_CHIP = { onTrack: "b-ok", needsAttention: "b-att", actionRequired: "b-rev" };
+function screenCompany() {
+  return `<h1 class="h1">${t("company")}</h1><p class="small muted">${t("thisWeek")} · ${t("noMoney")}</p>
+    ${venues().map(v => { const vs = venueState(v); return `<div class="card"><div class="row between"><b class="h2">${t("venue")} ${v.id}</b><span class="badge ${STATE_CHIP[vs.state]}">${vs.state === "onTrack" ? ICON.check : ICON.dot}${t(vs.state)}</span></div>
+      <ul class="reasons">${vs.reasons.map(r => `<li>${esc(r)}</li>`).join("")}</ul></div>`; }).join("")}`;
 }
-function screenVenueDetail(id) {
-  const v = venueCards().find(x => x.id === id);
-  return `<button class="btn quiet" data-venue-back>${ICON.back}${t("back")}</button><h1 class="h1">${t("venue")} ${v.id}</h1>
-    <div class="card"><span class="label">${t("lastClose")}</span><div class="kv"><span>${t("covers")}</span><b>${v.covers}</b></div><div class="kv"><span>${t("netSales")}</span><b>${v.sales ? money(v.sales) : "—"}</b></div><div class="kv ${v.short ? "flag" : ""}"><span>${t("shortages")}</span><b>${v.short}</b></div><div class="kv"><span>${t("tasksOnTime")}</span><b>${v.onTime} %</b></div></div>
-    ${id === 2 ? `<div class="card"><span class="label">${t("team")}</span>${PEOPLE.map(p => `<div class="kv"><span>${esc(p.name)}</span>${stateBadge(warningState(personWarnings(p.id), now))}</div>`).join("")}</div>` : ""}`;
-}
-
-/* Floor requests */
-const REQ_ICON = { water: "water", clear: "clear", help: "hand", void: "undo", comp: "gift" };
-function sheetRequest() {
-  const d = state.reqDraft; const p = me();
-  const money_ = d.kind === "void" || d.kind === "comp";
-  const blocked = d.kind === "comp" && p && p.level === "C";
-  return `<div class="grab"></div><h2 class="h1" style="font-size:var(--t-lead)">${t("kind")}</h2>
-    <div class="kinds" role="group" aria-label="${t("kind")}">
-      <button class="kind help" data-kind="help" aria-pressed="${d.kind === "help"}">${ICON.hand}${t("help")}</button>
-      ${["water", "clear", "void", "comp"].map(k => `<button class="kind" data-kind="${k}" aria-pressed="${d.kind === k}">${ICON[REQ_ICON[k]]}${t(k)}</button>`).join("")}
-    </div>
-    <div class="field"><label>${t("whichTable")}</label><div class="tables" role="group">${SECTION.tables.map(tb => `<button class="tbl" data-table="${tb}" aria-pressed="${d.table === tb}">${tb}</button>`).join("")}</div></div>
-    ${money_ ? `<div class="field"><label for="rq-item">${t("item")}</label><select id="rq-item">${MENU.map(m => `<option value="${m.id}" ${d.item === m.id ? "selected" : ""}>${esc(pick(m.name))} · ${money(m.price)}</option>`).join("")}</select></div>
-      <div class="field"><label for="rq-reason">${t("reason")}</label><select id="rq-reason">${["r_wrong", "r_quality", "r_left", "r_courtesy"].map(r => `<option value="${r}" ${d.reason === r ? "selected" : ""}>${t(r)}</option>`).join("")}</select></div>` : ""}
-    ${blocked ? `<span class="badge b-att">${t("levelNeeded")}</span>` : ""}
-    <button class="btn primary" data-send-request ${blocked ? "disabled" : ""}>${t("sendRequest")}</button>`;
-}
-function reqLine(q) {
-  const m = q.item ? MENU.find(x => x.id === q.item) : null;
-  const status = q.status === "pending" ? `<span class="badge b-att">${t("waitingManager")}</span>` : q.status === "approved" ? `<span class="badge b-ok">${ICON.check}${t("approved")}</span>` : q.status === "denied" ? `<span class="badge b-rev">${t("denied")}</span>` : q.status === "claimed" ? `<span class="badge b-info">${t("claimedBy")} ${esc(q.claimedBy)}</span>` : q.status === "done" ? `<span class="badge b-ok">${ICON.check}${t("markDone")}</span>` : `<span class="badge ${q.kind === "help" ? "b-rev" : "b-att"}">${t("openReq")}</span>`;
-  return `<div class="req"><div class="row between"><b class="small">${t(q.kind)} · ${t("table")} ${esc(q.table)}</b>${status}</div>
-    <span class="cap muted">${esc(q.by)} · ${ago(q.at).replace(/^0 h ago$|^hace 0 h$/, state.lang === "es" ? "recién" : "just now")}${m ? ` · ${esc(pick(m.name))} · ${money(q.amount)} · ${t(q.reason)}` : ""}</span>
-    ${q.status === "pending" ? `<div class="actions"><button class="btn primary" data-decide="${q.id}" data-v="approved">${t("approve")}</button><button class="btn deny" data-decide="${q.id}" data-v="denied">${t("deny")}</button></div>` : ""}
-    ${q.status === "open" ? `<div class="actions"><button class="btn secondary" data-claim="${q.id}">${t("onIt")}</button></div>` : ""}
-    ${q.status === "claimed" ? `<div class="actions"><button class="btn secondary" data-done="${q.id}">${t("markDone")}</button></div>` : ""}</div>`;
-}
-function screenRequests() {
-  const pend = state.requests.filter(q => q.status === "pending");
-  const rest = state.requests.filter(q => q.status !== "pending");
-  return `<h1 class="h1">${t("requests")}</h1>
-    <div><p class="label">${t("approvals")} · ${pend.length}</p>${pend.length ? pend.map(reqLine).join("") : `<p class="small muted" style="padding:10px 0">0</p>`}</div>
-    <div><p class="label">${t("requests")}</p>${rest.map(reqLine).join("")}</div>`;
-}
-function approvedTotal() { return state.requests.filter(q => (q.kind === "void" || q.kind === "comp") && q.status === "approved").reduce((a, q) => a + q.amount, 0); }
-function screenPay() {
-  return `<h1 class="h1">${t("pay")}</h1><p class="small muted">${t("payNote")}</p>
-    <div>${state.adjustments.map(a => `<div class="req"><div class="row between"><b class="small">${esc(a.person)} · ${t(a.kind)}</b><span class="mono">${money(a.amount)}</span></div>
-      <div class="row between"><span class="cap muted">${t("proposedBy")} ${esc(a.by)}</span>
-      <span class="row"><span class="cap">${t("switchOn")}</span><button class="toggle" role="switch" aria-checked="${a.on}" aria-label="${t("switchOn")} ${esc(a.person)}" data-adj="${a.id}" ${a.by.includes("Captain") ? "disabled" : ""}></button></span></div></div>`).join("")}</div>`;
+function screenOrg() {
+  const A = [["a_floor", ["polisher", "busser", "runner", "server", "captain"]], ["a_reception", ["host", L("Maître d'", "Maître d'")]], ["a_pass", ["expo"]],
+    ["a_bar", ["barback", "bartender", L("Head bartender", "Head bartender"), L("Sommelier (optional)", "Sommelier (opcional)")]],
+    ["a_kitchen", [L("Dishwasher", "Bachero"), L("Prep cook", "Ayudante de cocina"), L("Line cook", "Cocinero de línea"), L("Sous chef", "Sous chef"), L("Chef de cuisine", "Jefe de cocina")]],
+    ["a_mgmt", [L("Floor manager", "Manager de turno"), L("Assistant GM", "Gerente adjunto"), L("General manager", "Gerente general")]], ["a_corp", ["director", "owner"]]];
+  const nm = x => typeof x === "string" ? pick(POS[x]) : pick(x);
+  return `<h1 class="h1">${t("org")}</h1>
+    <div class="card" style="background:var(--olive-50);border-color:transparent"><span class="label">${t("chain")}</span><p class="small">${t("chainDown")}</p></div>
+    <div class="chain">${A.map(([k, list]) => `<div class="area"><span class="label">${t(k)}</span><div class="lad">${list.map(nm).join(" → ")}</div></div>`).join("")}</div>`;
 }
 
 /* ---------- render ---------- */
-const SCREENS = { requests: screenRequests, pay: screenPay, today: screenToday, tasks: screenTasks, menu: screenMenu, messages: screenMessages, me: screenMe, inventory: screenInventory, shift: screenShift, team: screenTeam, close: screenClose, venues: screenVenues };
-const SHEETS = { request: sheetRequest, dish: sheetDish, msg: sheetMessage, compose: sheetCompose, warning: sheetWarning, warn: sheetWarn };
+const SCREENS = { today: screenToday, tasks: screenTasks, schedule: screenSchedule, section: screenSection, menu: screenMenu, rules: screenRules, me: screenMe, bar: screenBar, messages: screenMessages,
+  floor: screenFloor, preshift: screenPreshift, shift: screenShift, team: screenTeam, close: screenClose, company: screenCompany, org: screenOrg };
+const SHEETS = { request: sheetRequest, dish: sheetDish, msg: sheetMessage, compose: sheetCompose, warning: sheetWarning, propose: () => sheetPropose(false), issue: () => sheetPropose(true), event: sheetEvent };
 
-function applyPrefs() {
-  document.documentElement.lang = state.lang;
-  document.documentElement.setAttribute("data-theme", state.theme);
-  document.documentElement.style.setProperty("--scale", state.large ? "1.18" : "1");
-}
+function applyPrefs() { document.documentElement.lang = state.lang; document.documentElement.setAttribute("data-theme", state.theme); document.documentElement.style.setProperty("--scale", state.large ? "1.18" : "1"); }
 function renderPanel() {
   $("#lbl-role").textContent = t("seeAs"); $("#lbl-lang").textContent = t("language"); $("#lbl-view").textContent = t("view");
-  $("#roles").innerHTML = ROLES.map(r => `<button data-role="${r.key}" aria-pressed="${state.role === r.key}">${pick(ROLE_NAME[r.key])}<small>${r.key === "server" ? "Sofia R." : r.key === "bartender" ? "Kenji M." : r.key === "manager" ? "Daniel B." : "TFHG"}</small></button>`).join("");
+  $("#roles").innerHTML = ROLES.map(r => `<button data-role="${r.key}" aria-pressed="${state.role === r.key}">${pick(POS[r.key])}<small>${r.person ? person(r.person).name : r.key === "manager" ? "Daniel B." : "Alex M."}</small></button>`).join("");
   $("#langs").innerHTML = `<button class="chipbtn" data-lang="en" aria-pressed="${state.lang === "en"}">English</button><button class="chipbtn" data-lang="es" aria-pressed="${state.lang === "es"}">Español</button>`;
   $("#views").innerHTML = `<button class="chipbtn" data-large aria-pressed="${state.large}">${t("largeText")}</button><button class="chipbtn" data-theme-set="${state.theme === "dark" ? "light" : "dark"}" aria-pressed="${state.theme === "dark"}">${t("dark")}</button>`;
   $("#demo-note").textContent = t("demoNote");
 }
 function render() {
   applyPrefs(); renderPanel();
-  if (!role().tabs.includes(state.tab)) state.tab = role().tabs[0];
-  const scrollTop = $("main") ? $("main").scrollTop : 0;
-  const focusId = document.activeElement && document.activeElement.id;
+  if (!role().tabs.includes(state.tab) && !(me() && EXTRA_TABS.includes(state.tab)) && !(state.tab === "messages")) state.tab = role().tabs[0];
+  const m0 = $("main"); const scrollTop = m0 ? m0.scrollTop : 0; const focusId = document.activeElement && document.activeElement.id;
   let html = topbar() + mobileDemo() + `<main id="main">${SCREENS[state.tab]()}</main>` + tabsBar();
-  if (me() && state.shift !== "closed") html += `<button class="fab" data-sheet="request">${ICON.bell}${t("request")}</button>`;
+  if (me() && state.shift !== "closed" && !state.closed) html += `<button class="fab" data-sheet="request">${ICON.bell}${t("request")}</button>`;
   if (state.sheet) html += `<div class="scrim" data-scrim><div class="sheet" role="dialog" aria-modal="true">${SHEETS[state.sheet.kind](state.sheet.id)}</div></div>`;
   if (state.toast) html += `<div class="toast" role="status">${esc(state.toast)}</div>`;
   $("#app").innerHTML = html;
-  if (state.sheet && state.sheet.kind === "warn") fillRules();
-  const m = $("main"); if (m && state.keepScroll) m.scrollTop = scrollTop;
-  state.keepScroll = false;
-  if (focusId && document.getElementById(focusId)) { const el = document.getElementById(focusId); el.focus(); if (el.setSelectionRange && el.value !== undefined) { try { el.setSelectionRange(el.value.length, el.value.length); } catch (e) {} } }
+  if (state.sheet && (state.sheet.kind === "propose" || state.sheet.kind === "issue")) fillRules();
+  const m = $("main"); if (m && state.keepScroll) m.scrollTop = scrollTop; state.keepScroll = false;
+  if (focusId && document.getElementById(focusId)) { const el = document.getElementById(focusId); el.focus(); try { el.setSelectionRange(el.value.length, el.value.length); } catch (e) {} }
 }
-function toast(msg) { state.toast = msg; render(); clearTimeout(toast.h); toast.h = setTimeout(() => { state.toast = null; render(); }, 2600); }
+function toast(msg) { state.toast = msg; render(); clearTimeout(toast.h); toast.h = setTimeout(() => { state.toast = null; render(); }, 2800); }
 
 /* ---------- events ---------- */
 document.addEventListener("click", e => {
-  const b = e.target.closest("button, [data-scrim]"); if (!b) return;
-  const d = b.dataset;
+  const b = e.target.closest("button, [data-scrim]"); if (!b) return; const d = b.dataset;
   if (d.scrim !== undefined && e.target === b) { state.sheet = null; return render(); }
-  if (d.role) { state.role = d.role; store.set("role", d.role); state.tab = role().tabs[0]; state.sheet = null; state.ownerVenue = null; return render(); }
+  if (d.role) { state.role = d.role; store.set("role12", d.role); state.tab = role().tabs[0]; state.sheet = null; return render(); }
   if (d.lang) { state.lang = d.lang; store.set("lang", d.lang); return render(); }
   if (d.large !== undefined) { state.large = !state.large; store.set("large", state.large); return render(); }
   if (d.largeSet !== undefined) { state.large = d.largeSet === "1"; store.set("large", state.large); return render(); }
   if (d.themeSet) { state.theme = d.themeSet; store.set("theme", d.themeSet); return render(); }
-  if (d.tab) { state.tab = d.tab; state.sheet = null; state.ownerVenue = null; return render(); }
+  if (d.tab) { state.tab = d.tab; state.sheet = null; return render(); }
   if (d.closeSheet !== undefined) { state.sheet = null; return render(); }
+  if (d.sheet) { state.sheet = { kind: d.sheet }; return render(); }
   if (d.cat) { state.menuCat = d.cat; return render(); }
   if (d.dish) { state.sheet = { kind: "dish", id: d.dish }; return render(); }
   if (d.msg) { state.sheet = { kind: "msg", id: d.msg }; return render(); }
-  if (d.sheet) { state.sheet = { kind: d.sheet }; return render(); }
   if (d.openWarning) { state.sheet = { kind: "warning", id: d.openWarning }; return render(); }
-  if (d.check !== undefined) {
-    const p = me(); const run = runFor(p.id, p.role); const it = run.items[+d.check];
-    if (it.photo && !it.hasPhoto && !it.done) { it.hasPhoto = true; it.done = true; state.keepScroll = true; return toast(t("photoAdded")); }
-    it.done = !it.done; state.keepScroll = true; return render();
-  }
+  if (d.ackSched !== undefined) { state.schedAck[me().id] = true; state.unconfirmed = state.unconfirmed.filter(n => n !== me().name); state.keepScroll = true; return toast(`${t("confirmedAt")} · ${t("week")}`); }
+  if (d.ackRules !== undefined) { state.rulesAck[me().id] = true; return toast(t("confirmed")); }
+  if (d.ackMenu) { state.menuAck[d.ackMenu] = true; state.sheet = null; return toast(t("confirmed")); }
+  if (d.check !== undefined) { const run = runFor(me()); const it = run.items[+d.check]; if (it.photo && !it.hasPhoto && !it.done) { it.hasPhoto = true; it.done = true; state.keepScroll = true; return toast(t("photoAdded")); } it.done = !it.done; state.keepScroll = true; return render(); }
+  if (d.pickup !== undefined) { state.openShiftTaken = true; return toast(t("pickedUp")); }
+  if (d.swap !== undefined) return toast(t("swapSent"));
+  if (d.timeoff !== undefined) return toast(t("timeOffSent"));
   if (d.confirmMsg) { const m = state.messages.find(x => x.id === d.confirmMsg); m.confirmed = true; m.readBy++; return render(); }
   if (d.ack) { const w = state.warnings.find(x => x.id === d.ack); w.ack = true; const r = $("#w-resp").value.trim(); w.response = { en: r, es: r }; state.sheet = null; return toast(t("acknowledged")); }
-  if (d.step) { state.counts[d.step] = Math.max(0, state.counts[d.step] + (+d.d)); state.countSaved = false; state.keepScroll = true; return render(); }
-  if (d.saveCount !== undefined) { state.countSaved = true; state.keepScroll = true; return toast(t("countSaved")); }
+  if (d.short) { const ex = state.shortages.find(s => s.item === d.short && s.status !== "restocked"); if (ex) ex.level = d.level; else state.shortages.unshift({ id: "s" + Date.now(), item: d.short, level: d.level, by: me() ? me().name : "Daniel B.", status: "open", at: Date.now() }); state.keepScroll = true; return toast(t("shortageSent")); }
+  if (d.kind) { state.draft.kind = d.kind; return render(); }
+  if (d.table) { state.draft.table = d.table; return render(); }
+  if (d.sendRequest !== undefined) { const dr = state.draft; state.requests.unshift({ id: "q" + Date.now(), kind: dr.kind, by: me().name, table: dr.table, status: "open", at: Date.now() }); state.sheet = null; return toast(dr.kind === "help" ? t("helpSent") : t("sentTo")); }
+  if (d.claim) { const q = state.requests.find(x => x.id === d.claim); q.status = "claimed"; q.claimedBy = me() ? me().name : "Daniel B."; state.keepScroll = true; return render(); }
+  if (d.done) { state.requests.find(x => x.id === d.done).status = "done"; state.keepScroll = true; return render(); }
   if (d.sev) { b.parentElement.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b)); return; }
-  if (d.submitWarn !== undefined) {
-    const sev = $('[data-sev][aria-pressed="true"]').dataset.sev; const note = $("#wf-note").value.trim();
-    state.warnings.unshift({ id: "w" + Date.now(), personId: $("#wf-person").value, ruleId: $("#wf-rule").value, sev, at: Date.now(), by: state.role === "manager" ? "Daniel B." : "TFHG", note: { en: note, es: note }, ack: false, response: { en: "", es: "" } });
-    state.sheet = null; return toast(t("warningSent"));
-  }
-  if (d.sendMsg !== undefined) {
-    const title = $("#c-title").value.trim(); const body = $("#c-body").value.trim(); if (!title || !body) return;
-    state.messages.unshift({ id: "g" + Date.now(), from: state.role === "manager" ? "Daniel B." : "TFHG", at: Date.now(), title: { en: title, es: title }, body: { en: body, es: body }, confirm: $("#c-confirm").checked, read: true, confirmed: false, readBy: 0, total: 14 });
-    state.sheet = null; return toast(t("messageSent"));
-  }
-  if (d.startClosing !== undefined) { state.shift = "closing"; state.counts = Object.fromEntries(BAR.map(b => [b.id, Math.round((b.open - b.used) * 10) - (b.id === "b1" ? 4 : 0)])); return render(); }
-  if (d.submitClose !== undefined) {
-    const c = state.close; const toC = v => Math.round(parseFloat(String(v).replace(/[^0-9.]/g, "") || "0") * 100);
-    state.closedReport = { covers: parseInt(c.covers, 10) || 0, sales: toC(c.sales), comps: toC(c.comps), voids: toC(c.voids), short: shortages() };
-    state.shift = "closed"; return toast(t("closed"));
-  }
-  if (d.kind) { state.reqDraft.kind = d.kind; return render(); }
-  if (d.table) { state.reqDraft.table = d.table; return render(); }
-  if (d.sendRequest !== undefined) {
-    const dr = state.reqDraft; const p = me(); const isMoney = dr.kind === "void" || dr.kind === "comp";
-    if (isMoney) { dr.item = $("#rq-item").value; dr.reason = $("#rq-reason").value; }
-    const m = isMoney ? MENU.find(x => x.id === dr.item) : null;
-    state.requests.unshift({ id: "q" + Date.now(), kind: dr.kind, by: p.name, byId: p.id, table: dr.table, item: m ? m.id : null, amount: m ? m.price : 0, reason: isMoney ? dr.reason : null, status: isMoney ? "pending" : "open", at: Date.now() });
+  if (d.submitWarn) {
+    const sev = $('[data-sev][aria-pressed="true"]').dataset.sev; const note = $("#wf-note").value.trim(); const rec = { personId: $("#wf-person").value, ruleId: $("#wf-rule").value, sev, note: { en: note, es: note } };
     state.sheet = null;
-    return toast(dr.kind === "help" ? t("helpSent") : isMoney ? t("waitingManager") : `${t("sentTo")} Ana L., Diego P.`);
+    if (d.submitWarn === "propose") { state.proposals.unshift({ id: "pr" + Date.now(), ...rec, by: me().name, status: "open" }); return toast(t("proposed")); }
+    state.warnings.unshift({ id: "w" + Date.now(), ...rec, at: Date.now(), by: state.role === "director" ? "Alex M." : "Daniel B.", ack: false, response: { en: "", es: "" } }); return toast(t("issued"));
   }
-  if (d.decide) { const q = state.requests.find(x => x.id === d.decide); q.status = d.v; state.keepScroll = true; return toast(t(d.v)); }
-  if (d.claim) { const q = state.requests.find(x => x.id === d.claim); q.status = "claimed"; q.claimedBy = "Daniel B."; state.keepScroll = true; return render(); }
-  if (d.done) { const q = state.requests.find(x => x.id === d.done); q.status = "done"; state.keepScroll = true; return render(); }
-  if (d.adj) { const a = state.adjustments.find(x => x.id === d.adj); a.on = !a.on; state.keepScroll = true; return render(); }
-  if (d.venue) { state.ownerVenue = +d.venue; return render(); }
-  if (d.venueBack !== undefined) { state.ownerVenue = null; return render(); }
+  if (d.issue) { const x = state.proposals.find(y => y.id === d.issue); x.status = "issued"; state.warnings.unshift({ id: "w" + Date.now(), personId: x.personId, ruleId: x.ruleId, sev: x.sev, note: x.note, at: Date.now(), by: "Daniel B.", ack: false, response: { en: "", es: "" } }); state.keepScroll = true; return toast(t("issued")); }
+  if (d.discard) { state.proposals.find(y => y.id === d.discard).status = "discarded"; state.keepScroll = true; return render(); }
+  if (d.resolve) { state.shortages.find(s => s.id === d.resolve).status = d.v; state.keepScroll = true; return toast(t(d.v)); }
+  if (d.addNote !== undefined) { const v = $("#pn").value.trim(); if (!v) return; state.preNotes.push({ en: v, es: v }); return toast(t("noteSaved")); }
+  if (d["86"]) { const id = d["86"]; state.eighty6 = state.eighty6.includes(id) ? state.eighty6.filter(x => x !== id) : [...state.eighty6, id]; state.keepScroll = true; return state.eighty6.includes(id) ? toast(t("marked86")) : render(); }
+  if (d.remind !== undefined) return toast(t("reminded"));
+  if (d.approve) { state.approvals.find(a => a.id === d.approve).status = d.v; state.keepScroll = true; return render(); }
+  if (d.publish !== undefined) { state.published2 = true; return toast(t("published")); }
+  if (d.createEvent !== undefined) { const day_ = +$("#ev-day").value; state.events.push({ id: "ev" + Date.now(), name: { en: $("#ev-name").value, es: $("#ev-name").value }, day: day_, time: "6:00 PM", need: { captain: [1, 0], server: [2, 0], busser: [1, 0], bartender: [1, 0] } }); state.sheet = null; return toast(t("eventCreated")); }
+  if (d.startClosing !== undefined) { state.shift = "closing"; return render(); }
+  if (d.clean) { state.close.cleaning = d.clean; state.keepScroll = true; return render(); }
+  if (d.submitClose !== undefined) { state.closed = true; state.shift = "closed"; return toast(t("closed")); }
+  if (d.sendMsg !== undefined) { const ti = $("#c-title").value.trim(), bo = $("#c-body").value.trim(); if (!ti || !bo) return; state.messages.unshift({ id: "g" + Date.now(), from: state.role === "manager" ? "Daniel B." : "Alex M.", at: Date.now(), title: { en: ti, es: ti }, body: { en: bo, es: bo }, confirm: $("#c-confirm").checked, read: true, readBy: 0, total: 14 }); state.sheet = null; return toast(t("messageSent")); }
 });
 document.addEventListener("input", e => {
   if (e.target.id === "menu-q") { state.menuQ = e.target.value; state.keepScroll = true; return render(); }
-  if (e.target.dataset.closeField) { state.close[e.target.dataset.closeField] = e.target.value; if (e.target.dataset.rerender !== undefined) { state.keepScroll = true; return render(); } const btn = $("[data-submit-close]"); if (btn) btn.disabled = !(state.close.covers !== "" && state.close.sales !== ""); }
+  if (e.target.dataset.closeField) state.close[e.target.dataset.closeField] = e.target.value;
 });
-document.addEventListener("change", e => { if (e.target.id === "wf-person") fillRules(); });
+document.addEventListener("change", e => { if (e.target.id === "wf-person") fillRules(); if (e.target.dataset.late) state.close.late[e.target.dataset.late] = e.target.checked; });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && state.sheet) { state.sheet = null; render(); } });
 render();
+
 </script>

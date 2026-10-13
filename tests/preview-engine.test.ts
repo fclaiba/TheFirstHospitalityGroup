@@ -4,7 +4,7 @@ import { emptyState } from "../lib/demo/state";
 import type { DemoState } from "../lib/demo/state";
 import { DEMO_PASSWORD } from "../lib/demo/accounts";
 
-// ADR 0018: preview mode runs the real Convex handlers over the in-memory database. These tests prove the engine
+// ADR 0028: preview mode runs the real Convex handlers over the in-memory database. These tests prove the engine
 // supports what the handlers use: the demo seed, indexes, auth, and transactional rollback on a throw.
 
 async function seeded(): Promise<DemoState> {

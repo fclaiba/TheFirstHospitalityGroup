@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { expectAccessible, signInAs } from "./helpers";
 
-// The critical flows (BLUEPRINT 15) in preview mode, on the real handlers (ADR 0018).
+// The critical flows (BLUEPRINT 15) in preview mode, on the real handlers (ADR 0028).
 
 test("public pages are accessible", async ({ page }) => {
   await page.goto("/");

@@ -2,7 +2,7 @@ import { expect } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-/** Each test gets a fresh browser context, so a fresh demo database seeded by seed:demo (ADR 0018). */
+/** Each test gets a fresh browser context, so a fresh demo database seeded by seed:demo (ADR 0028). */
 export async function signInAs(page: Page, name: RegExp | string, opts: { locale?: "en" | "es" } = {}) {
   if (opts.locale === "es") await page.context().addCookies([{ name: "tf_lang", value: "es", url: page.url().startsWith("http") ? page.url() : (process.env.BASE_URL ?? "http://localhost:3300") }]);
   await page.goto("/login");

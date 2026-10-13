@@ -1,7 +1,7 @@
-# ADR 0018: Preview mode runs the real Convex handlers in the browser
+# ADR 0028: Preview mode runs the real Convex handlers in the browser
 
 - **Date:** 2026-10-13
-- **Status:** accepted (refines ADR 0010)
+- **Status:** accepted (refines ADR 0010). Numbered 0018 when written during the Sprint 0 build; renumbered 0028 on 2026-10-13 because blueprint v1.3 assigns 0018 to "no money". Content unchanged.
 
 ## Context
 ADR 0010 keeps OSCURA's preview mode: without `NEXT_PUBLIC_CONVEX_URL` the app runs on demo handlers, one per Convex function, sharing the pure rules in `lib/domain/`. In OSCURA that meant a second hand-written backend (`lib/demo/handlers.ts`, 834 lines) that drifted from `convex/` and needed its own fixes. The First has about 120 functions; a parallel copy would double the backend work and its bugs.

@@ -1,14 +1,14 @@
 /*
- * The First Hospitality Group — design tokens (ADR 0009)
- * Layout concept: mobile-first operational app, one task per screen, white canvas,
- * ink text, olive reserved for the brand and the single primary action.
+ * The First Hospitality Group — design tokens (ADR 0009, 0025)
+ * Layout concept: executive hospitality, mobile-first; one task per screen, white canvas,
+ * ink text, martini green reserved for the brand, the lion and the single primary action.
  * Single source of truth: copy into app/globals.css (@theme). tests/tokens.test.ts
  * rejects any hex, rgb() or arbitrary size outside this file.
  * Contrast (WCAG 2.2): checked in docs/brand/BRAND.md, section 3.
  */
 
 :root {
-  /* Neutrals: white main, ink secondary (green-biased so it sits with the olive) */
+  /* Neutrals: white main, ink secondary (green-biased so it sits with the martini) */
   --color-canvas: #ffffff;        /* page background */
   --color-surface: #f6f7f3;       /* grouped areas, input fill */
   --color-surface-raised: #ffffff;/* sheets, cards that must lift */
@@ -19,17 +19,17 @@
   --color-ink-subtle: #6b6f68;    /* captions, 5.1:1 on white (never below AA) */
   --color-on-ink: #ffffff;
 
-  /* Brand: olive. Primary action, active tab, brand moments. Never a status. */
-  --color-olive-50: #f3f5ec;
-  --color-olive-100: #e8ecdc;
-  --color-olive-200: #c9d1ae;
-  --color-olive-300: #9aaa62;
-  --color-olive-500: #5c6b2f;     /* brand, 5.8:1 with white text */
-  --color-olive-600: #4a5726;     /* pressed, 7.8:1 with white text */
-  --color-olive-800: #2e3618;
-  --color-olive-900: #1d2410;
-  --color-brand: var(--color-olive-500);
-  --color-brand-pressed: var(--color-olive-600);
+  /* Brand: martini green. Primary action, active tab, the lion. Never a status. */
+  --color-martini-50: #eef2e8;
+  --color-martini-100: #e3ebdb;
+  --color-martini-200: #c8d6ba;
+  --color-martini-300: #9db88a;
+  --color-martini-500: #4a6b3e;     /* brand, 6.1:1 with white text */
+  --color-martini-600: #36522f;     /* pressed, 8.7:1 with white text */
+  --color-martini-800: #2e4729;
+  --color-martini-900: #1e2e1b;
+  --color-brand: var(--color-martini-500);
+  --color-brand-pressed: var(--color-martini-600);
   --color-on-brand: #ffffff;
   --color-focus: #2f5b8f;         /* focus ring: blue so it never reads as brand or status */
 
@@ -88,7 +88,7 @@
   color-scheme: light;
 }
 
-/* Dark: for night service in dim rooms. Same roles, olive lifted to stay AA. */
+/* Dark: optional, for dim dining rooms. Light is the default and the brand's face. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --color-canvas: #0f110e;
@@ -100,8 +100,8 @@
     --color-ink-muted: #b6bbae;
     --color-ink-subtle: #a2a79a;
     --color-on-ink: #111311;
-    --color-brand: var(--color-olive-300);
-    --color-brand-pressed: var(--color-olive-200);
+    --color-brand: var(--color-martini-300);
+    --color-brand-pressed: var(--color-martini-200);
     --color-on-brand: #111311;
     --color-focus: #8fb4e3;
     --color-ok-fg: #8fd1b3;   --color-ok-bg: #16281f;
@@ -122,8 +122,8 @@
   --color-ink-muted: #b6bbae;
   --color-ink-subtle: #a2a79a;
   --color-on-ink: #111311;
-  --color-brand: var(--color-olive-300);
-  --color-brand-pressed: var(--color-olive-200);
+  --color-brand: var(--color-martini-300);
+  --color-brand-pressed: var(--color-martini-200);
   --color-on-brand: #111311;
   --color-focus: #8fb4e3;
   --color-ok-fg: #8fd1b3;   --color-ok-bg: #16281f;

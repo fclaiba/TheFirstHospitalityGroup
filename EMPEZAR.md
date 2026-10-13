@@ -1,6 +1,6 @@
 # Cómo arrancar — The First Hospitality Group
 
-Sistema operativo para el staff de los 4 restaurantes de The First Hospitality Group en Nueva York, construido de cero sobre la base técnica de OSCURA NYC.
+Sistema operativo para el staff de los 4 restaurantes de The First Hospitality Group en Nueva York, construido de cero sobre la base técnica de OSCURA NYC. Versión 1.3: estética ejecutiva de hospitalidad (verde martini y el león), toda la organización por áreas desde polisher hasta director de operaciones, cadena de supervisión sin trato de par a par, y estados en vez de números.
 
 ## Estrategia (cómo se armó y cómo se sigue)
 
@@ -10,16 +10,18 @@ Sistema operativo para el staff de los 4 restaurantes de The First Hospitality G
    3. Correr /blueprint-fullstack-premium usando lo anterior como entrada → `docs/BLUEPRINT.md`, ADRs, reglas de agentes, CI, runbook.
    4. Entregar un único .zip (este).
 - **Conflictos:** en producto y marca manda el blueprint nuevo. En stack, convenciones de código e infraestructura manda el blueprint existente de OSCURA. Cada conflicto queda registrado como decisión de arquitectura (ADR) — ver ADR 0001.
-- **Branding:** blanco como principal, negro como secundario y verde aceituna `#5C6B2F` como color de marca, con chequeo de contraste. Los colores de los warnings van aparte, para no confundir el color de marca con un estado. Logo: monograma TFHG.
+- **Branding:** blanco como principal, negro como secundario y **verde martini** `#4A6B3E` como color de marca, con chequeo de contraste. Los colores de los warnings van aparte, para no confundir el color de marca con un estado. Logo: **un león de perfil**. Estética ejecutiva de hospitalidad, clara, sin nada de vida nocturna.
 
 ## Qué hay en el paquete
 
 | Ruta | Qué es |
 |---|---|
 | `docs/BLUEPRINT.md` | Fuente de verdad: concepto, roles, flujos, contratos, datos, devops, seguridad, calidad, sprints |
-| `docs/adr/` | 17 decisiones de arquitectura |
+| `docs/adr/` | 27 decisiones de arquitectura; el estado de cada una en `docs/adr/README.md` |
+| `docs/PREGUNTAS-DUENO.md` | Banco de 126 preguntas para el dueño; las 8 primeras bloquean |
+| `docs/research/JERARQUIA-ROLES-NY.md` | Investigación de puestos, escalera, horarios y propinas en NY |
 | `docs/MIGRATION-FROM-OSCURA.md` | Qué se toma de OSCURA y qué no |
-| `docs/brand/` | Marca completa: logos TFHG en SVG, íconos de app, favicon, tokens, guía y lámina |
+| `docs/brand/` | Marca completa: el león en SVG, logos, íconos de app, favicon, tokens, guía y lámina |
 | `prototype/index.html` | Prototipo navegable (staff, manager y dueño) para mostrarle al dueño, funciona sin internet |
 | `docs/PROPUESTA-COMERCIAL.md` | Propuesta para el dueño |
 | `docs/research/ESTUDIO-DE-MERCADO.md` | Competencia, FODA y Pareto |
@@ -41,19 +43,17 @@ Read CLAUDE.md, docs/BLUEPRINT.md, docs/DEVLOG.md, docs/MIGRATION-FROM-OSCURA.md
 
 Cada vez que vuelvas, alcanza con escribir "seguí".
 
-## Antes del primer arranque, validá lo marcado `(to be validated)`
+## Antes del primer arranque
 
-- Nombre del producto: "The First" (la app) dentro de The First Hospitality Group.
-- Nombres de los 4 restaurantes, sus servicios (almuerzo, cena, late) y horarios.
-- Cuántas cuentas de dueño (propuesta: hasta 3).
-- Umbrales de warnings (propuesta: 30 días; Atención 1–2 leves, Seguimiento 3 leves o 1 grave, Revisión 2+ graves).
-- Campos del cierre del manager y si van a tipear las cifras del POS (v1) o integrarlo más adelante.
-- Reglas de la casa por rol (hay un set de ejemplo).
-- Si siguen usando 7shifts para horarios.
-- Dominio (propuesta `app.thefirsthg.com`) y plan de backups.
-- Qué significan los niveles A, B y C: etapa de formación (C en formación, B formado, A líder) o nivel de inglés.
-- Si el capitán puede aprobar invitaciones (comps) además del manager, y la lista de motivos de anulación e invitación.
-- Sectores y mesas de cada restaurante.
-- Quién ve los salarios (propuesta: solo el dueño y la propia persona) y quién aprueba cada ajuste.
-- Revisión de un abogado laboral de NY sobre warnings, ajustes de sueldo (en NY no se pueden descontar multas del sueldo) y retención de registros.
+Respondé con el dueño las 8 preguntas que bloquean y las decisiones de la v1.2, al principio de `docs/PREGUNTAS-DUENO.md`. Lo más importante:
+
+- Los puestos definitivos de cada área (incluida cocina) y si los 4 locales usan los mismos.
+- Qué hace el director de operaciones y quién aprueba los ascensos.
+- Secciones, mesas y asientos de cada local.
+- Qué usan hoy de 7shifts, idealmente con una semana real exportada.
+- Qué es un evento y qué tipos de warning existen.
+- Si quieren guardar los puntos de propinas o nada de números.
+- Qué servicios abre cada local y en qué días.
+- Confirmar que "no números" significa nada de plata, y que A, B, C no eran niveles.
+- Revisión de un abogado laboral de NY sobre warnings, horarios, tareas sin propina y propinas.
 - Precio de la propuesta comercial.

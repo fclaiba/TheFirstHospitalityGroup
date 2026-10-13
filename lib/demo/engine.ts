@@ -1,4 +1,4 @@
-// Preview engine (ADR 0010, ADR 0018): runs the real Convex handlers (convex/*.ts) against the in-memory database in
+// Preview engine (ADR 0010, ADR 0028): runs the real Convex handlers (convex/*.ts) against the in-memory database in
 // lib/demo/db.ts, so preview mode and production share one implementation of every contract and rule.
 import { getFunctionName } from "convex/server";
 import schema from "../../convex/schema";

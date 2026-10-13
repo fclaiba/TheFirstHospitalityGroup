@@ -1,4 +1,4 @@
-// In-memory Convex database for preview mode (ADR 0010, ADR 0018). Implements the part of `ctx.db` the backend uses
+// In-memory Convex database for preview mode (ADR 0010, ADR 0028). Implements the part of `ctx.db` the backend uses
 // (get, insert, patch, replace, delete, normalizeId, query with indexes, filters, order, take, first, unique, collect,
 // paginate) over plain arrays, with the index fields read from convex/schema.ts. Pure: no React, no storage.
 

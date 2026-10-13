@@ -1,8 +1,8 @@
 {
   "name": "The First Hospitality Group",
   "short_name": "The First",
-  "monogram": "TFHG",
-  "version": "1.0",
+  "mark": "Lion head in profile (martini green)",
+  "version": "2.0",
   "updated": "2026-10-13",
   "color": {
     "canvas": "#FFFFFF",
@@ -12,9 +12,9 @@
     "ink": "#111311",
     "inkMuted": "#5E625B",
     "inkSubtle": "#6B6F68",
-    "brand": "#5C6B2F",
-    "brandPressed": "#4A5726",
-    "olive": { "50": "#F3F5EC", "100": "#E8ECDC", "200": "#C9D1AE", "300": "#9AAA62", "500": "#5C6B2F", "600": "#4A5726", "800": "#2E3618", "900": "#1D2410" },
+    "brand": "#4A6B3E",
+    "brandPressed": "#36522F",
+    "martini": { "50": "#EEF2E8", "100": "#E3EBDB", "200": "#C8D6BA", "300": "#9DB88A", "500": "#4A6B3E", "600": "#36522F", "800": "#2E4729", "900": "#1E2E1B" },
     "focus": "#2F5B8F",
     "status": {
       "ok": { "fg": "#1F5F46", "bg": "#E3F1EA" },
@@ -25,7 +25,7 @@
       "danger": "#B42318"
     },
     "dark": {
-      "canvas": "#0F110E", "surface": "#171A15", "ink": "#F2F3EE", "inkMuted": "#B6BBAE", "brand": "#9AAA62", "onBrand": "#111311"
+      "canvas": "#0F110E", "surface": "#171A15", "ink": "#F2F3EE", "inkMuted": "#B6BBAE", "brand": "#9DB88A", "onBrand": "#111311"
     }
   },
   "type": {

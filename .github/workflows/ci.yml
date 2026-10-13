@@ -40,7 +40,9 @@ jobs:
       - name: Typecheck
         if: steps.app.outputs.present == 'true'
         run: npm run typecheck
-      - name: Generated Convex API and preview registry are current (ADR 0018)
+      - name: No money in the data model (ADR 0018)
+        run: node scripts/no-money-check.mjs
+      - name: Generated Convex API and preview registry are current (ADR 0028)
         if: steps.app.outputs.present == 'true'
         run: node scripts/gen-convex-api.mjs && git diff --exit-code convex/_generated/api.d.ts lib/demo/registry.ts
       - name: Unit and backend tests with coverage (domain >= 90 %, role x venue matrix on the real handlers, tokens and copy guards)

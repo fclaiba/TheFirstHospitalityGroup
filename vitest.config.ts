@@ -2,7 +2,7 @@ import { defineConfig } from "vitest/config";
 import { fileURLToPath } from "node:url";
 
 // BLUEPRINT 15: pure domain ≥ 90 % lines, functions and statements; backend functions run through the preview engine
-// (ADR 0018) in tests/*.test.ts; tokens and copy guards.
+// (ADR 0028) in tests/*.test.ts; tokens and copy guards.
 export default defineConfig({
   resolve: { alias: { "@": fileURLToPath(new URL("./", import.meta.url)) } },
   test: {
