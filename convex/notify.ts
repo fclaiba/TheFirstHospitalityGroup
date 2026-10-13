@@ -1,5 +1,6 @@
 // Web Push subscriptions and the outbound queue bookkeeping (ADR 0006). Delivery itself is a Node action in push.ts.
 import { v } from "convex/values";
+import { isAtLeast } from "../lib/domain/positions";
 import { internalMutation, internalQuery, mutation, query } from "./_generated/server";
 import { requireUser } from "./lib/auth";
 import { appError } from "./lib/errors";
@@ -58,7 +59,7 @@ export const load = internalQuery({
           .withIndex("by_user", (q) => q.eq("userId", row.userId!))
           .collect()
       : [];
-    return { row, email: user && (user.role === "manager" || user.role === "owner") && user.emailVerifiedAt ? (user.email ?? null) : null, subs };
+    return { row, email: user && isAtLeast(user.primaryPosition, "manager") && user.emailVerifiedAt ? (user.email ?? null) : null, subs };
   },
 });
 

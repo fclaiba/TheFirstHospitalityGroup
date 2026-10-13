@@ -4,11 +4,12 @@ import { v } from "convex/values";
 import { internalMutation, mutation, query } from "./_generated/server";
 import type { QueryCtx } from "./_generated/server";
 import type { Id } from "./_generated/dataModel";
-import { requireRole, requireUser } from "./lib/auth";
+import { requireCan, requireUser } from "./lib/auth";
 import type { Actor } from "./lib/auth";
 import { appError } from "./lib/errors";
 import { audit } from "./lib/audit";
 import { rateLimit } from "./lib/rateLimit";
+import { isAtLeast } from "../lib/domain/positions";
 
 export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
@@ -34,31 +35,32 @@ export const register = mutation({
       await ctx.storage.delete(args.storageId);
       throw appError(bad);
     }
-    const purpose = ["task", "menu", "inventory", "incident", "warning", "message", "count"].includes(args.purpose) ? args.purpose : "other";
+    const purpose = ["task", "menu", "shortage", "incident", "warning", "message"].includes(args.purpose) ? args.purpose : "other";
     await ctx.db.insert("files", { storageId: args.storageId, ownerId: actor._id, purpose, createdAt: Date.now() });
     return { storageId: args.storageId };
   },
 });
 
 /**
- * Who may see a photo: its uploader, managers and owners of the company, and for menu photos everybody signed in.
- * Task, count, incident and warning evidence is staff-private otherwise.
+ * Who may see a photo: its uploader, managers and above, and for menu, shortage and message photos everybody signed in.
+ * Task, incident and warning evidence is private otherwise (leads see their team's task evidence).
  */
 async function canSee(ctx: QueryCtx, actor: Actor, storageId: Id<"_storage">): Promise<boolean> {
   const file = await ctx.db
     .query("files")
     .withIndex("by_storage", (q) => q.eq("storageId", storageId))
     .unique();
-  if (!file) return actor.role === "owner" || actor.role === "dev" || actor.role === "manager";
+  const leader = isAtLeast(actor.primaryPosition, "manager") || isAtLeast(actor.position, "manager");
+  if (!file) return leader;
   if (file.ownerId === actor._id) return true;
-  if (file.purpose === "menu" || file.purpose === "inventory" || file.purpose === "message") return true;
-  if (actor.role === "owner" || actor.role === "dev" || actor.role === "manager") return true;
+  if (file.purpose === "menu" || file.purpose === "shortage" || file.purpose === "message") return true;
+  if (leader) return true;
   // A warned person sees the photo of their own warning.
   if (file.purpose === "warning" && file.attachedTo?.startsWith("warnings:")) {
     const w = await ctx.db.get(file.attachedTo.slice("warnings:".length) as Id<"warnings">);
     return !!w && w.userId === actor._id;
   }
-  return actor.role === "captain";
+  return file.purpose === "task" && isAtLeast(actor.position, "lead");
 }
 
 export const url = query({
@@ -74,7 +76,7 @@ export const url = query({
 export const remove = mutation({
   args: { storageId: v.id("_storage"), reason: v.string() },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "tasks.excuse");
     const file = await ctx.db
       .query("files")
       .withIndex("by_storage", (q) => q.eq("storageId", args.storageId))
@@ -86,7 +88,7 @@ export const remove = mutation({
   },
 });
 
-/** Daily (crons.ts): uploads never attached after 24 h. Menu and inventory photos attach through their item. */
+/** Daily (crons.ts): uploads never attached after 24 h. Menu photos attach through their item. */
 export const gc = internalMutation({
   args: {},
   handler: async (ctx) => {

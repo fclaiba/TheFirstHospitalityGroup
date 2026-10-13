@@ -194,7 +194,8 @@ export const demo = internalMutation({
         createdAt: now - 400 * DAY,
       });
       for (const key of p.venues) await ctx.db.insert("assignments", { userId: users[p.username]!, venueId: venueIds[key]!, since: now - 400 * DAY });
-      await ctx.db.insert("positionHistory", { userId: users[p.username]!, companyId, toPosition: p.position, effectiveFrom: addDays(today, -400), status: "approved", proposedBy: users.owner ?? users[p.username]!, approvedBy: users.owner, at: now - 400 * DAY, decidedAt: now - 400 * DAY });
+      const firstStep: Partial<Record<string, Position>> = { "tom.b": "busser", "luis.c": "server", "sam.r": "bartender" };
+      await ctx.db.insert("positionHistory", { userId: users[p.username]!, companyId, toPosition: firstStep[p.username] ?? p.position, effectiveFrom: addDays(today, -400), status: "approved", proposedBy: users.owner ?? users[p.username]!, approvedBy: users.owner, at: now - 400 * DAY, decidedAt: now - 400 * DAY });
     }
     const id = (u: string) => users[u]!;
     const owner = id("owner");

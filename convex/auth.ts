@@ -1,4 +1,5 @@
-// Sign-in (ADR 0003, ported from OSCURA ADR 0016/0024): username, or a verified manager or owner email, + password.
+// Sign-in (ADR 0003, ported from OSCURA ADR 0016/0024): username, or a verified email of a leader (venue management or
+// corporate), + password.
 // Bridge functions are called only by the Next.js routes with the shared secret and return the session subject Next
 // signs into the cookie. New staff sign in with a temporary password and must choose their own (mustChangePassword).
 import { v } from "convex/values";
@@ -8,17 +9,28 @@ import type { Doc } from "./_generated/dataModel";
 import { sha256, toHex, utf8 } from "../lib/sha256";
 import { appError } from "./lib/errors";
 import { rateLimit } from "./lib/rateLimit";
-import { accountFromSubject, getUser, requireBridge, userSubject, venueIdsOf } from "./lib/auth";
+import { accountFromSubject, getUser, requireBridge, userSubject, venueIdsOf, workingPosition } from "./lib/auth";
 import { ACCOUNT_PASSWORD_MIN, afterFailedLogin, hashPassword, normalizeUsername, passwordProblem, verifyPassword } from "../lib/domain/password";
 import { audit } from "./lib/audit";
 import { makeT } from "../lib/i18n";
+import { areaOf, isAtLeast, layerOf } from "../lib/domain/positions";
 
 const CODE_TTL_MS = 10 * 60_000;
 const MAX_ATTEMPTS = 5;
 const hash = (email: string, code: string) => toHex(sha256(utf8(`${email}:${code}`)));
-const result = v.object({ ok: v.boolean(), error: v.optional(v.string()), subject: v.optional(v.string()), mustChangePassword: v.optional(v.boolean()), role: v.optional(v.string()) });
+const result = v.object({
+  ok: v.boolean(),
+  error: v.optional(v.string()),
+  subject: v.optional(v.string()),
+  mustChangePassword: v.optional(v.boolean()),
+  // Session lifetime class read by lib/auth/session-server.ts: "manager" (7 days) for venue management and corporate,
+  // the primary position (12 h) for everybody else (BLUEPRINT 10).
+  role: v.optional(v.string()),
+  position: v.optional(v.string()),
+});
 const normalizeEmail = (e: string) => e.trim().toLowerCase();
-const canUseEmail = (u: Doc<"users">) => (u.role === "manager" || u.role === "owner" || !!u.isDev) && !!u.emailVerifiedAt;
+const canUseEmail = (u: Doc<"users">) => (isAtLeast(u.primaryPosition, "manager") || !!u.isDev) && !!u.emailVerifiedAt;
+const sessionRole = (u: Doc<"users">) => (isAtLeast(u.primaryPosition, "manager") ? "manager" : u.primaryPosition);
 
 function sixDigits(): string {
   const buf = new Uint32Array(1);
@@ -68,7 +80,7 @@ export const signIn = mutation({
     }
     await ctx.db.patch(user._id, { failedLogins: 0, lockedUntil: undefined });
     await audit(ctx, { actorId: user._id, action: "auth.signed_in", entity: "users", entityId: user._id, meta: { via: login.includes("@") ? "email" : "username" } });
-    return { ok: true, subject: userSubject(user), mustChangePassword: user.mustChangePassword, role: user.role };
+    return { ok: true, subject: userSubject(user), mustChangePassword: user.mustChangePassword, role: sessionRole(user), position: user.primaryPosition };
   },
 });
 
@@ -92,7 +104,7 @@ export const changePassword = mutation({
     await ctx.db.patch(user._id, { passwordHash: await hashPassword(args.next), mustChangePassword: false });
     const version = await bumpSession(ctx, user);
     await audit(ctx, { actorId: user._id, action: "auth.password_changed", entity: "users", entityId: user._id });
-    return { ok: true, subject: userSubject(user, version), role: user.role };
+    return { ok: true, subject: userSubject(user, version), role: sessionRole(user), position: user.primaryPosition };
   },
 });
 
@@ -106,11 +118,11 @@ export const revokeSessions = mutation({
     if (!user) throw appError("UNAUTHENTICATED");
     const version = await bumpSession(ctx, user);
     await audit(ctx, { actorId: user._id, action: "auth.sessions_revoked", entity: "users", entityId: user._id });
-    return { ok: true, subject: userSubject(user, version), role: user.role };
+    return { ok: true, subject: userSubject(user, version), role: sessionRole(user), position: user.primaryPosition };
   },
 });
 
-/** Public. Recovery for managers and owners with a verified email. Always {ok:true}: never reveals an account. */
+/** Public. Recovery for leaders (venue management and corporate) with a verified email. Always {ok:true}: never reveals an account. */
 export const requestCode = mutation({
   args: { email: v.string() },
   returns: v.object({ ok: v.boolean() }),
@@ -174,7 +186,7 @@ export const verifyCode = mutation({
     await ctx.db.patch(user._id, { mustChangePassword: true, failedLogins: 0, lockedUntil: undefined });
     const version = await bumpSession(ctx, user);
     await audit(ctx, { actorId: user._id, action: "auth.signed_in", entity: "users", entityId: user._id, meta: { via: "email_code" } });
-    return { ok: true, subject: userSubject(user, version), mustChangePassword: true, role: user.role };
+    return { ok: true, subject: userSubject(user, version), mustChangePassword: true, role: sessionRole(user), position: user.primaryPosition };
   },
 });
 
@@ -188,28 +200,33 @@ export const me = query({
     const venues = [];
     for (const id of venueIds) {
       const venue = await ctx.db.get(id);
-      if (venue) venues.push({ id: venue._id, name: venue.name, slug: venue.slug, services: venue.services });
+      if (venue) venues.push({ _id: venue._id, id: venue._id, name: venue.name, slug: venue.slug, services: venue.services, localNames: venue.localNames, reservationsUrl: venue.reservationsUrl ?? null, sort: venue.sort });
     }
-    // The company order of venues (Midtown first), so every role starts on the same venue.
-    const order = new Map(venueIds.map((id, i) => [id as string, i]));
-    venues.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
+    // The company order of venues (Midtown first), so every person starts on the same venue.
+    venues.sort((a, b) => a.sort - b.sort);
+    const position = await workingPosition(ctx, user);
     const company = await ctx.db.get(user.companyId);
     return {
       id: user._id,
       name: user.name,
       username: user.username,
       email: user.email ?? null,
-      role: user.role,
-      level: user.level,
+      primaryPosition: user.primaryPosition,
+      enabledPositions: user.enabledPositions,
+      title: user.title ?? null,
+      position,
+      layer: layerOf(position),
+      area: areaOf(position),
       venues,
       locale: user.locale,
       largeText: user.largeText,
       theme: user.theme,
+      notifyPrefs: user.notifyPrefs,
       notify: user.notifyPrefs,
-      isOwner: user.role === "owner" || !!user.isDev,
+      isCorporate: layerOf(user.primaryPosition) === "corporate",
       isDev: !!user.isDev,
       mustChangePassword: user.mustChangePassword,
-      company: company ? { id: company._id, name: company.name, captainApprovesComps: company.captainApprovesComps } : null,
+      company: company ? { id: company._id, name: company.name } : null,
     };
   },
 });

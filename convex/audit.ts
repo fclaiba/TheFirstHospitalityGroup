@@ -2,12 +2,12 @@
 import { v } from "convex/values";
 import { query } from "./_generated/server";
 import type { Id } from "./_generated/dataModel";
-import { requireRole } from "./lib/auth";
+import { requireCan } from "./lib/auth";
 
 export const list = query({
   args: { actorId: v.optional(v.id("users")), entity: v.optional(v.string()), from: v.optional(v.number()), limit: v.optional(v.number()) },
   handler: async (ctx, args) => {
-    await requireRole(ctx, ["owner"]);
+    await requireCan(ctx, "audit.read");
     const limit = Math.min(Math.max(args.limit ?? 50, 1), 200);
     const base = args.actorId
       ? ctx.db.query("auditLogs").withIndex("by_actor", (q) => (args.from ? q.eq("actorId", args.actorId).gte("at", args.from) : q.eq("actorId", args.actorId)))

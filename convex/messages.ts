@@ -1,10 +1,11 @@
-// Announcements with read receipts (BLUEPRINT 2.2): a manager writes to the venue or one role, the owner to any venue,
-// in EN and ES. Every recipient gets a messageReads row; "requires confirmation" messages ask for "I read it".
+// One-way announcements with receipts (BLUEPRINT 2.6, ADR 0026): down the chain only. Managers write to their venue,
+// its areas or positions; the owner and director to any venue. No replies, no threads. Every recipient gets a
+// messageReads row; "requires confirmation" announcements ask for "I read it".
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import type { QueryCtx } from "./_generated/server";
 import type { Doc, Id } from "./_generated/dataModel";
-import { getUser, requireRole, requireUser, requireVenue } from "./lib/auth";
+import { actorCan, getUser, requireCan, requireUser, requireVenue } from "./lib/auth";
 import type { Actor } from "./lib/auth";
 import { appError } from "./lib/errors";
 import { audit } from "./lib/audit";
@@ -12,8 +13,9 @@ import { enqueue } from "./lib/notify";
 import { rateLimit } from "./lib/rateLimit";
 import { parseOrThrow } from "./lib/validate";
 import { messageInput } from "../schemas";
-import { readRate, recipients } from "../lib/domain/messages";
-import type { Role } from "../lib/domain/types";
+import { receiptState, recipients } from "../lib/domain/messages";
+import { isCorporate } from "../lib/domain/positions";
+import type { Position } from "../lib/domain/types";
 
 /** Unread messages for the header badge. Zero when signed out (the header renders before the gate resolves). */
 export const unreadCount = query({
@@ -32,22 +34,25 @@ export const unreadCount = query({
 export const send = mutation({
   args: {
     venueIds: v.array(v.id("venues")),
-    roles: v.optional(v.array(v.string())),
+    positions: v.optional(v.array(v.string())),
     title: v.object({ en: v.string(), es: v.string() }),
     body: v.object({ en: v.string(), es: v.string() }),
     requiresConfirmation: v.boolean(),
     photoId: v.optional(v.id("_storage")),
   },
   handler: async (ctx, args) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "messages.send");
     const p = parseOrThrow(messageInput, args);
     for (const id of args.venueIds) requireVenue(actor, id);
+    if (args.venueIds.length > 1 && !actorCan(actor, "messages.send_all")) throw appError("FORBIDDEN");
     await rateLimit(ctx, `msg:${actor._id}`, 20, 3600_000);
-    const roles = p.roles?.length ? (p.roles as Role[]) : undefined;
-    const users = await ctx.db
-      .query("users")
-      .withIndex("by_company_role", (q) => q.eq("companyId", actor.companyId))
-      .collect();
+    const positions = p.positions?.length ? (p.positions as Position[]) : undefined;
+    const users = (
+      await ctx.db
+        .query("users")
+        .withIndex("by_company_position", (q) => q.eq("companyId", actor.companyId))
+        .collect()
+    ).filter((u) => !isCorporate(u.primaryPosition));
     const assignments = [];
     for (const venueId of args.venueIds) {
       assignments.push(
@@ -57,12 +62,12 @@ export const send = mutation({
           .collect()),
       );
     }
-    const ids = recipients({ venueIds: args.venueIds, roles }, users, assignments, actor._id) as Id<"users">[];
+    const ids = recipients({ venueIds: args.venueIds, positions }, users, assignments, actor._id) as Id<"users">[];
     if (!ids.length) throw appError("NO_RECIPIENTS");
     const now = Date.now();
     const messageId = await ctx.db.insert("messages", {
       companyId: actor.companyId,
-      audience: { venueIds: args.venueIds, roles },
+      audience: { venueIds: args.venueIds, positions },
       title: p.title,
       body: p.body,
       requiresConfirmation: p.requiresConfirmation,
@@ -83,9 +88,8 @@ export const send = mutation({
       .query("venues")
       .withIndex("by_company", (q) => q.eq("companyId", actor.companyId))
       .collect();
-    if (venues.filter((x) => x.active).every((x) => args.venueIds.includes(x._id))) {
-      await audit(ctx, { actorId: actor._id, action: "message.sent", entity: "messages", entityId: messageId, meta: { recipients: ids.length, allVenues: true } });
-    }
+    const allVenues = venues.filter((x) => x.active).every((x) => args.venueIds.includes(x._id));
+    await audit(ctx, { actorId: actor._id, venueId: args.venueIds.length === 1 ? args.venueIds[0] : undefined, action: "message.sent", entity: "messages", entityId: messageId, meta: { recipients: ids.length, allVenues, positions: positions ?? null } });
     // The title travels in each person's own language (enqueue picks the locale; the title goes as a var).
     for (const userId of ids) {
       const u = users.find((x) => x._id === userId);
@@ -104,7 +108,7 @@ async function view(ctx: QueryCtx, m: Doc<"messages">, read: Doc<"messageReads">
     requiresConfirmation: m.requiresConfirmation,
     photoId: m.photoId ?? null,
     senderName: sender?.name ?? "",
-    senderRole: sender?.role ?? null,
+    senderPosition: sender?.primaryPosition ?? null,
     sentBy: m.sentBy,
     at: m.at,
     recipients: m.recipients,
@@ -135,11 +139,11 @@ export const inbox = query({
 
 async function canManage(ctx: QueryCtx, actor: Actor, m: Doc<"messages">) {
   if (m.companyId !== actor.companyId) return false;
-  if (m.sentBy === actor._id || actor.role === "owner" || actor.role === "dev") return true;
-  return actor.role === "manager" && m.audience.venueIds.some((id) => actor.venueIds.includes(id));
+  if (m.sentBy === actor._id || isCorporate(actor.primaryPosition)) return true;
+  return actorCan(actor, "messages.send") && m.audience.venueIds.some((id) => actor.venueIds.includes(id));
 }
 
-/** One message. Recipients, its sender and the venue's managers and owners can open it. Marks nothing. */
+/** One announcement. Recipients, its sender, the venue's managers and corporate can open it. Marks nothing. */
 export const get = query({
   args: { messageId: v.id("messages") },
   handler: async (ctx, { messageId }) => {
@@ -188,11 +192,12 @@ export const confirm = mutation({
     const read = await myRead(ctx, actor._id, messageId);
     const now = Date.now();
     await ctx.db.patch(read._id, { readAt: read.readAt ?? now, confirmedAt: read.confirmedAt ?? now });
+    if (!read.confirmedAt) await ctx.db.insert("analyticsEvents", { name: "message_confirmed", userId: actor._id, props: { messageId }, at: now });
     return { ok: true };
   },
 });
 
-/** Who read and who confirmed (sender, the venue's managers, owners). */
+/** Who read and who confirmed, by name and state (sender, the venue's managers, corporate). No percentages (ADR 0027). */
 export const receipts = query({
   args: { messageId: v.id("messages") },
   handler: async (ctx, { messageId }) => {
@@ -206,25 +211,26 @@ export const receipts = query({
     const people = [];
     for (const r of reads) {
       const u = await ctx.db.get(r.userId);
-      people.push({ userId: r.userId, name: u?.name ?? "", role: u?.role ?? null, readAt: r.readAt ?? null, confirmedAt: r.confirmedAt ?? null });
+      const done = m.requiresConfirmation ? !!r.confirmedAt : !!r.readAt;
+      people.push({ userId: r.userId, name: u?.name ?? "", position: u?.primaryPosition ?? null, state: done ? ("confirmed" as const) : ("pending" as const), readAt: r.readAt ?? null, confirmedAt: r.confirmedAt ?? null });
     }
-    people.sort((a, b) => Number(!!a.readAt) - Number(!!b.readAt) || a.name.localeCompare(b.name));
+    people.sort((a, b) => Number(a.state === "confirmed") - Number(b.state === "confirmed") || a.name.localeCompare(b.name));
     return {
       requiresConfirmation: m.requiresConfirmation,
       total: reads.length,
       read: reads.filter((r) => r.readAt).length,
       confirmed: reads.filter((r) => r.confirmedAt).length,
-      readRate: readRate(reads, reads.length),
+      state: receiptState(reads, m.requiresConfirmation),
       people,
     };
   },
 });
 
-/** Messages sent to a venue, newest first, with read counts (managers, owner). */
+/** Announcements sent to a venue, newest first, with receipt state (managers, corporate). */
 export const sent = query({
   args: { venueId: v.id("venues") },
   handler: async (ctx, { venueId }) => {
-    const actor = await requireRole(ctx, ["manager"]);
+    const actor = await requireCan(ctx, "messages.send");
     requireVenue(actor, venueId);
     const rows = await ctx.db
       .query("messages")
@@ -237,7 +243,7 @@ export const sent = query({
         .query("messageReads")
         .withIndex("by_message", (q) => q.eq("messageId", m._id))
         .collect();
-      out.push({ ...(await view(ctx, m, null)), read: reads.filter((r) => r.readAt).length, confirmed: reads.filter((r) => r.confirmedAt).length, total: reads.length });
+      out.push({ ...(await view(ctx, m, null)), read: reads.filter((r) => r.readAt).length, confirmed: reads.filter((r) => r.confirmedAt).length, total: reads.length, state: receiptState(reads, m.requiresConfirmation) });
     }
     return out;
   },
