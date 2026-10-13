@@ -34,3 +34,9 @@ Chronological log. Entries are never rewritten or deleted: only appended at the 
 - Idle sign-out after 12 h for staff roles (blueprint 10, to be validated) is not implemented: sessions last 7 days, ended by sign out everywhere, reset or deactivation.
 - Real menu photos from the owner; the menu shows a monogram placeholder until then.
 - Restore drill, load test with 300 staff, and the moderated usability test (5 staff aged 18 to 65) before the pilot in Venue 1.
+
+## [2026-10-13] Design review round 2 and staff session expiry
+**Done:** Reviewed every role's screens in Chrome at 412 px (kitchen, bar count, menu, schedule, guide, messages, rules, warning form, owner pay and settings). Fixed: the floating Request button no longer covers the bar count's save bar; segmented controls size to their labels; venues follow the company order everywhere (Midtown first); past-midnight service ends show as clock time (02:00); bar categories capitalized. Staff sessions now end after 12 h, managers and owners after 7 days (blueprint 10; the bridge returns the role and the cookie and JWT use that lifetime). Demo data version 2. Knowledge graph updated with `graphify update .`.
+**Quality gates:** typecheck 0, ESLint 0, Vitest 191 passed (coverage statements 94.65 %, branches 95.64 %, functions 92.85 %, lines 94.39 %), Playwright + axe 27 passed on three devices, `npm audit` 0.
+**Decisions:** none beyond the previous entry; blueprint unchanged (the 12 h idle sign-out was already specified).
+**Pending / next steps:** as in the previous entry, minus the 12 h sign-out, which is done.
