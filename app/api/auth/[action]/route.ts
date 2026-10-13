@@ -13,7 +13,7 @@ const secret = () => process.env.AUTH_BRIDGE_SECRET ?? "";
 const bad = (error: string, status = 400) => NextResponse.json({ error }, { status, headers: { "Cache-Control": "no-store" } });
 const ok = (body: Record<string, unknown> = {}) => NextResponse.json({ ok: true, ...body }, { headers: { "Cache-Control": "no-store" } });
 
-type BridgeResult = { ok: boolean; error?: string; subject?: string; mustChangePassword?: boolean };
+type BridgeResult = { ok: boolean; error?: string; subject?: string; mustChangePassword?: boolean; role?: string };
 
 async function call<T>(fn: () => Promise<T>): Promise<T | NextResponse> {
   try {
@@ -46,7 +46,7 @@ export async function POST(req: Request, ctx: RouteContext<"/api/auth/[action]">
     if (res instanceof NextResponse) return res;
     const r = res as BridgeResult;
     if (!r.ok || !r.subject) return bad(r.error ?? "INVALID_CREDENTIALS", 401);
-    await startSession(r.subject);
+    await startSession(r.subject, r.role);
     return ok({ mustChangePassword: !!r.mustChangePassword });
   }
 
@@ -64,7 +64,7 @@ export async function POST(req: Request, ctx: RouteContext<"/api/auth/[action]">
     if (res instanceof NextResponse) return res;
     const r = res as BridgeResult;
     if (!r.ok || !r.subject) return bad(r.error ?? "INVALID_CODE", 401);
-    await startSession(r.subject);
+    await startSession(r.subject, r.role);
     return ok({ mustChangePassword: true });
   }
 
@@ -78,7 +78,7 @@ export async function POST(req: Request, ctx: RouteContext<"/api/auth/[action]">
     if (res instanceof NextResponse) return res;
     const r = res as BridgeResult;
     if (!r.ok || !r.subject) return bad(r.error ?? "INVALID_CREDENTIALS", 401);
-    await startSession(r.subject);
+    await startSession(r.subject, r.role);
     return ok();
   }
 
@@ -87,7 +87,7 @@ export async function POST(req: Request, ctx: RouteContext<"/api/auth/[action]">
     if (res instanceof NextResponse) return res;
     const r = res as BridgeResult;
     if (!r.ok || !r.subject) return bad("UNKNOWN", 400);
-    await startSession(r.subject);
+    await startSession(r.subject, r.role);
     return ok();
   }
 

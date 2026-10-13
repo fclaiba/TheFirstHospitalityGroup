@@ -16,7 +16,7 @@ import { makeT } from "../lib/i18n";
 const CODE_TTL_MS = 10 * 60_000;
 const MAX_ATTEMPTS = 5;
 const hash = (email: string, code: string) => toHex(sha256(utf8(`${email}:${code}`)));
-const result = v.object({ ok: v.boolean(), error: v.optional(v.string()), subject: v.optional(v.string()), mustChangePassword: v.optional(v.boolean()) });
+const result = v.object({ ok: v.boolean(), error: v.optional(v.string()), subject: v.optional(v.string()), mustChangePassword: v.optional(v.boolean()), role: v.optional(v.string()) });
 const normalizeEmail = (e: string) => e.trim().toLowerCase();
 const canUseEmail = (u: Doc<"users">) => (u.role === "manager" || u.role === "owner" || !!u.isDev) && !!u.emailVerifiedAt;
 
@@ -68,7 +68,7 @@ export const signIn = mutation({
     }
     await ctx.db.patch(user._id, { failedLogins: 0, lockedUntil: undefined });
     await audit(ctx, { actorId: user._id, action: "auth.signed_in", entity: "users", entityId: user._id, meta: { via: login.includes("@") ? "email" : "username" } });
-    return { ok: true, subject: userSubject(user), mustChangePassword: user.mustChangePassword };
+    return { ok: true, subject: userSubject(user), mustChangePassword: user.mustChangePassword, role: user.role };
   },
 });
 
@@ -92,7 +92,7 @@ export const changePassword = mutation({
     await ctx.db.patch(user._id, { passwordHash: await hashPassword(args.next), mustChangePassword: false });
     const version = await bumpSession(ctx, user);
     await audit(ctx, { actorId: user._id, action: "auth.password_changed", entity: "users", entityId: user._id });
-    return { ok: true, subject: userSubject(user, version) };
+    return { ok: true, subject: userSubject(user, version), role: user.role };
   },
 });
 
@@ -106,7 +106,7 @@ export const revokeSessions = mutation({
     if (!user) throw appError("UNAUTHENTICATED");
     const version = await bumpSession(ctx, user);
     await audit(ctx, { actorId: user._id, action: "auth.sessions_revoked", entity: "users", entityId: user._id });
-    return { ok: true, subject: userSubject(user, version) };
+    return { ok: true, subject: userSubject(user, version), role: user.role };
   },
 });
 
@@ -174,7 +174,7 @@ export const verifyCode = mutation({
     await ctx.db.patch(user._id, { mustChangePassword: true, failedLogins: 0, lockedUntil: undefined });
     const version = await bumpSession(ctx, user);
     await audit(ctx, { actorId: user._id, action: "auth.signed_in", entity: "users", entityId: user._id, meta: { via: "email_code" } });
-    return { ok: true, subject: userSubject(user, version), mustChangePassword: true };
+    return { ok: true, subject: userSubject(user, version), mustChangePassword: true, role: user.role };
   },
 });
 

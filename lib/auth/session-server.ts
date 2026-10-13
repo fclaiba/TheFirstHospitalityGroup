@@ -24,15 +24,19 @@ export async function jwks() {
 }
 
 /** `user|<username>|<v>`, exactly as a Convex bridge function returned it. */
-export async function startSession(subject: string): Promise<void> {
+/** Staff roles sign out after 12 h (BLUEPRINT 10: shared phones); managers and owners keep 7 days. */
+const sessionSeconds = (role?: string) => (role && !["manager", "owner", "dev"].includes(role) ? 12 * 3600 : 7 * 24 * 3600);
+
+export async function startSession(subject: string, role?: string): Promise<void> {
+  const ttl = sessionSeconds(role);
   const session = await new SignJWT({})
     .setProtectedHeader({ alg: ALG, kid: KID })
     .setIssuer(`${issuer()}#session`)
     .setSubject(subject)
     .setIssuedAt()
-    .setExpirationTime("7d")
+    .setExpirationTime(`${ttl}s`)
     .sign(await privateKey());
-  (await cookies()).set(COOKIE, session, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 7 * 24 * 3600 });
+  (await cookies()).set(COOKIE, session, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: ttl });
 }
 
 /** The subject of the signed-in session, or null. Bridge routes hand it back to Convex, which checks its version. */
