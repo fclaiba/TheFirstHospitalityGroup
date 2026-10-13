@@ -16,8 +16,6 @@ import enSchedule from "./en/schedule.json";
 import esSchedule from "./es/schedule.json";
 import enGuide from "./en/guide.json";
 import esGuide from "./es/guide.json";
-import enInventory from "./en/inventory.json";
-import esInventory from "./es/inventory.json";
 import enFloor from "./en/floor.json";
 import esFloor from "./es/floor.json";
 import enManage from "./en/manage.json";
@@ -31,5 +29,5 @@ import esNotify from "./es/notify.json";
 
 type Dict = { [k: string]: string | Dict };
 
-export const en: Dict = { ...enCommon, ...enAuth, ...enToday, ...enTasks, ...enRules, ...enMenu, ...enSchedule, ...enGuide, ...enInventory, ...enFloor, ...enManage, ...enOwner, ...enPeople, ...enNotify };
-export const es: Dict = { ...esCommon, ...esAuth, ...esToday, ...esTasks, ...esRules, ...esMenu, ...esSchedule, ...esGuide, ...esInventory, ...esFloor, ...esManage, ...esOwner, ...esPeople, ...esNotify };
+export const en: Dict = { ...enCommon, ...enAuth, ...enToday, ...enTasks, ...enRules, ...enMenu, ...enSchedule, ...enGuide, ...enFloor, ...enManage, ...enOwner, ...enPeople, ...enNotify };
+export const es: Dict = { ...esCommon, ...esAuth, ...esToday, ...esTasks, ...esRules, ...esMenu, ...esSchedule, ...esGuide, ...esFloor, ...esManage, ...esOwner, ...esPeople, ...esNotify };

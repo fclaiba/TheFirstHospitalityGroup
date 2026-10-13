@@ -5,28 +5,32 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import type { ReactNode } from "react";
 import {
-  Bell,
   Buildings,
+  CalendarBlank,
+  ChalkboardTeacher,
   ChatsCircle,
   ClipboardText,
   CookingPot,
   ForkKnife,
-  GearSix,
-  HandCoins,
   House,
   ListChecks,
+  Megaphone,
   Receipt,
-  SealWarning,
+  Scroll,
+  Storefront,
+  TreeStructure,
+  UserCircle,
   UsersThree,
   Wine,
-  Storefront,
+  Bell,
+  ChartBar,
   CaretDown,
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/cn";
-import { useT } from "@/lib/i18n-client";
+import { useLocale, useT } from "@/lib/i18n-client";
 import { HREF, tabsFor } from "@/lib/nav";
 import type { NavKey } from "@/lib/nav";
-import type { Role } from "@/lib/domain/types";
+import type { Position } from "@/lib/domain/types";
 import { LionMark } from "@/components/ui/brand";
 import { useMe, useVenue } from "@/hooks/use-app";
 import { useQuery } from "@/lib/backend/hooks";
@@ -37,42 +41,32 @@ import { RequestButton } from "@/components/floor/request-button";
 
 const ICONS: Record<NavKey, typeof House> = {
   today: House,
-  tasks: ListChecks,
+  schedule: CalendarBlank,
+  section: Storefront,
+  station: ListChecks,
+  rules: Scroll,
+  me: UserCircle,
   menu: ForkKnife,
+  bar: Wine,
+  pass: Bell,
   floor: Storefront,
+  preshift: ChalkboardTeacher,
+  leadBar: Wine,
   kitchen: CookingPot,
-  inventory: Wine,
-  messages: ChatsCircle,
-  manage: ClipboardText,
-  requests: Bell,
+  shift: ClipboardText,
+  manageSchedule: CalendarBlank,
   team: UsersThree,
   close: Receipt,
-  warnings: SealWarning,
-  owner: Buildings,
-  pay: HandCoins,
-  settings: GearSix,
-};
-
-const NAV_LABEL: Record<NavKey, string> = {
-  today: "today",
-  tasks: "tasks",
-  menu: "menu",
-  floor: "floor",
-  kitchen: "kitchen",
-  inventory: "inventory",
-  messages: "messages",
-  manage: "manage",
-  requests: "requests",
-  team: "team",
-  close: "close",
-  warnings: "warnings",
-  owner: "owner",
-  pay: "pay",
-  settings: "settings",
+  closes: Receipt,
+  announce: Megaphone,
+  manageMenu: ForkKnife,
+  venue: ChartBar,
+  company: Buildings,
+  org: TreeStructure,
 };
 
 function isActive(pathname: string, href: string) {
-  if (href === "/manage" || href === "/owner") return pathname === href;
+  if (href === "/manage" || href === "/company") return pathname === href;
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -100,13 +94,16 @@ function VenueTitle({ name, role }: { name: string; role: string }) {
  */
 export function AppShell({ children }: { children: ReactNode }) {
   const t = useT();
+  const { locale } = useLocale();
   const pathname = usePathname();
   const me = useMe();
   const { venueName, venues } = useVenue();
   const [switcher, setSwitcher] = useState(false);
   const unread = useQuery(api.messages.unreadCount, me ? {} : "skip");
-  const role = (me?.role ?? "server") as Role;
-  const tabs = tabsFor(role);
+  const position = (me?.position ?? "server") as Position;
+  const tabs = tabsFor(position);
+  const venue = me?.venues.find((v) => v.name === venueName);
+  const positionLabel = me ? (venue?.localNames.find((l) => l.position === position)?.name[locale] ?? t(`positions.${position}`)) : "";
 
   return (
     <div className="app-shell flex flex-col">
@@ -122,12 +119,12 @@ export function AppShell({ children }: { children: ReactNode }) {
               className="pressable flex min-h-target min-w-0 flex-1 items-center gap-1 rounded-control px-1 text-left"
               aria-label={`${t("common.chooseVenue")}: ${venueName}`}
             >
-              <VenueTitle name={venueName || t("brand.company")} role={me ? t(`roles.${me.role}`) : ""} />
+              <VenueTitle name={venueName || t("brand.company")} role={positionLabel} />
               <CaretDown weight="bold" className="size-4 shrink-0 text-ink-muted" aria-hidden />
             </button>
           ) : (
             <div className="flex min-h-target min-w-0 flex-1 items-center px-1">
-              <VenueTitle name={venueName || t("brand.company")} role={me ? t(`roles.${me.role}`) : ""} />
+              <VenueTitle name={venueName || t("brand.company")} role={positionLabel} />
             </div>
           )}
           <Link href="/messages" aria-label={t("nav.messages")} className="pressable hover-surface relative flex size-target items-center justify-center rounded-full text-ink">
@@ -162,7 +159,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   className={cn("pressable flex h-full flex-col items-center justify-center gap-0.5 text-caption font-semibold", on ? "text-brand" : "hover-ink text-ink-muted")}
                 >
                   <Icon weight={on ? "fill" : "regular"} className="size-6" aria-hidden />
-                  <span>{t(`nav.${NAV_LABEL[key]}`)}</span>
+                  <span>{t(`nav.${key}`)}</span>
                 </Link>
               </li>
             );

@@ -4,17 +4,16 @@ import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthState } from "@/lib/backend/hooks";
-import { useMe } from "@/hooks/use-app";
-import { can } from "@/lib/domain/permissions";
+import { canDo, useMe } from "@/hooks/use-app";
 import type { Action } from "@/lib/domain/permissions";
-import type { Role } from "@/lib/domain/types";
+import type { Position } from "@/lib/domain/types";
 import { useT } from "@/lib/i18n-client";
 import { ScreenSkeleton, LockedState } from "@/components/ui/states";
 import { ButtonLink } from "@/components/ui/button";
 import { homeFor } from "@/lib/nav";
 
 /**
- * Gate for every signed-in route (BLUEPRINT 6.2). Signed out → /login; temporary password → /login/password; a role
+ * Gate for every signed-in route (BLUEPRINT 6.2). Signed out → /login; temporary password → /login/password; a position
  * without the screen's action gets the locked state. The server is still the authority on every call.
  */
 export function RequireAuth({ children, action }: { children: ReactNode; action?: Action }) {
@@ -37,13 +36,13 @@ export function RequireAuth({ children, action }: { children: ReactNode; action?
       </div>
     );
   }
-  if (action && !can(me!.role as Role, action)) {
+  if (action && !canDo(me, action)) {
     return (
       <div className="pt-6">
         <LockedState
           title={t("common.noAccess")}
           action={
-            <ButtonLink href={homeFor(me!.role as Role)} variant="secondary" size="md">
+            <ButtonLink href={homeFor(me!.position as Position)} variant="secondary" size="md">
               {t("common.goHome")}
             </ButtonLink>
           }

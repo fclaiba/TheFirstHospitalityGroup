@@ -7,7 +7,8 @@ import type { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "@/lib/backend/hooks";
 import { can } from "@/lib/domain/permissions";
 import type { Action } from "@/lib/domain/permissions";
-import type { Role } from "@/lib/domain/types";
+import { isAtLeast } from "@/lib/domain/positions";
+import type { Position } from "@/lib/domain/types";
 
 export type Me = NonNullable<ReturnType<typeof useMeRaw>>;
 function useMeRaw() {
@@ -17,9 +18,16 @@ function useMeRaw() {
 /** The signed-in account. undefined while loading, null when signed out. */
 export const useMe = () => useMeRaw();
 
+/** Same rule as the server's actorCan (convex/lib/auth.ts): the working position, or a manager's primary position. */
+export function canDo(me: { position: string; primaryPosition: string } | null | undefined, action: Action): boolean {
+  if (!me) return false;
+  const pos = me.position as Position;
+  const primary = me.primaryPosition as Position;
+  return can(pos, action) || (isAtLeast(primary, "manager") && can(primary, action));
+}
+
 export function useCan(action: Action): boolean {
-  const me = useMe();
-  return !!me && can(me.role as Role, action);
+  return canDo(useMe(), action);
 }
 
 // Current venue: remembered per device, defaults to the first assignment.
