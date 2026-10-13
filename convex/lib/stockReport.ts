@@ -43,8 +43,10 @@ export async function shiftStock(ctx: QueryCtx, shift: Doc<"shifts">) {
       .query("stockMoves")
       .withIndex("by_item_at", (q) => q.eq("itemId", item._id).gt("at", since))
       .collect()) as unknown as Move[];
-    const between = moves.filter((m) => m.at < openedAt && m.shiftId !== (shift._id as string));
-    const during = moves.filter((m) => m.shiftId === (shift._id as string) || m.at >= openedAt);
+    // By time, not by shiftId: a purchase recorded before the shift opened belongs between shifts even when it was
+    // tagged with the shift it was bought for.
+    const between = moves.filter((m) => m.at < openedAt);
+    const during = moves.filter((m) => m.at >= openedAt && (!shift.closedAt || m.at <= shift.closedAt));
     purchasesBetween[item._id] = sumBy(between, ["purchase", "transfer_in"])[item._id] ?? 0;
     purchasesDuring[item._id] = sumBy(during, ["purchase", "transfer_in"])[item._id] ?? 0;
     losses[item._id] = -(sumBy(during, ["waste", "comp", "transfer_out"])[item._id] ?? 0);

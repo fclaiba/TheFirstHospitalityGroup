@@ -1,0 +1,38 @@
+{
+  "rules": {
+    "title": "House rules",
+    "subtitle": "How we work as {role}. Version {version}.",
+    "howTo": "How to do it right",
+    "accept": "I read the rules and accept them",
+    "accepted": "Thank you. You can start your checklist.",
+    "acceptedOn": "You confirmed this version {when}.",
+    "pendingTitle": "New version to confirm",
+    "pendingBody": "Read every rule, then confirm at the bottom.",
+    "emptyTitle": "No rules for your role yet",
+    "emptyBody": "Your manager will publish them here.",
+    "setup": {
+      "title": "House rules",
+      "subtitle": "Rules per role. Publishing a new version asks everyone with that role to confirm it.",
+      "scopeCompany": "Company rules",
+      "scopeVenue": "Rules for this venue",
+      "version": "Version {version}",
+      "count": "{n} rules",
+      "edit": "Edit rules",
+      "editTitle": "Rules for {role}",
+      "rule": "Rule {n}",
+      "titleEn": "Rule in English",
+      "titleEs": "Rule in Spanish",
+      "bodyEn": "What it means, in English",
+      "bodyEs": "What it means, in Spanish",
+      "howToEn": "How to do it right, in English",
+      "howToEs": "How to do it right, in Spanish",
+      "add": "Add a rule",
+      "remove": "Remove rule",
+      "publish": "Publish new version",
+      "published": "Version {version} published",
+      "venueNote": "Publishing here creates rules for this venue only.",
+      "none": "No rules yet",
+      "needOne": "Add at least one rule."
+    }
+  }
+}

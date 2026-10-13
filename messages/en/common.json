@@ -1,42 +1,255 @@
 {
-  "brand": { "name": "The First", "company": "The First Hospitality Group", "tagline": "One system for every venue", "description": "Everyone knows what to do, what we serve and how we work." },
-  "common": {
-    "loading": "Loading", "close": "Close", "back": "Back", "save": "Save", "saved": "Saved", "cancel": "Cancel", "done": "Done", "edit": "Edit", "add": "Add", "remove": "Remove", "retry": "Try again", "search": "Search", "send": "Send", "next": "Next", "confirm": "Confirm", "continue": "Continue", "optional": "Optional", "required": "Required", "yes": "Yes", "no": "No", "all": "All", "none": "None", "more": "More", "today": "Today", "yesterday": "Yesterday", "now": "Now", "minutesAgo": "{n} min ago", "hoursAgo": "{n} h ago", "daysAgo": "{n} d ago", "skipToContent": "Skip to content",
-    "errorTitle": "Something went wrong", "errorBody": "It was not you. Try again in a moment.", "offline": "You are offline. Showing what was saved on this phone.", "offlineBanner": "Offline. Changes need a connection.",
-    "notFoundTitle": "This page does not exist", "notFoundBody": "Check the address or go back to Today.", "goHome": "Go to Today",
-    "photo": "Photo", "addPhoto": "Add a photo", "retakePhoto": "Change photo", "photoHint": "No guests' faces in photos.", "uploading": "Uploading",
-    "venue": "Venue", "chooseVenue": "Choose a venue", "of": "of", "items": "{n} items", "showMore": "Show more", "language": "Language", "english": "English", "spanish": "Español", "otherLanguage": "Ver en español",
-    "previewMode": "Preview with demo data", "help": "Help", "signOut": "Sign out", "noAccess": "Your role does not open this screen.", "by": "by {name}", "at": "at {time}", "total": "Total"
+  "brand": {
+    "name": "The First",
+    "company": "The First Hospitality Group",
+    "tagline": "One system for every venue",
+    "description": "Everyone knows what to do, what we serve and how we work."
   },
-  "roles": { "server": "Server", "runner": "Runner", "busser": "Busser", "bartender": "Bartender", "barback": "Barback", "kitchen": "Kitchen", "captain": "Captain", "manager": "Manager", "owner": "Owner", "dev": "Developer" },
-  "levels": { "A": "Level A, lead", "B": "Level B, trained", "C": "Level C, in training", "label": "Level" },
-  "services": { "lunch": "Lunch", "dinner": "Dinner", "late": "Late" },
-  "shiftStatus": { "scheduled": "Scheduled", "open": "Open", "closing": "Closing", "closed": "Closed" },
-  "phases": { "open": "Opening", "mid": "During service", "close": "Closing" },
-  "states": { "up_to_date": "Up to date", "attention": "Attention", "follow_up": "Follow-up", "review": "Review" },
-  "nav": { "today": "Today", "tasks": "Tasks", "menu": "Menu", "messages": "Messages", "floor": "Floor", "kitchen": "Kitchen", "inventory": "Bar", "me": "Me", "manage": "Shift", "team": "Team", "requests": "Requests", "owner": "Venues", "more": "More", "close": "Close", "warnings": "Warnings", "settings": "Settings", "rules": "Rules", "schedule": "Schedule", "guide": "Guide", "pay": "Pay", "sections": "Sections", "setup": "Setup", "audit": "Audit log", "mainNav": "Main" },
+  "common": {
+    "loading": "Loading",
+    "close": "Close",
+    "back": "Back",
+    "save": "Save",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "done": "Done",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "retry": "Try again",
+    "search": "Search",
+    "send": "Send",
+    "next": "Next",
+    "confirm": "Confirm",
+    "continue": "Continue",
+    "optional": "Optional",
+    "required": "Required",
+    "yes": "Yes",
+    "no": "No",
+    "all": "All",
+    "none": "None",
+    "more": "More",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "now": "Now",
+    "minutesAgo": "{n} min ago",
+    "hoursAgo": "{n} h ago",
+    "daysAgo": "{n} d ago",
+    "skipToContent": "Skip to content",
+    "errorTitle": "Something went wrong",
+    "errorBody": "It was not you. Try again in a moment.",
+    "offline": "You are offline. Showing what was saved on this phone.",
+    "offlineBanner": "Offline. Changes need a connection.",
+    "notFoundTitle": "This page does not exist",
+    "notFoundBody": "Check the address or go back to Today.",
+    "goHome": "Go to Today",
+    "photo": "Photo",
+    "addPhoto": "Add a photo",
+    "retakePhoto": "Change photo",
+    "photoHint": "No guests' faces in photos.",
+    "uploading": "Uploading",
+    "venue": "Venue",
+    "chooseVenue": "Choose a venue",
+    "of": "of",
+    "items": "{n} items",
+    "showMore": "Show more",
+    "language": "Language",
+    "english": "English",
+    "spanish": "Español",
+    "otherLanguage": "Ver en español",
+    "previewMode": "Preview with demo data",
+    "help": "Help",
+    "signOut": "Sign out",
+    "noAccess": "Your role does not open this screen.",
+    "by": "by {name}",
+    "at": "at {time}",
+    "total": "Total"
+  },
+  "roles": {
+    "server": "Server",
+    "runner": "Runner",
+    "busser": "Busser",
+    "bartender": "Bartender",
+    "barback": "Barback",
+    "kitchen": "Kitchen",
+    "captain": "Captain",
+    "manager": "Manager",
+    "owner": "Owner",
+    "dev": "Developer"
+  },
+  "levels": {
+    "A": "Level A, lead",
+    "B": "Level B, trained",
+    "C": "Level C, in training",
+    "label": "Level"
+  },
+  "services": {
+    "lunch": "Lunch",
+    "dinner": "Dinner",
+    "late": "Late"
+  },
+  "shiftStatus": {
+    "scheduled": "Scheduled",
+    "open": "Open",
+    "closing": "Closing",
+    "closed": "Closed"
+  },
+  "phases": {
+    "open": "Opening",
+    "mid": "During service",
+    "close": "Closing"
+  },
+  "states": {
+    "up_to_date": "Up to date",
+    "attention": "Attention",
+    "follow_up": "Follow-up",
+    "review": "Review"
+  },
+  "nav": {
+    "today": "Today",
+    "tasks": "Tasks",
+    "menu": "Menu",
+    "messages": "Messages",
+    "floor": "Floor",
+    "kitchen": "Kitchen",
+    "inventory": "Bar",
+    "me": "Me",
+    "manage": "Shift",
+    "team": "Team",
+    "requests": "Requests",
+    "owner": "Venues",
+    "more": "More",
+    "close": "Close",
+    "warnings": "Warnings",
+    "settings": "Settings",
+    "rules": "Rules",
+    "schedule": "Schedule",
+    "guide": "Guide",
+    "pay": "Pay",
+    "sections": "Sections",
+    "setup": "Setup",
+    "audit": "Audit log",
+    "mainNav": "Main"
+  },
   "errors": {
-    "UNAUTHENTICATED": "Sign in to continue.", "FORBIDDEN": "You cannot do this with your role.", "NOT_FOUND": "We could not find it. It may have been removed.", "INVALID_INPUT": "Check the highlighted fields.", "RATE_LIMITED": "Too many attempts. Wait a minute and try again.", "INVALID_CREDENTIALS": "Wrong username or password.", "ACCOUNT_LOCKED": "Too many attempts. Your account is locked for 15 minutes.", "INVALID_CODE": "That code is not right.", "CODE_EXPIRED": "The code expired. Ask for a new one.", "VENUE_FORBIDDEN": "This venue is not one of yours.", "SHIFT_NOT_OPEN": "The shift is not open yet. Ask your manager.", "OTHER_SHIFT_OPEN": "Another shift is still open at this venue. Close it first.", "NOT_SCHEDULED": "That service does not run at this venue.", "INVALID_TRANSITION": "That step is not possible right now.", "RUNS_OPEN": "Some checklists are not done. Finish or excuse them first.", "MISSING_COUNTS": "Count every bar item first.", "PHOTO_REQUIRED": "This task needs a photo.", "RULES_NOT_ACKNOWLEDGED": "Read and confirm the new rules first.", "RULE_REQUIRED": "Pick the rule.", "RULE_NOT_FOR_ROLE": "That rule does not apply to this person.", "TOO_LATE": "This can only be done within 24 hours.", "FILE_TOO_LARGE": "The photo is too large.", "FILE_TYPE": "Only photos can be uploaded.", "NO_RECIPIENTS": "Nobody is in that audience.", "REQUEST_CLOSED": "Someone already took care of it.", "SELF_APPROVAL": "You cannot approve your own request.", "LEVEL_FORBIDDEN": "Your level cannot do this yet. Ask your captain.", "PAY_FORBIDDEN": "You cannot approve this.", "NO_DEDUCTIONS": "Pay is never reduced for a warning or a mistake.", "USERNAME_TAKEN": "That username is taken.", "PASSWORD_CHANGE_REQUIRED": "Choose your own password first.", "CONTACT_DETAILS": "Leave out phone numbers and emails.", "UNKNOWN": "Something went wrong. Try again."
+    "UNAUTHENTICATED": "Sign in to continue.",
+    "FORBIDDEN": "You cannot do this with your role.",
+    "NOT_FOUND": "We could not find it. It may have been removed.",
+    "INVALID_INPUT": "Check the highlighted fields.",
+    "RATE_LIMITED": "Too many attempts. Wait a minute and try again.",
+    "INVALID_CREDENTIALS": "Wrong username or password.",
+    "ACCOUNT_LOCKED": "Too many attempts. Your account is locked for 15 minutes.",
+    "INVALID_CODE": "That code is not right.",
+    "CODE_EXPIRED": "The code expired. Ask for a new one.",
+    "VENUE_FORBIDDEN": "This venue is not one of yours.",
+    "SHIFT_NOT_OPEN": "The shift is not open yet. Ask your manager.",
+    "OTHER_SHIFT_OPEN": "Another shift is still open at this venue. Close it first.",
+    "NOT_SCHEDULED": "That service does not run at this venue.",
+    "INVALID_TRANSITION": "That step is not possible right now.",
+    "RUNS_OPEN": "Some checklists are not done. Finish or excuse them first.",
+    "MISSING_COUNTS": "Count every bar item first.",
+    "PHOTO_REQUIRED": "This task needs a photo.",
+    "RULES_NOT_ACKNOWLEDGED": "Read and confirm the new rules first.",
+    "RULE_REQUIRED": "Pick the rule.",
+    "RULE_NOT_FOR_ROLE": "That rule does not apply to this person.",
+    "TOO_LATE": "This can only be done within 24 hours.",
+    "FILE_TOO_LARGE": "The photo is too large.",
+    "FILE_TYPE": "Only photos can be uploaded.",
+    "NO_RECIPIENTS": "Nobody is in that audience.",
+    "REQUEST_CLOSED": "Someone already took care of it.",
+    "SELF_APPROVAL": "You cannot approve your own request.",
+    "LEVEL_FORBIDDEN": "Your level cannot do this yet. Ask your captain.",
+    "PAY_FORBIDDEN": "You cannot approve this.",
+    "NO_DEDUCTIONS": "Pay is never reduced for a warning or a mistake.",
+    "USERNAME_TAKEN": "That username is taken.",
+    "PASSWORD_CHANGE_REQUIRED": "Choose your own password first.",
+    "CONTACT_DETAILS": "Leave out phone numbers and emails.",
+    "UNKNOWN": "Something went wrong. Try again."
   },
   "notify": {
-    "shiftOpen": { "title": "The shift is open", "body": "{venue}: your checklist is ready." },
-    "shiftForgotten": { "title": "Shift still open", "body": "{venue}: the shift ended 4 hours ago and has no close report." },
-    "shiftAutoClosed": { "title": "Shift closed automatically", "body": "{venue}: closed without a report. Review it." },
-    "tasksLate": { "title": "Checklists running late", "body": "{count} checklists passed their due time." },
-    "code": { "title": "Your sign-in code", "body": "Your code is {code}. It expires in 10 minutes." },
-    "message": { "title": "New message", "body": "{title}" },
-    "warning": { "title": "New note from your manager", "body": "Open The First to read it." },
-    "water": { "title": "Water, table {table}", "body": "From {name}." },
-    "clear": { "title": "Clear table {table}", "body": "From {name}." },
-    "help": { "title": "Help needed, table {table}", "body": "{name} needs help now." },
-    "helpNoTable": { "title": "Help needed", "body": "{name} needs help now." },
-    "escalated": { "title": "Still waiting, table {table}", "body": "Nobody took it after 90 seconds." },
-    "approval": { "title": "Approval needed", "body": "{name} asks for a {kind} at table {table}." },
-    "approved": { "title": "Approved", "body": "Table {table}: go ahead in the POS." },
-    "denied": { "title": "Not approved", "body": "Table {table}: talk to your manager." },
-    "allergy": { "title": "Allergy note, table {table}", "body": "Confirm it on the allergy board." },
-    "payProposed": { "title": "Pay adjustment to approve", "body": "A proposal is waiting for you." },
-    "payOn": { "title": "Pay adjustment approved", "body": "Open The First to see it." },
-    "rules": { "title": "Rules updated", "body": "Read and confirm the new version." }
+    "shiftOpen": {
+      "title": "The shift is open",
+      "body": "{venue}: your checklist is ready."
+    },
+    "shiftForgotten": {
+      "title": "Shift still open",
+      "body": "{venue}: the shift ended 4 hours ago and has no close report."
+    },
+    "shiftAutoClosed": {
+      "title": "Shift closed automatically",
+      "body": "{venue}: closed without a report. Review it."
+    },
+    "tasksLate": {
+      "title": "Checklists running late",
+      "body": "{count} checklists passed their due time."
+    },
+    "code": {
+      "title": "Your sign-in code",
+      "body": "Your code is {code}. It expires in 10 minutes."
+    },
+    "message": {
+      "title": "New message",
+      "body": "{title}"
+    },
+    "warning": {
+      "title": "New note from your manager",
+      "body": "Open The First to read it."
+    },
+    "water": {
+      "title": "Water, table {table}",
+      "body": "From {name}."
+    },
+    "clear": {
+      "title": "Clear table {table}",
+      "body": "From {name}."
+    },
+    "help": {
+      "title": "Help needed, table {table}",
+      "body": "{name} needs help now."
+    },
+    "helpNoTable": {
+      "title": "Help needed",
+      "body": "{name} needs help now."
+    },
+    "escalated": {
+      "title": "Still waiting, table {table}",
+      "body": "Nobody took it after 90 seconds."
+    },
+    "approved": {
+      "title": "Approved",
+      "body": "Table {table}: go ahead in the POS."
+    },
+    "denied": {
+      "title": "Not approved",
+      "body": "Table {table}: talk to your manager."
+    },
+    "allergy": {
+      "title": "Allergy note, table {table}",
+      "body": "Confirm it on the allergy board."
+    },
+    "payProposed": {
+      "title": "Pay adjustment to approve",
+      "body": "A proposal is waiting for you."
+    },
+    "payOn": {
+      "title": "Pay adjustment approved",
+      "body": "Open The First to see it."
+    },
+    "rules": {
+      "title": "Rules updated",
+      "body": "Read and confirm the new version."
+    },
+    "warningDigest": {
+      "title": "Warnings to review",
+      "body": "{review} people reached Review. {stale} notes are waiting for acknowledgment."
+    },
+    "approvalVoid": {
+      "title": "Void to approve",
+      "body": "{name} asks to void an item at table {table}."
+    },
+    "approvalComp": {
+      "title": "Comp to approve",
+      "body": "{name} asks to comp an item at table {table}."
+    }
   }
 }

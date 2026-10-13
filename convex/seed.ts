@@ -456,7 +456,7 @@ export const demo = internalMutation({
     for (let d = 0; d < 7; d++) {
       const date = addDays(today, d);
       for (const p of staffOf("v1")) {
-        if ((p.username.length + d) % 5 === 0) continue; // a day off now and then
+        if (d > 0 && (p.username.length + d) % 5 === 0) continue; // a day off now and then; everyone works tonight
         await ctx.db.insert("scheduleEntries", { venueId: v1, userId: users[p.username]!, date, service: "dinner", role: p.role, publishedAt: now - 3 * DAY, by: users["maria.m"]! });
       }
     }

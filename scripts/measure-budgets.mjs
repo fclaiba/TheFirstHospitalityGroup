@@ -1,14 +1,22 @@
-// JS budget gate (BLUEPRINT 6.6, 15): initial JS per route = the <script src> chunks in the server HTML, gzip-compressed.
-// Prefetched chunks for other routes are excluded. Usage: npm run build && npx next start -p 3200, then
-//   node scripts/measure-budgets.mjs http://localhost:3200
+// JS budget gate (BLUEPRINT 6.6, 15), ported from OSCURA: initial JS per route = the <script src> chunks in the server
+// HTML, gzip-compressed, minus the framework runtime shared by every route. Usage: npm run build && npx next start -p
+// 3300, then node scripts/measure-budgets.mjs http://localhost:3300
 import { gzipSync } from "node:zlib";
 
-const base = process.argv[2] ?? "http://localhost:3100";
+const base = process.argv[2] ?? "http://localhost:3300";
+const STAFF = 170;
+const MANAGE = 220;
 const BUDGETS = [
-  { path: "/", label: "public: landing", kb: 150 },
-  { path: "/registro", label: "public: registration", kb: 150 },
-  { path: "/pase/demo", label: "pass route", kb: 150 },
-  { path: "/staff/door", label: "door scanner (zxing-wasm lazy)", kb: 250 },
+  { path: "/", label: "public: landing", kb: 120 },
+  { path: "/login", label: "public: sign in", kb: 150 },
+  { path: "/today", label: "staff: today", kb: STAFF },
+  { path: "/tasks", label: "staff: tasks", kb: STAFF },
+  { path: "/menu", label: "staff: menu", kb: STAFF },
+  { path: "/floor", label: "staff: floor", kb: STAFF },
+  { path: "/kitchen", label: "staff: kitchen", kb: STAFF },
+  { path: "/manage", label: "manage: shift", kb: MANAGE },
+  { path: "/manage/close", label: "manage: close", kb: MANAGE },
+  { path: "/owner", label: "owner: venues", kb: MANAGE },
 ];
 
 const cache = new Map();
@@ -21,8 +29,7 @@ async function gz(url) {
 }
 
 async function scripts(path) {
-  const html = await (await fetch(base + path)).text();
-  // nomodule polyfills are only fetched by legacy browsers.
+  const html = await (await fetch(base + path, { redirect: "manual" })).text();
   const tags = [...html.matchAll(/<script([^>]*)>/g)].map((m) => m[1]).filter((a) => !/nomodule/i.test(a));
   return [...new Set(tags.map((a) => /src="([^"]+\.js[^"]*)"/.exec(a)?.[1]).filter(Boolean).map((s) => new URL(s, base).href))];
 }

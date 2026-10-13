@@ -66,6 +66,8 @@ export const list = query({
         id: u._id,
         name: u.name,
         username: u.username,
+        email: u.email ?? null,
+        locale: u.locale,
         role: u.role,
         level: u.level,
         languageLevel: u.languageLevel ?? null,

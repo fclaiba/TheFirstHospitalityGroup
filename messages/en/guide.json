@@ -1,0 +1,63 @@
+{
+  "guide": {
+    "title": "Guide",
+    "subtitle": "How each screen works, in a few lines.",
+    "forYou": "For your role",
+    "everything": "All screens",
+    "showAll": "Show every screen",
+    "showMine": "Show only my screens",
+    "levelsTitle": "Training by level",
+    "levelsBody": "Your level decides what you can do. Your manager moves you up when you are ready.",
+    "yourLevel": "Your level",
+    "help": "Help",
+    "helpFor": "Help for this screen",
+    "stillStuck": "Still stuck? Send a Help request during the shift, or ask your captain or manager.",
+    "contents": "Contents",
+    "section": {
+      "today": { "title": "Today", "body": "Your home for the shift. The big button is the next thing to do. You also see your checklist progress, new messages, any note waiting for you and the manager's notes for tonight." },
+      "tasks": { "title": "Tasks", "body": "Your opening and closing checklists. Tap a row to tick it. A camera badge means it needs a photo first: take it of the work, never of guests. Tasks open when the manager opens the shift." },
+      "menu": { "title": "Menu", "body": "Every dish and drink with photo, ingredients and allergens. Search by any word. Not available today means the kitchen ran out. Tap View in Spanish or English to read it in the other language." },
+      "floor": { "title": "Floor", "body": "Your section and its tables for tonight, with the notes on each table. Requests for your section show up here first." },
+      "requests": { "title": "Requests", "body": "The round button asks for water, a table clear, help, a void or a comp in two taps: what, then which table. When someone taps I am on it, you see it. If nobody takes it in 90 seconds, it goes to the whole team." },
+      "notes": { "title": "Table notes", "body": "Add a short note to a table: allergy, VIP, occasion or preference. Never write phone numbers or emails. Allergy notes go to the kitchen, and you see when they confirm." },
+      "kitchen": { "title": "Allergy board", "body": "Kitchen: every allergy note of tonight, by table. Read it and tap Confirm before the course fires." },
+      "inventory": { "title": "Bar count", "body": "Count each bottle at open and at close, in tenths: 0.7 is seven tenths of a bottle. Tap plus and minus or type the number. The screen stays on while you count." },
+      "messages": { "title": "Messages", "body": "News from your manager or the owner. When a message asks for it, tap I read it so they know it reached you." },
+      "rules": { "title": "House rules", "body": "The rules for your role. When they change, read and confirm them before your next checklist starts." },
+      "warnings": { "title": "Notes from your manager", "body": "A note always points to one house rule and says how to do it right. Confirm you read it and, if you want, add your side. Notes stop counting after 30 days." },
+      "schedule": { "title": "Schedule", "body": "Your next shifts and the venue's events, like private dinners and tastings, with notes for your role." },
+      "me": { "title": "Me", "body": "Language, Large text, theme, notifications and your password. Your record of notes is here too. Sign out everywhere if you lost a phone." },
+      "manage": { "title": "Shift control", "body": "Managers: open the shift, watch each person's progress live, excuse a checklist with a reason, and start the close." },
+      "close": { "title": "Close report", "body": "Managers: type covers, net sales, comps and voids from the POS end-of-day report, add incidents and notes, and submit. The summary flags bar shortages and comp differences." },
+      "team": { "title": "Team", "body": "Managers: each person's notes, state, on-time rate and messages read, plus the longest run without a note." },
+      "owner": { "title": "Venues", "body": "Owners: the four venues on one screen, tonight's status, the last close, shortages and who needs a review." },
+      "pay": { "title": "Pay", "body": "Captains and managers propose a bonus or award; the person above switches it on. You see your own rate and approved bonuses. Pay is never reduced for a note or a mistake." }
+    },
+    "level": {
+      "C": {
+        "title": "Level C, in training",
+        "i1": "Learn the table numbers and your section.",
+        "i2": "Know every allergen on the menu by heart.",
+        "i3": "Finish your checklists on time for two weeks.",
+        "i4": "Ask your captain before any comp.",
+        "i5": "Shadow a level A at line-up."
+      },
+      "B": {
+        "title": "Level B, trained",
+        "i1": "Run your section alone on a full book.",
+        "i2": "Request comps and voids with the right reason.",
+        "i3": "Pair wine with every main.",
+        "i4": "Help a level C on their first week.",
+        "i5": "No notes in the last 30 days."
+      },
+      "A": {
+        "title": "Level A, lead",
+        "i1": "Lead a section and its runners and bussers.",
+        "i2": "Run the line-up when the captain is off.",
+        "i3": "Handle a guest complaint end to end.",
+        "i4": "Train new hires on the floor.",
+        "i5": "Keep your section's checklists at 100 percent."
+      }
+    }
+  }
+}

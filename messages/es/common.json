@@ -1,42 +1,255 @@
 {
-  "brand": { "name": "The First", "company": "The First Hospitality Group", "tagline": "Un solo sistema para cada local", "description": "Todos saben qué hacer, qué servimos y cómo trabajamos." },
-  "common": {
-    "loading": "Cargando", "close": "Cerrar", "back": "Atrás", "save": "Guardar", "saved": "Guardado", "cancel": "Cancelar", "done": "Listo", "edit": "Editar", "add": "Agregar", "remove": "Quitar", "retry": "Reintentar", "search": "Buscar", "send": "Enviar", "next": "Siguiente", "confirm": "Confirmar", "continue": "Continuar", "optional": "Opcional", "required": "Obligatorio", "yes": "Sí", "no": "No", "all": "Todos", "none": "Ninguno", "more": "Más", "today": "Hoy", "yesterday": "Ayer", "now": "Ahora", "minutesAgo": "hace {n} min", "hoursAgo": "hace {n} h", "daysAgo": "hace {n} d", "skipToContent": "Ir al contenido",
-    "errorTitle": "Algo salió mal", "errorBody": "No fue tu culpa. Vuelve a intentarlo en un momento.", "offline": "Estás sin conexión. Se muestra lo guardado en este teléfono.", "offlineBanner": "Sin conexión. Los cambios necesitan conexión.",
-    "notFoundTitle": "Esta página no existe", "notFoundBody": "Revisa la dirección o vuelve a Hoy.", "goHome": "Ir a Hoy",
-    "photo": "Foto", "addPhoto": "Agregar una foto", "retakePhoto": "Cambiar la foto", "photoHint": "Sin caras de clientes en las fotos.", "uploading": "Subiendo",
-    "venue": "Local", "chooseVenue": "Elige un local", "of": "de", "items": "{n} ítems", "showMore": "Ver más", "language": "Idioma", "english": "English", "spanish": "Español", "otherLanguage": "View in English",
-    "previewMode": "Vista previa con datos de ejemplo", "help": "Ayuda", "signOut": "Cerrar sesión", "noAccess": "Tu rol no abre esta pantalla.", "by": "por {name}", "at": "a las {time}", "total": "Total"
+  "brand": {
+    "name": "The First",
+    "company": "The First Hospitality Group",
+    "tagline": "Un solo sistema para cada local",
+    "description": "Todos saben qué hacer, qué servimos y cómo trabajamos."
   },
-  "roles": { "server": "Mesero", "runner": "Runner", "busser": "Ayudante de mesero", "bartender": "Bartender", "barback": "Barback", "kitchen": "Cocina", "captain": "Capitán", "manager": "Manager", "owner": "Dueño", "dev": "Desarrollo" },
-  "levels": { "A": "Nivel A, líder", "B": "Nivel B, formado", "C": "Nivel C, en formación", "label": "Nivel" },
-  "services": { "lunch": "Almuerzo", "dinner": "Cena", "late": "Trasnoche" },
-  "shiftStatus": { "scheduled": "Programado", "open": "Abierto", "closing": "Cerrando", "closed": "Cerrado" },
-  "phases": { "open": "Apertura", "mid": "Durante el servicio", "close": "Cierre" },
-  "states": { "up_to_date": "Al día", "attention": "Atención", "follow_up": "Seguimiento", "review": "Revisión" },
-  "nav": { "today": "Hoy", "tasks": "Tareas", "menu": "Carta", "messages": "Mensajes", "floor": "Salón", "kitchen": "Cocina", "inventory": "Barra", "me": "Yo", "manage": "Turno", "team": "Equipo", "requests": "Pedidos", "owner": "Locales", "more": "Más", "close": "Cierre", "warnings": "Advertencias", "settings": "Ajustes", "rules": "Reglas", "schedule": "Horarios", "guide": "Guía", "pay": "Pagos", "sections": "Secciones", "setup": "Configuración", "audit": "Registro de auditoría", "mainNav": "Principal" },
+  "common": {
+    "loading": "Cargando",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "save": "Guardar",
+    "saved": "Guardado",
+    "cancel": "Cancelar",
+    "done": "Listo",
+    "edit": "Editar",
+    "add": "Agregar",
+    "remove": "Quitar",
+    "retry": "Reintentar",
+    "search": "Buscar",
+    "send": "Enviar",
+    "next": "Siguiente",
+    "confirm": "Confirmar",
+    "continue": "Continuar",
+    "optional": "Opcional",
+    "required": "Obligatorio",
+    "yes": "Sí",
+    "no": "No",
+    "all": "Todos",
+    "none": "Ninguno",
+    "more": "Más",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "now": "Ahora",
+    "minutesAgo": "hace {n} min",
+    "hoursAgo": "hace {n} h",
+    "daysAgo": "hace {n} d",
+    "skipToContent": "Ir al contenido",
+    "errorTitle": "Algo salió mal",
+    "errorBody": "No fue tu culpa. Vuelve a intentarlo en un momento.",
+    "offline": "Estás sin conexión. Se muestra lo guardado en este teléfono.",
+    "offlineBanner": "Sin conexión. Los cambios necesitan conexión.",
+    "notFoundTitle": "Esta página no existe",
+    "notFoundBody": "Revisa la dirección o vuelve a Hoy.",
+    "goHome": "Ir a Hoy",
+    "photo": "Foto",
+    "addPhoto": "Agregar una foto",
+    "retakePhoto": "Cambiar la foto",
+    "photoHint": "Sin caras de clientes en las fotos.",
+    "uploading": "Subiendo",
+    "venue": "Local",
+    "chooseVenue": "Elige un local",
+    "of": "de",
+    "items": "{n} ítems",
+    "showMore": "Ver más",
+    "language": "Idioma",
+    "english": "English",
+    "spanish": "Español",
+    "otherLanguage": "View in English",
+    "previewMode": "Vista previa con datos de ejemplo",
+    "help": "Ayuda",
+    "signOut": "Cerrar sesión",
+    "noAccess": "Tu rol no abre esta pantalla.",
+    "by": "por {name}",
+    "at": "a las {time}",
+    "total": "Total"
+  },
+  "roles": {
+    "server": "Mesero",
+    "runner": "Runner",
+    "busser": "Ayudante de mesero",
+    "bartender": "Bartender",
+    "barback": "Barback",
+    "kitchen": "Cocina",
+    "captain": "Capitán",
+    "manager": "Manager",
+    "owner": "Dueño",
+    "dev": "Desarrollo"
+  },
+  "levels": {
+    "A": "Nivel A, líder",
+    "B": "Nivel B, formado",
+    "C": "Nivel C, en formación",
+    "label": "Nivel"
+  },
+  "services": {
+    "lunch": "Almuerzo",
+    "dinner": "Cena",
+    "late": "Trasnoche"
+  },
+  "shiftStatus": {
+    "scheduled": "Programado",
+    "open": "Abierto",
+    "closing": "Cerrando",
+    "closed": "Cerrado"
+  },
+  "phases": {
+    "open": "Apertura",
+    "mid": "Durante el servicio",
+    "close": "Cierre"
+  },
+  "states": {
+    "up_to_date": "Al día",
+    "attention": "Atención",
+    "follow_up": "Seguimiento",
+    "review": "Revisión"
+  },
+  "nav": {
+    "today": "Hoy",
+    "tasks": "Tareas",
+    "menu": "Carta",
+    "messages": "Mensajes",
+    "floor": "Salón",
+    "kitchen": "Cocina",
+    "inventory": "Barra",
+    "me": "Yo",
+    "manage": "Turno",
+    "team": "Equipo",
+    "requests": "Pedidos",
+    "owner": "Locales",
+    "more": "Más",
+    "close": "Cierre",
+    "warnings": "Advertencias",
+    "settings": "Ajustes",
+    "rules": "Reglas",
+    "schedule": "Horarios",
+    "guide": "Guía",
+    "pay": "Pagos",
+    "sections": "Secciones",
+    "setup": "Configuración",
+    "audit": "Registro de auditoría",
+    "mainNav": "Principal"
+  },
   "errors": {
-    "UNAUTHENTICATED": "Inicia sesión para continuar.", "FORBIDDEN": "No puedes hacer esto con tu rol.", "NOT_FOUND": "No lo encontramos. Puede que lo hayan quitado.", "INVALID_INPUT": "Revisa los campos marcados.", "RATE_LIMITED": "Demasiados intentos. Espera un minuto y vuelve a probar.", "INVALID_CREDENTIALS": "Usuario o contraseña incorrectos.", "ACCOUNT_LOCKED": "Demasiados intentos. Tu cuenta queda bloqueada 15 minutos.", "INVALID_CODE": "Ese código no es correcto.", "CODE_EXPIRED": "El código venció. Pide uno nuevo.", "VENUE_FORBIDDEN": "Este local no es uno de los tuyos.", "SHIFT_NOT_OPEN": "El turno todavía no está abierto. Pregúntale a tu manager.", "OTHER_SHIFT_OPEN": "Hay otro turno abierto en este local. Ciérralo primero.", "NOT_SCHEDULED": "Ese servicio no existe en este local.", "INVALID_TRANSITION": "Ese paso no es posible ahora.", "RUNS_OPEN": "Hay checklists sin terminar. Termínalos o justifícalos primero.", "MISSING_COUNTS": "Cuenta todos los ítems de la barra primero.", "PHOTO_REQUIRED": "Esta tarea necesita una foto.", "RULES_NOT_ACKNOWLEDGED": "Lee y confirma las reglas nuevas primero.", "RULE_REQUIRED": "Elige la regla.", "RULE_NOT_FOR_ROLE": "Esa regla no aplica a esta persona.", "TOO_LATE": "Esto solo se puede hacer dentro de las 24 horas.", "FILE_TOO_LARGE": "La foto es demasiado grande.", "FILE_TYPE": "Solo se pueden subir fotos.", "NO_RECIPIENTS": "No hay nadie en ese público.", "REQUEST_CLOSED": "Alguien ya se ocupó.", "SELF_APPROVAL": "No puedes aprobar tu propio pedido.", "LEVEL_FORBIDDEN": "Tu nivel todavía no permite esto. Pídeselo a tu capitán.", "PAY_FORBIDDEN": "No puedes aprobar esto.", "NO_DEDUCTIONS": "El pago nunca se reduce por una advertencia o un error.", "USERNAME_TAKEN": "Ese usuario ya existe.", "PASSWORD_CHANGE_REQUIRED": "Elige tu propia contraseña primero.", "CONTACT_DETAILS": "No incluyas teléfonos ni emails.", "UNKNOWN": "Algo salió mal. Vuelve a intentarlo."
+    "UNAUTHENTICATED": "Inicia sesión para continuar.",
+    "FORBIDDEN": "No puedes hacer esto con tu rol.",
+    "NOT_FOUND": "No lo encontramos. Puede que lo hayan quitado.",
+    "INVALID_INPUT": "Revisa los campos marcados.",
+    "RATE_LIMITED": "Demasiados intentos. Espera un minuto y vuelve a probar.",
+    "INVALID_CREDENTIALS": "Usuario o contraseña incorrectos.",
+    "ACCOUNT_LOCKED": "Demasiados intentos. Tu cuenta queda bloqueada 15 minutos.",
+    "INVALID_CODE": "Ese código no es correcto.",
+    "CODE_EXPIRED": "El código venció. Pide uno nuevo.",
+    "VENUE_FORBIDDEN": "Este local no es uno de los tuyos.",
+    "SHIFT_NOT_OPEN": "El turno todavía no está abierto. Pregúntale a tu manager.",
+    "OTHER_SHIFT_OPEN": "Hay otro turno abierto en este local. Ciérralo primero.",
+    "NOT_SCHEDULED": "Ese servicio no existe en este local.",
+    "INVALID_TRANSITION": "Ese paso no es posible ahora.",
+    "RUNS_OPEN": "Hay checklists sin terminar. Termínalos o justifícalos primero.",
+    "MISSING_COUNTS": "Cuenta todos los ítems de la barra primero.",
+    "PHOTO_REQUIRED": "Esta tarea necesita una foto.",
+    "RULES_NOT_ACKNOWLEDGED": "Lee y confirma las reglas nuevas primero.",
+    "RULE_REQUIRED": "Elige la regla.",
+    "RULE_NOT_FOR_ROLE": "Esa regla no aplica a esta persona.",
+    "TOO_LATE": "Esto solo se puede hacer dentro de las 24 horas.",
+    "FILE_TOO_LARGE": "La foto es demasiado grande.",
+    "FILE_TYPE": "Solo se pueden subir fotos.",
+    "NO_RECIPIENTS": "No hay nadie en ese público.",
+    "REQUEST_CLOSED": "Alguien ya se ocupó.",
+    "SELF_APPROVAL": "No puedes aprobar tu propio pedido.",
+    "LEVEL_FORBIDDEN": "Tu nivel todavía no permite esto. Pídeselo a tu capitán.",
+    "PAY_FORBIDDEN": "No puedes aprobar esto.",
+    "NO_DEDUCTIONS": "El pago nunca se reduce por una advertencia o un error.",
+    "USERNAME_TAKEN": "Ese usuario ya existe.",
+    "PASSWORD_CHANGE_REQUIRED": "Elige tu propia contraseña primero.",
+    "CONTACT_DETAILS": "No incluyas teléfonos ni emails.",
+    "UNKNOWN": "Algo salió mal. Vuelve a intentarlo."
   },
   "notify": {
-    "shiftOpen": { "title": "El turno está abierto", "body": "{venue}: tu checklist está listo." },
-    "shiftForgotten": { "title": "Turno todavía abierto", "body": "{venue}: el turno terminó hace 4 horas y no tiene informe de cierre." },
-    "shiftAutoClosed": { "title": "Turno cerrado automáticamente", "body": "{venue}: se cerró sin informe. Revísalo." },
-    "tasksLate": { "title": "Checklists atrasados", "body": "{count} checklists pasaron su hora límite." },
-    "code": { "title": "Tu código de acceso", "body": "Tu código es {code}. Vence en 10 minutos." },
-    "message": { "title": "Mensaje nuevo", "body": "{title}" },
-    "warning": { "title": "Nueva nota de tu manager", "body": "Abre The First para leerla." },
-    "water": { "title": "Agua, mesa {table}", "body": "De {name}." },
-    "clear": { "title": "Levantar mesa {table}", "body": "De {name}." },
-    "help": { "title": "Ayuda, mesa {table}", "body": "{name} necesita ayuda ahora." },
-    "helpNoTable": { "title": "Ayuda", "body": "{name} necesita ayuda ahora." },
-    "escalated": { "title": "Sigue esperando, mesa {table}", "body": "Nadie lo tomó en 90 segundos." },
-    "approval": { "title": "Aprobación pendiente", "body": "{name} pide una {kind} en la mesa {table}." },
-    "approved": { "title": "Aprobado", "body": "Mesa {table}: adelante en el POS." },
-    "denied": { "title": "No aprobado", "body": "Mesa {table}: habla con tu manager." },
-    "allergy": { "title": "Nota de alergia, mesa {table}", "body": "Confírmala en el tablero de alergias." },
-    "payProposed": { "title": "Ajuste de pago para aprobar", "body": "Hay una propuesta esperándote." },
-    "payOn": { "title": "Ajuste de pago aprobado", "body": "Abre The First para verlo." },
-    "rules": { "title": "Reglas actualizadas", "body": "Lee y confirma la versión nueva." }
+    "shiftOpen": {
+      "title": "El turno está abierto",
+      "body": "{venue}: tu checklist está listo."
+    },
+    "shiftForgotten": {
+      "title": "Turno todavía abierto",
+      "body": "{venue}: el turno terminó hace 4 horas y no tiene informe de cierre."
+    },
+    "shiftAutoClosed": {
+      "title": "Turno cerrado automáticamente",
+      "body": "{venue}: se cerró sin informe. Revísalo."
+    },
+    "tasksLate": {
+      "title": "Checklists atrasados",
+      "body": "{count} checklists pasaron su hora límite."
+    },
+    "code": {
+      "title": "Tu código de acceso",
+      "body": "Tu código es {code}. Vence en 10 minutos."
+    },
+    "message": {
+      "title": "Mensaje nuevo",
+      "body": "{title}"
+    },
+    "warning": {
+      "title": "Nueva nota de tu manager",
+      "body": "Abre The First para leerla."
+    },
+    "water": {
+      "title": "Agua, mesa {table}",
+      "body": "De {name}."
+    },
+    "clear": {
+      "title": "Levantar mesa {table}",
+      "body": "De {name}."
+    },
+    "help": {
+      "title": "Ayuda, mesa {table}",
+      "body": "{name} necesita ayuda ahora."
+    },
+    "helpNoTable": {
+      "title": "Ayuda",
+      "body": "{name} necesita ayuda ahora."
+    },
+    "escalated": {
+      "title": "Sigue esperando, mesa {table}",
+      "body": "Nadie lo tomó en 90 segundos."
+    },
+    "approved": {
+      "title": "Aprobado",
+      "body": "Mesa {table}: adelante en el POS."
+    },
+    "denied": {
+      "title": "No aprobado",
+      "body": "Mesa {table}: habla con tu manager."
+    },
+    "allergy": {
+      "title": "Nota de alergia, mesa {table}",
+      "body": "Confírmala en el tablero de alergias."
+    },
+    "payProposed": {
+      "title": "Ajuste de pago para aprobar",
+      "body": "Hay una propuesta esperándote."
+    },
+    "payOn": {
+      "title": "Ajuste de pago aprobado",
+      "body": "Abre The First para verlo."
+    },
+    "rules": {
+      "title": "Reglas actualizadas",
+      "body": "Lee y confirma la versión nueva."
+    },
+    "warningDigest": {
+      "title": "Advertencias para revisar",
+      "body": "{review} personas llegaron a Revisión. {stale} notas esperan confirmación."
+    },
+    "approvalVoid": {
+      "title": "Anulación para aprobar",
+      "body": "{name} pide anular un ítem en la mesa {table}."
+    },
+    "approvalComp": {
+      "title": "Invitación para aprobar",
+      "body": "{name} pide invitar un ítem en la mesa {table}."
+    }
   }
 }

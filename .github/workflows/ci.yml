@@ -40,7 +40,10 @@ jobs:
       - name: Typecheck
         if: steps.app.outputs.present == 'true'
         run: npm run typecheck
-      - name: Unit tests with coverage (domain >= 90 %, tokens and copy guards)
+      - name: Generated Convex API and preview registry are current (ADR 0018)
+        if: steps.app.outputs.present == 'true'
+        run: node scripts/gen-convex-api.mjs && git diff --exit-code convex/_generated/api.d.ts lib/demo/registry.ts
+      - name: Unit and backend tests with coverage (domain >= 90 %, role x venue matrix on the real handlers, tokens and copy guards)
         if: steps.app.outputs.present == 'true'
         run: npm run test -- --coverage
       - name: Build (preview mode)
@@ -71,12 +74,12 @@ jobs:
       - name: Install
         if: env.CONVEX_DEPLOY_KEY != ''
         run: npm ci
-      - name: Codegen and typecheck
+      - name: Codegen and typecheck against the deployment
         if: env.CONVEX_DEPLOY_KEY != ''
         run: npx convex codegen --typecheck enable
-      - name: Convex tests (role x function x venue matrix)
-        if: env.CONVEX_DEPLOY_KEY != ''
-        run: npm run test:convex
+      - name: Deploy functions (main only)
+        if: env.CONVEX_DEPLOY_KEY != '' && github.ref == 'refs/heads/main'
+        run: npx convex deploy
 
   e2e:
     if: github.event_name == 'pull_request'

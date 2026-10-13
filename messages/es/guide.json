@@ -1,0 +1,63 @@
+{
+  "guide": {
+    "title": "Guía",
+    "subtitle": "Cómo funciona cada pantalla, en pocas líneas.",
+    "forYou": "Para tu rol",
+    "everything": "Todas las pantallas",
+    "showAll": "Ver todas las pantallas",
+    "showMine": "Ver solo mis pantallas",
+    "levelsTitle": "Formación por nivel",
+    "levelsBody": "Tu nivel define lo que puedes hacer. Tu manager te sube de nivel cuando estás listo.",
+    "yourLevel": "Tu nivel",
+    "help": "Ayuda",
+    "helpFor": "Ayuda para esta pantalla",
+    "stillStuck": "¿Sigues con dudas? Manda un pedido de Ayuda durante el turno o pregúntale a tu capitán o manager.",
+    "contents": "Contenido",
+    "section": {
+      "today": { "title": "Hoy", "body": "Tu inicio del turno. El botón grande es lo próximo que tienes que hacer. También ves el avance de tu checklist, los mensajes nuevos, si tienes una nota pendiente y las notas del manager para hoy." },
+      "tasks": { "title": "Tareas", "body": "Tus checklists de apertura y cierre. Toca una fila para marcarla. El ícono de cámara indica que primero necesita una foto: del trabajo, nunca de clientes. Las tareas se abren cuando el manager abre el turno." },
+      "menu": { "title": "Carta", "body": "Cada plato y bebida con foto, ingredientes y alérgenos. Busca con cualquier palabra. No disponible hoy significa que la cocina se quedó sin stock. Toca Ver en inglés o español para leerlo en el otro idioma." },
+      "floor": { "title": "Salón", "body": "Tu sección y sus mesas de hoy, con las notas de cada mesa. Los pedidos de tu sección aparecen aquí primero." },
+      "requests": { "title": "Pedidos", "body": "El botón redondo pide agua, levantar una mesa, ayuda, una anulación o una invitación en dos toques: qué y en qué mesa. Cuando alguien toca Voy, lo ves. Si nadie lo toma en 90 segundos, le llega a todo el equipo." },
+      "notes": { "title": "Notas de mesa", "body": "Agrega una nota corta a una mesa: alergia, VIP, ocasión o preferencia. Nunca escribas teléfonos ni emails. Las notas de alergia van a la cocina y ves cuando las confirman." },
+      "kitchen": { "title": "Tablero de alergias", "body": "Cocina: todas las notas de alergia de hoy, por mesa. Léela y toca Confirmar antes de que salga el plato." },
+      "inventory": { "title": "Conteo de barra", "body": "Cuenta cada botella al abrir y al cerrar, en décimos: 0.7 son siete décimos de botella. Toca más y menos o escribe el número. La pantalla queda encendida mientras cuentas." },
+      "messages": { "title": "Mensajes", "body": "Novedades de tu manager o del dueño. Cuando el mensaje lo pide, toca Lo leí para que sepan que te llegó." },
+      "rules": { "title": "Reglas de la casa", "body": "Las reglas de tu rol. Cuando cambian, léelas y confírmalas antes de que empiece tu próximo checklist." },
+      "warnings": { "title": "Notas de tu manager", "body": "Una nota siempre se refiere a una regla de la casa y dice cómo hacerlo bien. Confirma que la leíste y, si quieres, agrega tu versión. Las notas dejan de contar a los 30 días." },
+      "schedule": { "title": "Horarios", "body": "Tus próximos turnos y los eventos del local, como cenas privadas y degustaciones, con notas para tu rol." },
+      "me": { "title": "Yo", "body": "Idioma, texto grande, tema, notificaciones y tu contraseña. Aquí también está tu registro de notas. Cierra sesión en todos lados si perdiste un teléfono." },
+      "manage": { "title": "Control del turno", "body": "Managers: abre el turno, mira el avance de cada persona en vivo, justifica un checklist con un motivo y empieza el cierre." },
+      "close": { "title": "Informe de cierre", "body": "Managers: escribe cubiertos, ventas netas, invitaciones y anulaciones del cierre del POS, agrega incidentes y notas, y envíalo. El resumen marca faltantes de barra y diferencias de invitaciones." },
+      "team": { "title": "Equipo", "body": "Managers: las notas de cada persona, su estado, la puntualidad y los mensajes leídos, más la mejor racha sin notas." },
+      "owner": { "title": "Locales", "body": "Dueños: los cuatro locales en una pantalla, el estado de hoy, el último cierre, los faltantes y quién necesita revisión." },
+      "pay": { "title": "Pagos", "body": "Capitanes y managers proponen un bono o premio; la persona de arriba lo activa. Ves tu propia tarifa y los bonos aprobados. El pago nunca se reduce por una nota o un error." }
+    },
+    "level": {
+      "C": {
+        "title": "Nivel C, en formación",
+        "i1": "Aprende los números de mesa y tu sección.",
+        "i2": "Conoce de memoria cada alérgeno de la carta.",
+        "i3": "Termina tus checklists a tiempo durante dos semanas.",
+        "i4": "Pregúntale a tu capitán antes de cualquier invitación.",
+        "i5": "Acompaña a un nivel A en el line-up."
+      },
+      "B": {
+        "title": "Nivel B, formado",
+        "i1": "Atiende tu sección solo con el salón lleno.",
+        "i2": "Pide invitaciones y anulaciones con el motivo correcto.",
+        "i3": "Recomienda un vino para cada principal.",
+        "i4": "Ayuda a un nivel C en su primera semana.",
+        "i5": "Sin notas en los últimos 30 días."
+      },
+      "A": {
+        "title": "Nivel A, líder",
+        "i1": "Lidera una sección con sus runners y ayudantes.",
+        "i2": "Haz el line-up cuando el capitán no está.",
+        "i3": "Resuelve un reclamo de un cliente de principio a fin.",
+        "i4": "Forma a las personas nuevas en el salón.",
+        "i5": "Mantén los checklists de tu sección al 100 por ciento."
+      }
+    }
+  }
+}

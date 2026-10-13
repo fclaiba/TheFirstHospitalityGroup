@@ -68,7 +68,7 @@ export async function verifyCode(email: string, code: string): Promise<AuthResul
 export async function signOut(): Promise<void> {
   if (AUTH_MODE === "preview") {
     setSession(null);
-    window.location.assign("/login");
+    window.location.replace(new URL("/login", window.location.origin).href);
     return;
   }
   await fetch("/api/auth/sign-out", { method: "POST" });
