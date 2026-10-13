@@ -1,0 +1,160 @@
+{
+  "notify": {
+    "shiftOpen": {
+      "title": "El turno está abierto",
+      "body": "{venue}: tu trabajo del turno está listo."
+    },
+    "shiftForgotten": {
+      "title": "Turno todavía abierto",
+      "body": "{venue}: el turno terminó hace 4 horas y no tiene cierre."
+    },
+    "shiftAutoClosed": {
+      "title": "Turno cerrado automáticamente",
+      "body": "{venue}: se cerró sin cierre. Revísalo."
+    },
+    "tasksLate": {
+      "title": "Trabajo atrasado",
+      "body": "{count} listas pasaron su hora límite."
+    },
+    "code": {
+      "title": "Tu código de acceso",
+      "body": "Tu código es {code}. Vence en 10 minutos."
+    },
+    "message": {
+      "title": "Aviso nuevo",
+      "body": "{title}"
+    },
+    "warning": {
+      "title": "Nueva nota de tu manager",
+      "body": "Abre The First para leerla."
+    },
+    "warningProposed": {
+      "title": "Advertencia propuesta",
+      "body": "Hay una propuesta esperando tu decisión."
+    },
+    "warningEscalated": {
+      "title": "Propuesta de advertencia esperando",
+      "body": "Una propuesta espera hace más de 24 horas."
+    },
+    "warningDigest": {
+      "title": "Locales para revisar",
+      "body": "{action} locales necesitan acción. {review} personas llegaron a Revisión."
+    },
+    "water": {
+      "title": "Agua, mesa {table}",
+      "body": "De {name}."
+    },
+    "clear": {
+      "title": "Levantar mesa {table}",
+      "body": "De {name}."
+    },
+    "help": {
+      "title": "Ayuda, mesa {table}",
+      "body": "{name} necesita ayuda ahora."
+    },
+    "helpNoTable": {
+      "title": "Ayuda",
+      "body": "{name} necesita ayuda ahora."
+    },
+    "escalated": {
+      "title": "Sigue esperando, mesa {table}",
+      "body": "Nadie lo tomó en 90 segundos."
+    },
+    "allergy": {
+      "title": "Nota de alergia, mesa {table}",
+      "body": "Confírmala en el pase."
+    },
+    "rules": {
+      "title": "Reglas actualizadas",
+      "body": "Lee y confirma la versión nueva."
+    },
+    "schedulePublished": {
+      "title": "Salió tu horario",
+      "body": "{venue}: semana del {week}. Ábrelo y toca Lo vi."
+    },
+    "scheduleChanged": {
+      "title": "Tu horario cambió",
+      "body": "{venue}: semana del {week}. Ábrelo y confirma el cambio."
+    },
+    "scheduleReminder": {
+      "title": "Confirma tu horario",
+      "body": "{venue}: la semana del {week} espera tu confirmación."
+    },
+    "scheduleUnconfirmed": {
+      "title": "Horario sin confirmar",
+      "body": "{count} personas no confirmaron la semana del {week}."
+    },
+    "shiftSoon": {
+      "title": "Tu turno empieza pronto",
+      "body": "{venue}: {time}."
+    },
+    "swapAsked": {
+      "title": "Pedido de cambio de turno",
+      "body": "{name} pide cambiar un turno contigo. Decide tu manager."
+    },
+    "swapToDecide": {
+      "title": "Cambio para decidir",
+      "body": "Un cambio de turno espera tu decisión."
+    },
+    "swapDecided": {
+      "title": "Cambio decidido",
+      "body": "Abre tu horario para ver el resultado."
+    },
+    "timeOffToDecide": {
+      "title": "Días libres para decidir",
+      "body": "{name} pidió días libres."
+    },
+    "timeOffDecided": {
+      "title": "Días libres decididos",
+      "body": "Abre tu horario para ver la respuesta."
+    },
+    "openShift": {
+      "title": "Turno disponible",
+      "body": "{venue}: {date}. Tómalo en tu horario."
+    },
+    "claimToDecide": {
+      "title": "Turno disponible pedido",
+      "body": "{name} quiere tomar un turno disponible."
+    },
+    "claimDecided": {
+      "title": "Turno disponible decidido",
+      "body": "Abre tu horario para ver la respuesta."
+    },
+    "event": {
+      "title": "Evento nuevo",
+      "body": "{venue}: {name} el {date}."
+    },
+    "menuChanged": {
+      "title": "Cambio en la carta",
+      "body": "{count} platos son nuevos o cambiaron. Confírmalos antes de tu turno."
+    },
+    "menuProposed": {
+      "title": "Propuesta para la carta",
+      "body": "Un cambio de tragos o vinos espera tu aprobación."
+    },
+    "eightySix": {
+      "title": "86: {item}",
+      "body": "Agotado en este servicio."
+    },
+    "preshift": {
+      "title": "Nota del pre-shift",
+      "body": "{venue}: léela antes del servicio."
+    },
+    "shortage": {
+      "title": "Barra: {item} está {level}",
+      "body": "Lo avisó {name}."
+    },
+    "promotionProposed": {
+      "title": "Ascenso para aprobar",
+      "body": "{name}: {position}."
+    },
+    "promotionDecided": {
+      "title": "Ascenso decidido",
+      "body": "Abre The First para verlo."
+    },
+    "tipPolicy": {
+      "title": "Política de propinas publicada",
+      "body": "Lee y confirma la política escrita."
+    }
+  }
+}

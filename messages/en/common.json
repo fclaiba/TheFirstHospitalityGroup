@@ -60,28 +60,10 @@
     "previewMode": "Preview with demo data",
     "help": "Help",
     "signOut": "Sign out",
-    "noAccess": "Your role does not open this screen.",
+    "noAccess": "Your position does not open this screen.",
     "by": "by {name}",
     "at": "at {time}",
     "total": "Total"
-  },
-  "roles": {
-    "server": "Server",
-    "runner": "Runner",
-    "busser": "Busser",
-    "bartender": "Bartender",
-    "barback": "Barback",
-    "kitchen": "Kitchen",
-    "captain": "Captain",
-    "manager": "Manager",
-    "owner": "Owner",
-    "dev": "Developer"
-  },
-  "levels": {
-    "A": "Level A, lead",
-    "B": "Level B, trained",
-    "C": "Level C, in training",
-    "label": "Level"
   },
   "services": {
     "lunch": "Lunch",
@@ -103,7 +85,23 @@
     "up_to_date": "Up to date",
     "attention": "Attention",
     "follow_up": "Follow-up",
-    "review": "Review"
+    "review": "Review",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "late": "Late",
+    "on_track": "On track",
+    "needs_attention": "Needs attention",
+    "action_required": "Action required",
+    "staffed": "Staffed",
+    "short": "Short",
+    "over_limit": "Over limit",
+    "within_limit": "Within limit",
+    "low": "Low",
+    "out": "Out",
+    "restocked": "Restocked",
+    "ordered": "Ordered",
+    "passed": "Passed",
+    "not_yet": "Not yet"
   },
   "nav": {
     "today": "Today",
@@ -146,110 +144,80 @@
     "OTHER_SHIFT_OPEN": "Another shift is still open at this venue. Close it first.",
     "NOT_SCHEDULED": "That service does not run at this venue.",
     "INVALID_TRANSITION": "That step is not possible right now.",
-    "RUNS_OPEN": "Some checklists are not done. Finish or excuse them first.",
-    "MISSING_COUNTS": "Count every bar item first.",
+    "RUNS_OPEN": "Some side work is still open.",
     "PHOTO_REQUIRED": "This task needs a photo.",
     "RULES_NOT_ACKNOWLEDGED": "Read and confirm the new rules first.",
     "RULE_REQUIRED": "Pick the rule.",
-    "RULE_NOT_FOR_ROLE": "That rule does not apply to this person.",
-    "TOO_LATE": "This can only be done within 24 hours.",
+    "TOO_LATE": "This can no longer be done.",
     "FILE_TOO_LARGE": "The photo is too large.",
     "FILE_TYPE": "Only photos can be uploaded.",
     "NO_RECIPIENTS": "Nobody is in that audience.",
     "REQUEST_CLOSED": "Someone already took care of it.",
-    "SELF_APPROVAL": "You cannot approve your own request.",
-    "LEVEL_FORBIDDEN": "Your level cannot do this yet. Ask your captain.",
-    "PAY_FORBIDDEN": "You cannot approve this.",
-    "NO_DEDUCTIONS": "Pay is never reduced for a warning or a mistake.",
     "USERNAME_TAKEN": "That username is taken.",
     "PASSWORD_CHANGE_REQUIRED": "Choose your own password first.",
     "CONTACT_DETAILS": "Leave out phone numbers and emails.",
-    "UNKNOWN": "Something went wrong. Try again."
+    "UNKNOWN": "Something went wrong. Try again.",
+    "NOT_ENABLED": "This person is not enabled for that position.",
+    "WEEK_NOT_PUBLISHED": "This week is not published yet.",
+    "VERSION_STALE": "The schedule changed. Open it again and confirm the new version.",
+    "SWAP_CONFLICT": "These shifts cannot be swapped.",
+    "ALREADY_CLAIMED": "Someone already claimed this shift.",
+    "ACK_REQUIRED": "Confirm what is waiting for you first.",
+    "RULE_NOT_FOR_POSITION": "That rule does not apply to this person.",
+    "SEAT_REQUIRED": "Add the seat for an allergy.",
+    "MANAGER_IN_POOL": "Managers cannot take part in the tip pool."
   },
-  "notify": {
-    "shiftOpen": {
-      "title": "The shift is open",
-      "body": "{venue}: your checklist is ready."
-    },
-    "shiftForgotten": {
-      "title": "Shift still open",
-      "body": "{venue}: the shift ended 4 hours ago and has no close report."
-    },
-    "shiftAutoClosed": {
-      "title": "Shift closed automatically",
-      "body": "{venue}: closed without a report. Review it."
-    },
-    "tasksLate": {
-      "title": "Checklists running late",
-      "body": "{count} checklists passed their due time."
-    },
-    "code": {
-      "title": "Your sign-in code",
-      "body": "Your code is {code}. It expires in 10 minutes."
-    },
-    "message": {
-      "title": "New message",
-      "body": "{title}"
-    },
-    "warning": {
-      "title": "New note from your manager",
-      "body": "Open The First to read it."
-    },
-    "water": {
-      "title": "Water, table {table}",
-      "body": "From {name}."
-    },
-    "clear": {
-      "title": "Clear table {table}",
-      "body": "From {name}."
-    },
-    "help": {
-      "title": "Help needed, table {table}",
-      "body": "{name} needs help now."
-    },
-    "helpNoTable": {
-      "title": "Help needed",
-      "body": "{name} needs help now."
-    },
-    "escalated": {
-      "title": "Still waiting, table {table}",
-      "body": "Nobody took it after 90 seconds."
-    },
-    "approved": {
-      "title": "Approved",
-      "body": "Table {table}: go ahead in the POS."
-    },
-    "denied": {
-      "title": "Not approved",
-      "body": "Table {table}: talk to your manager."
-    },
-    "allergy": {
-      "title": "Allergy note, table {table}",
-      "body": "Confirm it on the allergy board."
-    },
-    "payProposed": {
-      "title": "Pay adjustment to approve",
-      "body": "A proposal is waiting for you."
-    },
-    "payOn": {
-      "title": "Pay adjustment approved",
-      "body": "Open The First to see it."
-    },
-    "rules": {
-      "title": "Rules updated",
-      "body": "Read and confirm the new version."
-    },
-    "warningDigest": {
-      "title": "Warnings to review",
-      "body": "{review} people reached Review. {stale} notes are waiting for acknowledgment."
-    },
-    "approvalVoid": {
-      "title": "Void to approve",
-      "body": "{name} asks to void an item at table {table}."
-    },
-    "approvalComp": {
-      "title": "Comp to approve",
-      "body": "{name} asks to comp an item at table {table}."
-    }
+  "positions": {
+    "polisher": "Polisher",
+    "busser": "Busser",
+    "runner": "Food runner",
+    "server": "Server",
+    "captain": "Captain",
+    "host": "Host",
+    "maitre_d": "Maître d'",
+    "expo": "Expo",
+    "barback": "Barback",
+    "bartender": "Bartender",
+    "head_bartender": "Head bartender",
+    "sommelier": "Sommelier",
+    "dishwasher": "Dishwasher",
+    "prep_cook": "Prep cook",
+    "line_cook": "Line cook",
+    "sous_chef": "Sous chef",
+    "chef_de_cuisine": "Chef de cuisine",
+    "floor_manager": "Floor manager",
+    "agm": "Assistant GM",
+    "gm": "General manager",
+    "director": "Director of operations",
+    "owner": "Owner",
+    "dev": "Developer"
+  },
+  "areas": {
+    "floor": "Floor",
+    "reception": "Reception",
+    "pass": "Pass",
+    "bar": "Bar and wine",
+    "kitchen": "Kitchen",
+    "venue_management": "Venue management",
+    "corporate": "Corporate"
+  },
+  "layers": {
+    "support": "Support",
+    "service": "Service",
+    "lead": "Lead",
+    "manager": "Venue management",
+    "corporate": "Corporate"
+  },
+  "reasons": {
+    "closeMissing": "{count} closes missing",
+    "autoClosed": "{count} shifts closed automatically, to review",
+    "confirmationsLate": "{count} people have not confirmed the schedule after 24 hours",
+    "confirmationsPending": "{count} people have not confirmed the schedule",
+    "shortagesOut": "{count} bar items out",
+    "shortagesLow": "{count} bar items low",
+    "peopleInReview": "{count} people in Review",
+    "sideWorkLate": "{count} side work lists running late",
+    "proposalsWaiting": "{count} warning proposals waiting more than 24 hours",
+    "sideWorkOverLimit": "{count} tipped shifts over the side-work limit"
   }
 }

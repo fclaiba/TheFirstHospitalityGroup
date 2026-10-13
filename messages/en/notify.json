@@ -1,0 +1,160 @@
+{
+  "notify": {
+    "shiftOpen": {
+      "title": "The shift is open",
+      "body": "{venue}: your side work is ready."
+    },
+    "shiftForgotten": {
+      "title": "Shift still open",
+      "body": "{venue}: the shift ended 4 hours ago and has no close."
+    },
+    "shiftAutoClosed": {
+      "title": "Shift closed automatically",
+      "body": "{venue}: closed without a close. Review it."
+    },
+    "tasksLate": {
+      "title": "Side work running late",
+      "body": "{count} lists passed their due time."
+    },
+    "code": {
+      "title": "Your sign-in code",
+      "body": "Your code is {code}. It expires in 10 minutes."
+    },
+    "message": {
+      "title": "New announcement",
+      "body": "{title}"
+    },
+    "warning": {
+      "title": "New note from your manager",
+      "body": "Open The First to read it."
+    },
+    "warningProposed": {
+      "title": "Warning proposed",
+      "body": "A proposal is waiting for your decision."
+    },
+    "warningEscalated": {
+      "title": "Warning proposal waiting",
+      "body": "A proposal has waited more than 24 hours."
+    },
+    "warningDigest": {
+      "title": "Venues to review",
+      "body": "{action} venues need action. {review} people reached Review."
+    },
+    "water": {
+      "title": "Water, table {table}",
+      "body": "From {name}."
+    },
+    "clear": {
+      "title": "Clear table {table}",
+      "body": "From {name}."
+    },
+    "help": {
+      "title": "Help needed, table {table}",
+      "body": "{name} needs help now."
+    },
+    "helpNoTable": {
+      "title": "Help needed",
+      "body": "{name} needs help now."
+    },
+    "escalated": {
+      "title": "Still waiting, table {table}",
+      "body": "Nobody took it after 90 seconds."
+    },
+    "allergy": {
+      "title": "Allergy note, table {table}",
+      "body": "Confirm it at the pass."
+    },
+    "rules": {
+      "title": "Rules updated",
+      "body": "Read and confirm the new version."
+    },
+    "schedulePublished": {
+      "title": "Your schedule is out",
+      "body": "{venue}: week of {week}. Open it and tap I saw it."
+    },
+    "scheduleChanged": {
+      "title": "Your schedule changed",
+      "body": "{venue}: week of {week}. Open it and confirm the change."
+    },
+    "scheduleReminder": {
+      "title": "Confirm your schedule",
+      "body": "{venue}: week of {week} is waiting for your confirmation."
+    },
+    "scheduleUnconfirmed": {
+      "title": "Schedule not confirmed",
+      "body": "{count} people have not confirmed the week of {week}."
+    },
+    "shiftSoon": {
+      "title": "Your shift starts soon",
+      "body": "{venue}: {time}."
+    },
+    "swapAsked": {
+      "title": "Shift swap request",
+      "body": "{name} asks to swap a shift with you. Your manager decides."
+    },
+    "swapToDecide": {
+      "title": "Swap to decide",
+      "body": "A shift swap is waiting for your decision."
+    },
+    "swapDecided": {
+      "title": "Swap decided",
+      "body": "Open your schedule to see the result."
+    },
+    "timeOffToDecide": {
+      "title": "Time off to decide",
+      "body": "{name} asked for time off."
+    },
+    "timeOffDecided": {
+      "title": "Time off decided",
+      "body": "Open your schedule to see the answer."
+    },
+    "openShift": {
+      "title": "Open shift",
+      "body": "{venue}: {date}. Claim it in your schedule."
+    },
+    "claimToDecide": {
+      "title": "Open shift claimed",
+      "body": "{name} wants to take an open shift."
+    },
+    "claimDecided": {
+      "title": "Open shift decided",
+      "body": "Open your schedule to see the answer."
+    },
+    "event": {
+      "title": "New event",
+      "body": "{venue}: {name} on {date}."
+    },
+    "menuChanged": {
+      "title": "Menu change",
+      "body": "{count} items are new or changed. Confirm them before your shift."
+    },
+    "menuProposed": {
+      "title": "Menu proposal",
+      "body": "A drinks or wine change is waiting for your approval."
+    },
+    "eightySix": {
+      "title": "86: {item}",
+      "body": "Sold out for this service."
+    },
+    "preshift": {
+      "title": "Pre-shift note",
+      "body": "{venue}: read it before service."
+    },
+    "shortage": {
+      "title": "Bar: {item} is {level}",
+      "body": "Reported by {name}."
+    },
+    "promotionProposed": {
+      "title": "Promotion to approve",
+      "body": "{name}: {position}."
+    },
+    "promotionDecided": {
+      "title": "Promotion decided",
+      "body": "Open The First to see it."
+    },
+    "tipPolicy": {
+      "title": "Tip policy published",
+      "body": "Read and confirm the written policy."
+    }
+  }
+}

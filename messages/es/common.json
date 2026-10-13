@@ -60,28 +60,10 @@
     "previewMode": "Vista previa con datos de ejemplo",
     "help": "Ayuda",
     "signOut": "Cerrar sesión",
-    "noAccess": "Tu rol no abre esta pantalla.",
+    "noAccess": "Tu puesto no abre esta pantalla.",
     "by": "por {name}",
     "at": "a las {time}",
     "total": "Total"
-  },
-  "roles": {
-    "server": "Mesero",
-    "runner": "Runner",
-    "busser": "Ayudante de mesero",
-    "bartender": "Bartender",
-    "barback": "Barback",
-    "kitchen": "Cocina",
-    "captain": "Capitán",
-    "manager": "Manager",
-    "owner": "Dueño",
-    "dev": "Desarrollo"
-  },
-  "levels": {
-    "A": "Nivel A, líder",
-    "B": "Nivel B, formado",
-    "C": "Nivel C, en formación",
-    "label": "Nivel"
   },
   "services": {
     "lunch": "Almuerzo",
@@ -103,7 +85,23 @@
     "up_to_date": "Al día",
     "attention": "Atención",
     "follow_up": "Seguimiento",
-    "review": "Revisión"
+    "review": "Revisión",
+    "confirmed": "Confirmado",
+    "pending": "Pendiente",
+    "late": "Atrasado",
+    "on_track": "En orden",
+    "needs_attention": "Requiere atención",
+    "action_required": "Acción necesaria",
+    "staffed": "Cubierto",
+    "short": "Falta gente",
+    "over_limit": "Pasado del límite",
+    "within_limit": "Dentro del límite",
+    "low": "Poca",
+    "out": "Agotada",
+    "restocked": "Repuesta",
+    "ordered": "Pedida",
+    "passed": "Aprobado",
+    "not_yet": "Todavía no"
   },
   "nav": {
     "today": "Hoy",
@@ -146,110 +144,80 @@
     "OTHER_SHIFT_OPEN": "Hay otro turno abierto en este local. Ciérralo primero.",
     "NOT_SCHEDULED": "Ese servicio no existe en este local.",
     "INVALID_TRANSITION": "Ese paso no es posible ahora.",
-    "RUNS_OPEN": "Hay checklists sin terminar. Termínalos o justifícalos primero.",
-    "MISSING_COUNTS": "Cuenta todos los ítems de la barra primero.",
+    "RUNS_OPEN": "Todavía hay trabajo pendiente.",
     "PHOTO_REQUIRED": "Esta tarea necesita una foto.",
     "RULES_NOT_ACKNOWLEDGED": "Lee y confirma las reglas nuevas primero.",
     "RULE_REQUIRED": "Elige la regla.",
-    "RULE_NOT_FOR_ROLE": "Esa regla no aplica a esta persona.",
-    "TOO_LATE": "Esto solo se puede hacer dentro de las 24 horas.",
+    "TOO_LATE": "Esto ya no se puede hacer.",
     "FILE_TOO_LARGE": "La foto es demasiado grande.",
     "FILE_TYPE": "Solo se pueden subir fotos.",
     "NO_RECIPIENTS": "No hay nadie en ese público.",
     "REQUEST_CLOSED": "Alguien ya se ocupó.",
-    "SELF_APPROVAL": "No puedes aprobar tu propio pedido.",
-    "LEVEL_FORBIDDEN": "Tu nivel todavía no permite esto. Pídeselo a tu capitán.",
-    "PAY_FORBIDDEN": "No puedes aprobar esto.",
-    "NO_DEDUCTIONS": "El pago nunca se reduce por una advertencia o un error.",
     "USERNAME_TAKEN": "Ese usuario ya existe.",
     "PASSWORD_CHANGE_REQUIRED": "Elige tu propia contraseña primero.",
     "CONTACT_DETAILS": "No incluyas teléfonos ni emails.",
-    "UNKNOWN": "Algo salió mal. Vuelve a intentarlo."
+    "UNKNOWN": "Algo salió mal. Vuelve a intentarlo.",
+    "NOT_ENABLED": "Esta persona no está habilitada para ese puesto.",
+    "WEEK_NOT_PUBLISHED": "Esta semana todavía no está publicada.",
+    "VERSION_STALE": "El horario cambió. Ábrelo de nuevo y confirma la versión nueva.",
+    "SWAP_CONFLICT": "Estos turnos no se pueden cambiar.",
+    "ALREADY_CLAIMED": "Alguien ya tomó este turno.",
+    "ACK_REQUIRED": "Primero confirma lo que te espera.",
+    "RULE_NOT_FOR_POSITION": "Esa regla no aplica a esta persona.",
+    "SEAT_REQUIRED": "Agrega el asiento para una alergia.",
+    "MANAGER_IN_POOL": "Los managers no pueden participar del pozo de propinas."
   },
-  "notify": {
-    "shiftOpen": {
-      "title": "El turno está abierto",
-      "body": "{venue}: tu checklist está listo."
-    },
-    "shiftForgotten": {
-      "title": "Turno todavía abierto",
-      "body": "{venue}: el turno terminó hace 4 horas y no tiene informe de cierre."
-    },
-    "shiftAutoClosed": {
-      "title": "Turno cerrado automáticamente",
-      "body": "{venue}: se cerró sin informe. Revísalo."
-    },
-    "tasksLate": {
-      "title": "Checklists atrasados",
-      "body": "{count} checklists pasaron su hora límite."
-    },
-    "code": {
-      "title": "Tu código de acceso",
-      "body": "Tu código es {code}. Vence en 10 minutos."
-    },
-    "message": {
-      "title": "Mensaje nuevo",
-      "body": "{title}"
-    },
-    "warning": {
-      "title": "Nueva nota de tu manager",
-      "body": "Abre The First para leerla."
-    },
-    "water": {
-      "title": "Agua, mesa {table}",
-      "body": "De {name}."
-    },
-    "clear": {
-      "title": "Levantar mesa {table}",
-      "body": "De {name}."
-    },
-    "help": {
-      "title": "Ayuda, mesa {table}",
-      "body": "{name} necesita ayuda ahora."
-    },
-    "helpNoTable": {
-      "title": "Ayuda",
-      "body": "{name} necesita ayuda ahora."
-    },
-    "escalated": {
-      "title": "Sigue esperando, mesa {table}",
-      "body": "Nadie lo tomó en 90 segundos."
-    },
-    "approved": {
-      "title": "Aprobado",
-      "body": "Mesa {table}: adelante en el POS."
-    },
-    "denied": {
-      "title": "No aprobado",
-      "body": "Mesa {table}: habla con tu manager."
-    },
-    "allergy": {
-      "title": "Nota de alergia, mesa {table}",
-      "body": "Confírmala en el tablero de alergias."
-    },
-    "payProposed": {
-      "title": "Ajuste de pago para aprobar",
-      "body": "Hay una propuesta esperándote."
-    },
-    "payOn": {
-      "title": "Ajuste de pago aprobado",
-      "body": "Abre The First para verlo."
-    },
-    "rules": {
-      "title": "Reglas actualizadas",
-      "body": "Lee y confirma la versión nueva."
-    },
-    "warningDigest": {
-      "title": "Advertencias para revisar",
-      "body": "{review} personas llegaron a Revisión. {stale} notas esperan confirmación."
-    },
-    "approvalVoid": {
-      "title": "Anulación para aprobar",
-      "body": "{name} pide anular un ítem en la mesa {table}."
-    },
-    "approvalComp": {
-      "title": "Invitación para aprobar",
-      "body": "{name} pide invitar un ítem en la mesa {table}."
-    }
+  "positions": {
+    "polisher": "Polisher",
+    "busser": "Ayudante de mesero",
+    "runner": "Runner",
+    "server": "Mesero",
+    "captain": "Capitán",
+    "host": "Host",
+    "maitre_d": "Maître",
+    "expo": "Expo",
+    "barback": "Barback",
+    "bartender": "Bartender",
+    "head_bartender": "Jefe de barra",
+    "sommelier": "Sommelier",
+    "dishwasher": "Lavaplatos",
+    "prep_cook": "Cocinero de preparación",
+    "line_cook": "Cocinero de línea",
+    "sous_chef": "Sous chef",
+    "chef_de_cuisine": "Chef de cocina",
+    "floor_manager": "Manager de salón",
+    "agm": "Gerente general adjunto",
+    "gm": "Gerente general",
+    "director": "Director de operaciones",
+    "owner": "Dueño",
+    "dev": "Desarrollo"
+  },
+  "areas": {
+    "floor": "Salón",
+    "reception": "Recepción",
+    "pass": "Pase",
+    "bar": "Barra y vinos",
+    "kitchen": "Cocina",
+    "venue_management": "Gerencia del local",
+    "corporate": "Corporativo"
+  },
+  "layers": {
+    "support": "Apoyo",
+    "service": "Servicio",
+    "lead": "Líder",
+    "manager": "Gerencia del local",
+    "corporate": "Corporativo"
+  },
+  "reasons": {
+    "closeMissing": "Faltan {count} cierres",
+    "autoClosed": "{count} turnos se cerraron solos, para revisar",
+    "confirmationsLate": "{count} personas no confirmaron el horario después de 24 horas",
+    "confirmationsPending": "{count} personas no confirmaron el horario",
+    "shortagesOut": "{count} productos de barra agotados",
+    "shortagesLow": "{count} productos de barra con poco",
+    "peopleInReview": "{count} personas en Revisión",
+    "sideWorkLate": "{count} listas de trabajo atrasadas",
+    "proposalsWaiting": "{count} propuestas de advertencia esperan más de 24 horas",
+    "sideWorkOverLimit": "{count} turnos con propina pasados del límite de trabajo extra"
   }
 }
