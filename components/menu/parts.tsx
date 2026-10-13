@@ -2,29 +2,34 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Prohibit, Translate, WarningOctagon } from "@phosphor-icons/react";
+import { Prohibit, Sparkle, Translate, WarningOctagon } from "@phosphor-icons/react";
 import { cn } from "@/lib/cn";
 import { useLocale } from "@/lib/i18n-client";
 import { pickLocalized } from "@/lib/domain/i18n";
-import { money } from "@/lib/format";
 import type { Locale, Localized } from "@/lib/domain/types";
 import { LionMark } from "@/components/ui/brand";
 import { StatusChip } from "@/components/ui/status";
 
+/** A menu item as the staff screens show it. No prices (ADR 0018). */
 export type MenuItemView = {
   _id: string;
+  kind: string;
   name: Localized;
   description: Localized;
   ingredients: Localized;
   allergens: string[];
+  pairing: Localized | null;
+  course: number | null;
   category: string;
   tags: string[];
   sort: number;
   active: boolean;
-  basePriceCents: number;
-  priceCents: number;
-  priceOverridden: boolean;
+  version: number;
+  changedAt: number;
   available: boolean;
+  is86: boolean;
+  eightySixNote: string | null;
+  pendingAck: boolean;
   photoId: string | null;
   photoUrl: string | null;
 };
@@ -95,7 +100,7 @@ export function TagChips({ tags }: { tags: string[] }) {
   );
 }
 
-/** 4:3 photo, or a quiet placeholder with the monogram so a missing photo never looks broken. */
+/** 4:3 photo, or a quiet placeholder with the lion so a missing photo never looks broken. */
 export function MenuPhoto({ url, alt, className, priority }: { url: string | null; alt: string; className?: string; priority?: boolean }) {
   const { t } = useLocale();
   const [failed, setFailed] = useState(false);
@@ -120,7 +125,7 @@ export function MenuPhoto({ url, alt, className, priority }: { url: string | nul
 }
 
 export function MenuCard({ item, content }: { item: MenuItemView; content: Locale }) {
-  const { t, locale } = useLocale();
+  const { t } = useLocale();
   const name = pickLocalized(item.name, content);
   return (
     <li>
@@ -131,22 +136,28 @@ export function MenuCard({ item, content }: { item: MenuItemView; content: Local
         )}
       >
         <div className="relative">
-          <MenuPhoto url={item.photoUrl} alt={t("menu.photoOf", { name })} className={cn(!item.available && "grayscale")} />
-          {!item.available ? (
-            <span className="absolute top-2 left-2">
+          <MenuPhoto url={item.photoUrl} alt={t("menu.photoOf", { name })} className={cn((!item.available || item.is86) && "grayscale")} />
+          <span className="absolute top-2 left-2 flex flex-col items-start gap-1">
+            {item.is86 ? (
+              <StatusChip tone="review" size="sm" icon={<Prohibit weight="bold" aria-hidden />} className="shadow-card">
+                {t("eightySix.badge")}
+              </StatusChip>
+            ) : !item.available ? (
               <StatusChip tone="neutral" size="sm" icon={<Prohibit weight="bold" aria-hidden />} className="bg-surface-raised shadow-card">
                 {t("menu.unavailable")}
               </StatusChip>
-            </span>
-          ) : null}
+            ) : null}
+            {item.pendingAck ? (
+              <StatusChip tone="attention" size="sm" icon={<Sparkle weight="fill" aria-hidden />} className="shadow-card">
+                {item.version === 1 ? t("menu.new") : t("menu.changed")}
+              </StatusChip>
+            ) : null}
+          </span>
         </div>
         <div className="flex flex-1 flex-col gap-2 p-3.5">
-          <div className="flex items-start justify-between gap-3">
-            <h3 lang={content} className="text-body leading-snug font-semibold text-ink">
-              {name}
-            </h3>
-            <span className="shrink-0 font-mono text-small font-semibold text-ink tabular">{money(locale, item.priceCents)}</span>
-          </div>
+          <h3 lang={content} className="text-body leading-snug font-semibold text-ink">
+            {name}
+          </h3>
           <p lang={content} className="line-clamp-2 text-small text-ink-muted">
             {pickLocalized(item.description, content)}
           </p>

@@ -3,13 +3,17 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { HandPalm } from "@phosphor-icons/react";
-import { useCurrentShift, useMe } from "@/hooks/use-app";
+import { canDo, useCurrentShift, useMe } from "@/hooks/use-app";
 import { useT } from "@/lib/i18n-client";
 import { RequestSheet } from "./request-sheet";
 
+/** Screens with their own sticky action bar or no floor context: the button stays out of their way. */
+const HIDDEN = ["/me", "/manage", "/company", "/lead/pass", "/lead/preshift", "/lead/kitchen"];
+
 /**
- * The floating Request button (BLUEPRINT 4.2, ADR 0013): on every staff screen while the venue's shift is live,
- * above the tab bar and clear of the home indicator. Owners have no shift to ask in.
+ * The floating Request button (BLUEPRINT 4.2, ADR 0013): on staff screens while the venue's shift is live, above the
+ * tab bar and clear of the home indicator. Requests go to roles, never to a named person (ADR 0026). Help is open to
+ * everyone on the floor; water and clear to the positions that serve tables.
  */
 export function RequestButton() {
   const t = useT();
@@ -18,7 +22,8 @@ export function RequestButton() {
   const { shift } = useCurrentShift();
   const [open, setOpen] = useState(false);
   const live = shift && (shift.status === "open" || shift.status === "closing");
-  if (!me || !live || me.role === "owner" || me.role === "dev" || pathname.startsWith("/me") || pathname.startsWith("/inventory")) return null; // the count screen has its own sticky save bar
+  if (!me || !live || me.isCorporate || HIDDEN.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return null;
+  if (!canDo(me, "requests.service") && !canDo(me, "requests.help")) return null;
   return (
     <>
       <button

@@ -26,10 +26,12 @@ import enPeople from "./en/people.json";
 import esPeople from "./es/people.json";
 import enMine from "./en/me.json";
 import esMine from "./es/me.json";
+import enBar from "./en/bar.json";
+import esBar from "./es/bar.json";
 import enNotify from "./en/notify.json";
 import esNotify from "./es/notify.json";
 
 type Dict = { [k: string]: string | Dict };
 
-export const en: Dict = { ...enCommon, ...enAuth, ...enToday, ...enTasks, ...enRules, ...enMenu, ...enSchedule, ...enGuide, ...enFloor, ...enManage, ...enOwner, ...enPeople, ...enMine, ...enNotify };
-export const es: Dict = { ...esCommon, ...esAuth, ...esToday, ...esTasks, ...esRules, ...esMenu, ...esSchedule, ...esGuide, ...esFloor, ...esManage, ...esOwner, ...esPeople, ...esMine, ...esNotify };
+export const en: Dict = { ...enCommon, ...enAuth, ...enToday, ...enTasks, ...enRules, ...enMenu, ...enSchedule, ...enGuide, ...enFloor, ...enManage, ...enOwner, ...enPeople, ...enMine, ...enBar, ...enNotify };
+export const es: Dict = { ...esCommon, ...esAuth, ...esToday, ...esTasks, ...esRules, ...esMenu, ...esSchedule, ...esGuide, ...esFloor, ...esManage, ...esOwner, ...esPeople, ...esMine, ...esBar, ...esNotify };
