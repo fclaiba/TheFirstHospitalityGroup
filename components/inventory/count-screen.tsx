@@ -95,7 +95,7 @@ export function CountScreen() {
                 <div className="flex min-w-0 flex-col gap-1">
                   <span className="text-body font-semibold text-ink">{it.name}</span>
                   <span className="flex flex-wrap gap-x-3 text-small text-ink-muted">
-                    <span>{it.category}</span>
+                    <span className="capitalize">{it.category}</span>
                     {it.parLevel !== null ? <span>{t("inventory.par", { qty: tenths(it.parLevel) })}</span> : null}
                     {it.lastTenths !== null ? <span className="font-mono tabular">{t("inventory.last", { qty: tenths(it.lastTenths) })}</span> : null}
                   </span>

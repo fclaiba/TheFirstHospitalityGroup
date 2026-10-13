@@ -190,7 +190,9 @@ export const me = query({
       const venue = await ctx.db.get(id);
       if (venue) venues.push({ id: venue._id, name: venue.name, slug: venue.slug, services: venue.services });
     }
-    venues.sort((a, b) => a.name.localeCompare(b.name));
+    // The company order of venues (Midtown first), so every role starts on the same venue.
+    const order = new Map(venueIds.map((id, i) => [id as string, i]));
+    venues.sort((a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0));
     const company = await ctx.db.get(user.companyId);
     return {
       id: user._id,

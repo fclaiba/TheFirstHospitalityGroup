@@ -65,7 +65,7 @@ export function ChoiceTiles<T extends string>({ options, value, onChange, label,
 /** Segmented control (iOS): two to four mutually exclusive views. */
 export function Segmented<T extends string>({ options, value, onChange, label, className }: { options: Array<{ value: T; label: string; badge?: number }>; value: T; onChange: (v: T) => void; label: string; className?: string }) {
   return (
-    <div role="tablist" aria-label={label} className={cn("grid auto-cols-fr grid-flow-col gap-1 rounded-control bg-surface p-1", className)}>
+    <div role="tablist" aria-label={label} className={cn("flex gap-1 rounded-control bg-surface p-1", className)}>
       {options.map((o) => {
         const on = o.value === value;
         return (
@@ -76,7 +76,7 @@ export function Segmented<T extends string>({ options, value, onChange, label, c
             aria-selected={on}
             onClick={() => onChange(o.value)}
             className={cn(
-              "pressable inline-flex min-h-10 items-center justify-center gap-1.5 rounded-input px-2 text-small font-semibold transition-colors",
+              "pressable inline-flex min-h-10 flex-auto items-center justify-center gap-1.5 rounded-input px-2 text-small font-semibold whitespace-nowrap transition-colors",
               on ? "bg-surface-raised text-ink shadow-card" : "hover-ink text-ink-muted",
             )}
           >

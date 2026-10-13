@@ -18,7 +18,7 @@ export function RequestButton() {
   const { shift } = useCurrentShift();
   const [open, setOpen] = useState(false);
   const live = shift && (shift.status === "open" || shift.status === "closing");
-  if (!me || !live || me.role === "owner" || me.role === "dev" || pathname.startsWith("/me")) return null;
+  if (!me || !live || me.role === "owner" || me.role === "dev" || pathname.startsWith("/me") || pathname.startsWith("/inventory")) return null; // the count screen has its own sticky save bar
   return (
     <>
       <button
