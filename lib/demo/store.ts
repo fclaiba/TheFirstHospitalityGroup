@@ -27,6 +27,7 @@ export const useDemoStore = create<Store>()(
 );
 
 const timers = new Set<ReturnType<typeof setTimeout>>();
+let pendingCommit: Promise<unknown> = Promise.resolve();
 
 export function getDemoState(): DemoState {
   const { hydrated: _h, seeding: _s, ...rest } = useDemoStore.getState();
@@ -35,10 +36,19 @@ export function getDemoState(): DemoState {
 
 /** Runs a mutation through the engine, keeps its writes, and arms what it scheduled (requests.escalate at 90 s). */
 export async function commit(name: string, args: unknown, opts: { seeding?: boolean } = {}): Promise<unknown> {
+  // Wait before joining the queue so bootstrap can populate an empty store.
   if (!opts.seeding) await whenReady();
+  // Each transaction reads the last committed state. Concurrent UI saves must not overwrite each other.
+  const next = pendingCommit.then(() => commitOne(name, args));
+  pendingCommit = next.catch(() => undefined);
+  return next;
+}
+
+async function commitOne(name: string, args: unknown): Promise<unknown> {
   const { runMutation } = await loadEngine();
   const { result, state, scheduled } = await runMutation(getDemoState(), name, args);
-  useDemoStore.setState(state);
+  // A sign-out or account switch while the handler awaited must remain effective.
+  useDemoStore.setState({ ...state, session: useDemoStore.getState().session });
   for (const s of scheduled) {
     const id = setTimeout(
       () => {
