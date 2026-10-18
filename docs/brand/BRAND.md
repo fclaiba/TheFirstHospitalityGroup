@@ -47,7 +47,7 @@ Regenerate every logo file with `python3 docs/brand/_src/generate-logos.py docs/
 | Surface | `--color-surface` | `#F6F7F3` | Grouped areas, input fill |
 | Secondary | `--color-ink` | `#111311` | Text, navigation, secondary buttons. 18.7:1 on white |
 | Muted text | `--color-ink-muted` | `#5E625B` | 6.2:1 on white |
-| **Brand: burgundy** | `--color-brand` | `#6B2337` | The lion, the primary action, the active tab, progress. White text on it: 6.1:1 |
+| **Brand: burgundy** | `--color-brand` | `#6B2337` | The lion, the primary action, the active tab, progress. White text on it: 10.9:1 |
 | Brand pressed | `--color-brand-pressed` | `#50182A` | 8.7:1 with white |
 | Burgundy tints | `--color-burgundy-50/100/200` | `#FAF1F4` `#F2DFE5` `#E4BFCB` | Selected rows, progress track, quiet highlights |
 | Control border | `--color-line-strong` | `#858A7F` | 3.5:1 on white (WCAG 1.4.11) |
@@ -62,7 +62,7 @@ Regenerate every logo file with `python3 docs/brand/_src/generate-logos.py docs/
 | Follow-up | `#9A3B0B` on `#FDE8D7` | 5.9:1 |
 | Review | `#912018` on `#FEE4E2` | 7.2:1 |
 
-Burgundy is never used for "done" or for a warning state. Light is the default theme. An optional dark theme exists for dim dining rooms (brand lifts to `#D6A6B5` with ink text, 8.6:1); it is a setting, never the brand's face.
+Burgundy is never used for "done" or for a warning state. Light is the default theme. An optional dark theme exists for dim dining rooms (brand lifts to `#D6A6B5` with ink text, 8.9:1); it is a setting, never the brand's face.
 
 ## 4. Type
 | Role | Face | Size | Notes |

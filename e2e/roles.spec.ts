@@ -14,7 +14,8 @@ for (const [role, person, home] of [
   test(`${role}: every primary tab opens an accessible screen`, async ({ page }, info) => {
     await signInAs(page, person!);
     await expect(page).toHaveURL(new RegExp(`${home}$`));
-    const links = page.locator("nav a");
+    await expect(page.locator("main:visible h1").first()).toBeVisible();
+    const links = page.locator("nav:visible a");
     const count = await links.count();
     expect(count).toBeGreaterThan(0);
     expect(count).toBeLessThanOrEqual(5);
@@ -23,7 +24,7 @@ for (const [role, person, home] of [
     await page.screenshot({ path: `.tmp/preview-${role}-${info.project.name}.png`, fullPage: true });
     for (const href of hrefs) {
       await page.goto(href);
-      await expect(page.locator("main h1").first()).toBeVisible();
+      await expect(page.locator("main:visible h1").first()).toBeVisible();
       await expect(page.locator("main")).not.toContainText(/You do not have access|No tienes acceso|Something went wrong|Algo salió mal/);
       await expectAccessible(page);
     }

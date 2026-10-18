@@ -138,7 +138,7 @@ export function MyWeekScreen() {
                           </span>
                         </div>
                         {future ? (
-                          <Button variant="quiet" size="md" icon={<ArrowsLeftRight weight="bold" />} onClick={() => setSwapFor(b as Block)}>
+                          <Button variant="quiet" size="md" disabled={!online} icon={<ArrowsLeftRight weight="bold" />} onClick={() => setSwapFor(b as Block)}>
                             {t("schedule.swapAction")}
                           </Button>
                         ) : null}
@@ -179,7 +179,7 @@ export function MyWeekScreen() {
                   s.claim ? (
                     <StateChip state={s.claim.status === "approved" ? "confirmed" : s.claim.status === "denied" ? "not_yet" : "pending"} size="sm" />
                   ) : (
-                    <Button size="md" variant="secondary" loading={claim.busy} onClick={() => void claim.run({ shiftId: s._id })}>
+                    <Button size="md" variant="secondary" disabled={!online} loading={claim.busy} onClick={() => void claim.run({ shiftId: s._id })}>
                       {t("schedule.claim")}
                     </Button>
                   )
@@ -197,10 +197,10 @@ export function MyWeekScreen() {
               <li key={s._id} className="flex flex-col gap-3 rounded-card border border-attention-fg/30 bg-attention-bg p-4">
                 <p className="text-body text-ink">{t("schedule.swapIncoming", { name: s.otherName, date: s.date ? `${weekdayShort(locale, s.date)} ${dayMonth(locale, s.date)}` : "" })}</p>
                 <div className="flex flex-wrap gap-2">
-                  <Button size="md" loading={answer.busy} onClick={() => void answer.run({ swapId: s._id, accept: true })}>
+                  <Button size="md" disabled={!online} loading={answer.busy} onClick={() => void answer.run({ swapId: s._id, accept: true })}>
                     {t("schedule.swapAccept")}
                   </Button>
-                  <Button size="md" variant="secondary" loading={answer.busy} onClick={() => void answer.run({ swapId: s._id, accept: false })}>
+                  <Button size="md" variant="secondary" disabled={!online} loading={answer.busy} onClick={() => void answer.run({ swapId: s._id, accept: false })}>
                     {t("schedule.swapDecline")}
                   </Button>
                 </div>
@@ -221,7 +221,7 @@ export function MyWeekScreen() {
                 subtitle={t(`schedule.swapStatus.${s.status}`)}
                 trailing={
                   s.mine && (s.status === "asked" || s.status === "accepted") ? (
-                    <ConfirmButton size="md" confirmLabel={t("schedule.cancelRequest")} loading={cancelSwap.busy} onConfirm={() => void cancelSwap.run({ swapId: s._id })}>
+                    <ConfirmButton size="md" disabled={!online} confirmLabel={t("schedule.cancelRequest")} loading={cancelSwap.busy} onConfirm={() => void cancelSwap.run({ swapId: s._id })}>
                       {t("common.cancel")}
                     </ConfirmButton>
                   ) : null
@@ -236,7 +236,7 @@ export function MyWeekScreen() {
                 subtitle={t(`schedule.timeOffStatus.${o.status}`)}
                 trailing={
                   o.status === "pending" ? (
-                    <ConfirmButton size="md" confirmLabel={t("schedule.cancelRequest")} loading={cancelOff.busy} onConfirm={() => void cancelOff.run({ timeOffId: o._id })}>
+                    <ConfirmButton size="md" disabled={!online} confirmLabel={t("schedule.cancelRequest")} loading={cancelOff.busy} onConfirm={() => void cancelOff.run({ timeOffId: o._id })}>
                       {t("common.cancel")}
                     </ConfirmButton>
                   ) : null
@@ -247,7 +247,7 @@ export function MyWeekScreen() {
         ) : (
           <p className="px-1 text-body text-ink-muted">{t("schedule.requestsEmpty")}</p>
         )}
-        <Button variant="secondary" icon={<Plus weight="bold" />} onClick={() => setSheet("timeOff")} className="self-start" disabled={!venues.length}>
+        <Button variant="secondary" icon={<Plus weight="bold" />} onClick={() => setSheet("timeOff")} className="self-start" disabled={!online || !venues.length}>
           {t("schedule.timeOffAsk")}
         </Button>
       </Section>
@@ -256,14 +256,14 @@ export function MyWeekScreen() {
         <p className="px-1 text-body text-ink-muted">
           {availability === undefined ? "" : availability.length ? availability.map((a) => `${t(`schedule.weekdays.${a.weekday}`)}: ${a.available ? t("schedule.times", { from: a.from, to: a.to }) : t("schedule.unavailable")}`).join(". ") : t("schedule.availabilityNone")}
         </p>
-        <Button variant="secondary" icon={<HandPalm weight="bold" />} onClick={() => setSheet("availability")} className="self-start" disabled={availability === undefined}>
+        <Button variant="secondary" icon={<HandPalm weight="bold" />} onClick={() => setSheet("availability")} className="self-start" disabled={!online || availability === undefined}>
           {t("schedule.availabilityEdit")}
         </Button>
       </Section>
 
-      {swapFor ? <SwapSheet shift={swapFor} onClose={() => setSwapFor(null)} /> : null}
-      {sheet === "timeOff" ? <TimeOffSheet venues={venues} onClose={() => setSheet(null)} /> : null}
-      {sheet === "availability" && availability ? <AvailabilitySheet rows={availability} onClose={() => setSheet(null)} /> : null}
+      {online && swapFor ? <SwapSheet shift={swapFor} onClose={() => setSwapFor(null)} /> : null}
+      {online && sheet === "timeOff" ? <TimeOffSheet venues={venues} onClose={() => setSheet(null)} /> : null}
+      {online && sheet === "availability" && availability ? <AvailabilitySheet rows={availability} onClose={() => setSheet(null)} /> : null}
     </div>
   );
 }

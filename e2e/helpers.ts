@@ -12,6 +12,11 @@ export async function signInAs(page: Page, name: RegExp | string, opts: { locale
 
 /** axe: no serious or critical violations (BLUEPRINT 15). */
 export async function expectAccessible(page: Page) {
+  // Scan settled text, not a transient blend during a toast, sheet, or route entrance.
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    await Promise.all(document.getAnimations().filter((a) => Number.isFinite(a.effect?.getComputedTiming().endTime)).map((a) => a.finished.catch(() => undefined)));
+  });
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
   const bad = results.violations.filter((v) => v.impact === "serious" || v.impact === "critical");
   expect(bad.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).slice(0, 3).join(", ")}`)).toEqual([]);

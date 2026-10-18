@@ -24,8 +24,8 @@
   --color-burgundy-100: #f2dfe5;
   --color-burgundy-200: #e4bfcb;
   --color-burgundy-300: #d6a6b5;
-  --color-burgundy-500: #6b2337;     /* brand, 11.0:1 with white text */
-  --color-burgundy-600: #50182a;     /* pressed, 13.8:1 with white text */
+  --color-burgundy-500: #6b2337;     /* brand, 10.9:1 with white text */
+  --color-burgundy-600: #50182a;     /* pressed, 14.0:1 with white text */
   --color-burgundy-800: #3b1220;
   --color-burgundy-900: #260b14;
   --color-brand: var(--color-burgundy-500);

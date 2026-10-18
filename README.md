@@ -18,6 +18,14 @@ dishwasher, prep cook, line cook, sous chef, chef de cuisine, floor manager, AGM
 
 To connect the real backend and go live: `docs/runbooks/connect-convex.md`.
 
+Current delivery is frontend-only with the browser Convex mock. Leave `NEXT_PUBLIC_CONVEX_URL` unset; no Convex
+account, deploy, or external credentials are needed. Changes are local to this browser. On Windows, if Turbopack
+cannot start its loader subprocesses, use `npm run build:webpack` followed by `npm run start`, or `npm run dev:webpack`.
+
+The primary brand is burgundy (`#6B2337`, ADR 0029). The final lion is pending. Replace `public/brand/mark.svg` and run `npm run gen:brand` to regenerate install icons.
+The shared UI mark reads that asset directly. The schedule remains readable after an offline reload in preview;
+confirmations and schedule requests wait until the device is online.
+
 ## Quality gates (BLUEPRINT 15)
 ```bash
 npm run lint && npm run typecheck
@@ -33,5 +41,5 @@ After adding a Convex module: `npm run gen:api` (writes `convex/_generated/api.d
 - `convex/`: schema and functions; `lib/domain/`: pure rules shared by backend and UI; `lib/demo/`: preview engine.
 - `app/`: routes by group `(public)`, `(app)` every position, `(lead)` area leads, `(manage)` venue management, `(company)` director and owner; `components/ui/`: the primitives.
 - `messages/<locale>/<namespace>.json`: every UI string in English and neutral Spanish.
-- Brand: `docs/brand/` (the lion in martini green). Owner-facing documents in Spanish: `EMPEZAR.md`, `docs/PROPUESTA-COMERCIAL.md`, `docs/PREGUNTAS-DUENO.md`.
+- Brand: `docs/brand/`; delivery mark: `public/brand/mark.svg` (neutral placeholder pending the final lion). Owner-facing documents in Spanish: `EMPEZAR.md`, `docs/PROPUESTA-COMERCIAL.md`, `docs/PREGUNTAS-DUENO.md`.
 - Clickable prototype for the owner: `prototype/index.html` (works offline).

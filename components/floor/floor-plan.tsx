@@ -35,8 +35,8 @@ export function FloorPlan({
   const t = useT();
   const mine = new Set(highlight ?? []);
   return (
-    <div className={cn("-mx-4 overflow-x-auto px-4 pb-1 [touch-action:pan-x_pan-y]", className)}>
-      <div role="group" aria-label={t("floor.planLabel")} className="relative aspect-[4/3] min-w-[34rem] overflow-hidden rounded-card border border-line bg-surface">
+    <div role="group" aria-label={t("floor.planLabel")} tabIndex={0} className={cn("-mx-4 overflow-x-auto px-4 pb-1 [touch-action:pan-x_pan-y]", className)}>
+      <div className="relative aspect-[4/3] min-w-[34rem] overflow-hidden rounded-card border border-line bg-surface">
         {sections.map((s) => {
           if (!s.tables.length) return null;
           const xs = s.tables.map((tb) => tb.x);

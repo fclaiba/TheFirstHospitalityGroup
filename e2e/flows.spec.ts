@@ -175,7 +175,7 @@ test("the mock schedule survives an offline reload without accepting confirmatio
   const week = await page.locator("main ol").innerText();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.locator("main ol")).toHaveText(week);
+  await expect(page.locator("main ol")).toHaveText(week, { useInnerText: true });
   await expect(confirm).toBeDisabled();
   await expect(page.getByRole("button", { name: /Ask for a swap|Pedir un cambio/ }).first()).toBeDisabled();
   await context.setOffline(false);

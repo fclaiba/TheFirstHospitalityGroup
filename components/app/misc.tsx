@@ -40,6 +40,7 @@ export function AppToaster() {
         classNames: {
           toast: "!rounded-card !border !border-line !bg-surface-raised !text-ink !shadow-float !font-sans !text-body",
           description: "!text-ink-muted",
+          title: "!text-ink !font-semibold",
           success: "[&_[data-icon]]:!text-ok-fg",
           error: "[&_[data-icon]]:!text-danger",
         },

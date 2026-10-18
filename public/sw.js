@@ -4,12 +4,12 @@
  * - Navigations: network-first with the last good copy offline.
  * - Push: shows the notification and routes the click. Never caches API or Convex traffic.
  */
-const VERSION = "tf-v2";
+const VERSION = "tf-v3";
 const STATIC = `${VERSION}-static`;
 const PAGES = `${VERSION}-pages`;
 const PHOTOS = `${VERSION}-photos`;
 const PHOTO_CAP_BYTES = 50 * 1024 * 1024;
-const PRECACHE = ["/", "/manifest.webmanifest", "/icon.svg", "/icon-192.png", "/today", "/schedule", "/menu"];
+const PRECACHE = ["/", "/manifest.webmanifest", "/brand/mark.svg", "/icon.svg", "/icon-192.png", "/today", "/schedule", "/menu"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
