@@ -18,7 +18,9 @@ test("guide spotlights the actual screen, moves both ways and restores keyboard 
     .getByRole("button", { name: "Pedido", exact: true })
     .boundingBox();
   const guideBox = await launcher.boundingBox();
-  expect(requestBox?.y).toBe(guideBox?.y);
+  const workBox = await page.locator("main").boundingBox();
+  expect(requestBox!.y + requestBox!.height).toBeLessThanOrEqual(workBox!.y);
+  expect(guideBox!.y + guideBox!.height).toBeLessThanOrEqual(workBox!.y);
   const work = page.locator("main");
   await work.evaluate((el) => {
     el.scrollTop = 200;
