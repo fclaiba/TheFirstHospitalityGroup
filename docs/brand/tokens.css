@@ -8,6 +8,12 @@
  */
 
 :root {
+  --guide-bar-height: calc(var(--size-target) + var(--safe-top, 0px));
+  --tour-blur: 6px;
+  --tour-gap: 16px;
+  --tour-target-pad: 6px;
+  --tour-panel-width: 384px;
+  --tour-panel-height: 55dvh;
   /* Neutrals: white main, ink secondary (green-biased so it sits with the burgundy) */
   --color-canvas: #ffffff;        /* page background */
   --color-surface: #f6f7f3;       /* grouped areas, input fill */

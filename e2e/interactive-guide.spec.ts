@@ -20,8 +20,10 @@ test("guide spotlights the actual screen, moves both ways and restores keyboard 
   const guideBox = await launcher.boundingBox();
   expect(requestBox?.y).toBe(guideBox?.y);
   const work = page.locator("main");
-  await work.evaluate(el => { el.scrollTop = 200; });
-  const originalScroll = await work.evaluate(el => el.scrollTop);
+  await work.evaluate((el) => {
+    el.scrollTop = 200;
+  });
+  const originalScroll = await work.evaluate((el) => el.scrollTop);
   expect(originalScroll).toBeGreaterThan(0);
   await launcher.click();
   const dialog = page.getByRole("dialog", {
@@ -51,7 +53,7 @@ test("guide spotlights the actual screen, moves both ways and restores keyboard 
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(launcher).toBeFocused();
-  expect(await work.evaluate(el => el.scrollTop)).toBe(originalScroll);
+  expect(await work.evaluate((el) => el.scrollTop)).toBe(originalScroll);
   expect(
     await page.evaluate(() => localStorage.getItem("tfhg-preview-v1")),
   ).toBe(before);

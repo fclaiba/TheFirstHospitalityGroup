@@ -20,7 +20,7 @@ import type { Locale } from "@/lib/domain/types";
 export default function MessageDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { t, locale } = useLocale();
-  const messageId = id as Id<"messages">;
+  const messageId = decodeURIComponent(id) as Id<"messages">;
   const m = useQuery(api.messages.get, { messageId });
   const markRead = useMutation(api.messages.markRead);
   const confirm = useRun(api.messages.confirm, { success: t("messages.confirmDone") });

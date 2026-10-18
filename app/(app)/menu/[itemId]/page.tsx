@@ -8,7 +8,7 @@ export default function MenuItemPage() {
   const { itemId } = useParams<{ itemId: string }>();
   return (
     <RequireAuth action="menu.view">
-      <MenuDetail itemId={itemId} />
+      <MenuDetail itemId={decodeURIComponent(itemId)} />
     </RequireAuth>
   );
 }

@@ -5,6 +5,7 @@
     "full": "Open the complete guide",
     "save": "Review the information before saving. Required fields are labeled. A success message confirms the change; if a field is invalid, correct the error and try again.",
     "routes": {
+      "guide": "Choose your position. Review how to prepare, work and hand over. Open Training to practice and request a review.",
       "actions": "Open your assignment, follow the instructions and submit evidence. Supervisors check the result and record what happens next.",
       "actionsNew": "Choose one responsible person below you in the reporting chain, write clear bilingual instructions and set a New York deadline.",
       "0": "Review pending confirmations first, then your shift and tasks.",

@@ -1,5 +1,6 @@
 // Most-specific prefixes win; detail screens inherit the instructions of their module.
 export const SCREEN_GUIDES: Array<[path: string, key: string, section: string | null]> = [
+  ["/guide", "guide", null],
   ["/actions", "actions", null],
   ["/actions/new", "actionsNew", null],
   ["/training", "training", null],

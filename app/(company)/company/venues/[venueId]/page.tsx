@@ -9,7 +9,7 @@ export default function CompanyVenuePage() {
   const { venueId } = useParams<{ venueId: string }>();
   return (
     <RequireAuth action="venue.state">
-      <VenueDetail venueId={venueId as Id<"venues">} />
+      <VenueDetail venueId={decodeURIComponent(venueId) as Id<"venues">} />
     </RequireAuth>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import type { FunctionReturnType } from "convex/server";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
@@ -18,7 +18,13 @@ import {
   trainingRequestInput,
   trainingReviewInput,
 } from "@/schemas";
-import { PageHeader, Section, Card, List, ButtonRow } from "@/components/ui/layout";
+import {
+  PageHeader,
+  Section,
+  Card,
+  List,
+  ButtonRow,
+} from "@/components/ui/layout";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
 import { Button, ButtonLink, ConfirmButton } from "@/components/ui/button";
 import {
@@ -266,12 +272,32 @@ export function TrainingScreen() {
               <p className="text-small text-ink-muted">
                 {t("training.archivedBody")}
               </p>
-            {data.archived.map((r) => (
-              <div key={r.recordId} className="flex min-w-0 flex-col gap-2">
-                <List><ButtonRow title={pickLocalized(r.label, locale)} subtitle={t("training.version", { version: r.version })} chevron expanded={archived === r.recordId} controls={`training-record-${r.recordId}`} onClick={() => setArchived(archived === r.recordId ? null : r.recordId)} /></List>
-                <div id={`training-record-${r.recordId}`} hidden={archived !== r.recordId}>{archived === r.recordId ? <Card><ArchivedEvidence recordId={r.recordId} /></Card> : null}</div>
-              </div>
-            ))}
+              {data.archived.map((r) => (
+                <div key={r.recordId} className="flex min-w-0 flex-col gap-2">
+                  <List>
+                    <ButtonRow
+                      title={pickLocalized(r.label, locale)}
+                      subtitle={t("training.version", { version: r.version })}
+                      chevron
+                      expanded={archived === r.recordId}
+                      controls={`training-record-${r.recordId}`}
+                      onClick={() =>
+                        setArchived(archived === r.recordId ? null : r.recordId)
+                      }
+                    />
+                  </List>
+                  <div
+                    id={`training-record-${r.recordId}`}
+                    hidden={archived !== r.recordId}
+                  >
+                    {archived === r.recordId ? (
+                      <Card>
+                        <ArchivedEvidence recordId={r.recordId} />
+                      </Card>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
             </Section>
           ) : null}
         </>
@@ -422,9 +448,13 @@ export function TrainingReviewScreen() {
 function ProgramForm({
   program,
   venueId,
+  focusVersion,
+  onPublished,
 }: {
   program: Program;
   venueId: Id<"venues">;
+  focusVersion: boolean;
+  onPublished: (version: number) => void;
 }) {
   const { t, locale } = useLocale(),
     online = useOnline();
@@ -436,6 +466,15 @@ function ProgramForm({
     silent: true,
   });
   const error = useTrainingError(publish.error, publish.message);
+  const versionBanner = useRef<HTMLParagraphElement>(null);
+  useLayoutEffect(() => {
+    if (!focusVersion) return;
+    versionBanner.current?.focus({ preventScroll: true });
+    versionBanner.current?.scrollIntoView({
+      block: "start",
+      behavior: "instant",
+    });
+  }, [focusVersion]);
   const save = async () => {
     const input = {
       venueId,
@@ -446,11 +485,18 @@ function ProgramForm({
     };
     const parsed = trainingProgramInput.safeParse(input);
     setInvalid(!parsed.success);
-    if (parsed.success) await publish.run({ venueId, ...parsed.data });
+    if (parsed.success) {
+      const result = await publish.run({ venueId, ...parsed.data });
+      if (result) onPublished(result.version);
+    }
   };
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-small text-ink-muted">
+      <p
+        ref={versionBanner}
+        tabIndex={-1}
+        className="text-small text-ink-muted"
+      >
         {t("training.version", { version: program.version })}
       </p>
       {(["en", "es"] as const).map((lang) => (
@@ -558,6 +604,10 @@ export function TrainingSetupScreen() {
   const { t } = useLocale(),
     { venueId } = useVenue();
   const [position, setPosition] = useState<Position>("server");
+  const [published, setPublished] = useState<{
+    position: Position;
+    version: number;
+  } | null>(null);
   const program = useQuery(
     api.training.program,
     venueId ? { venueId, position } : "skip",
@@ -589,6 +639,11 @@ export function TrainingSetupScreen() {
           key={`${venueId}:${position}:${program.version}`}
           program={program}
           venueId={venueId}
+          focusVersion={
+            published?.position === position &&
+            published.version === program.version
+          }
+          onPublished={(version) => setPublished({ position, version })}
         />
       ) : (
         <ScreenSkeleton />

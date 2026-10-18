@@ -5,6 +5,7 @@
     "full": "Abrir la guía completa",
     "save": "Revisa la información antes de guardar. Los campos obligatorios están identificados. Un mensaje confirma el cambio; si un campo es inválido, corrige el error e inténtalo de nuevo.",
     "routes": {
+      "guide": "Elige tu puesto. Revisa cómo preparar, trabajar y entregar el turno. Abre Formación para practicar y solicitar revisión.",
       "actions": "Abre tu pendiente, sigue las instrucciones y presenta evidencia. Los superiores revisan el resultado y registran el siguiente paso.",
       "actionsNew": "Elige una persona responsable debajo de ti en la cadena de supervisión, escribe instrucciones claras en ambos idiomas y fija un plazo de Nueva York.",
       "0": "Revisa primero las confirmaciones pendientes y luego tu turno y tareas.",

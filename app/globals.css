@@ -198,7 +198,7 @@ button, [role="button"], [role="tab"], .no-select { user-select: none; -webkit-u
   p { text-wrap-style: pretty; }
 }
 
-.app-shell { min-height: 100dvh; }
+.app-shell { height: calc(100dvh - var(--guide-bar-height)); overflow: hidden; }
 .tabular { font-variant-numeric: tabular-nums; }
 .scrollbar-none { scrollbar-width: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
@@ -271,4 +271,29 @@ button, [role="button"], [role="tab"], .no-select { user-select: none; -webkit-u
 @media print {
   .no-print { display: none !important; }
   html, body { background: #fff; color: #000; }
+}
+
+:root {
+  --guide-bar-height: calc(var(--size-target) + var(--safe-top, 0px));
+  --size-target: var(--spacing-target);
+  --tour-blur: 6px;
+  --tour-gap: 16px;
+  --tour-target-pad: 6px;
+  --tour-panel-width: 384px;
+  --tour-panel-height: 55dvh;
+}
+.tour-modal::backdrop { background: transparent; }
+
+:where(button, a, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-block-start: calc(var(--guide-bar-height) + var(--spacing-target-lg) + var(--tour-gap));
+  scroll-margin-block-end: calc(var(--nav-height) + var(--safe-bottom) + var(--spacing-target-lg));
+}
+
+.app-shell main {
+  scroll-padding-block-start: var(--tour-gap);
+  scroll-padding-block-end: calc(var(--spacing-target-lg) + var(--tour-gap) * 2);
+}
+.app-shell main :where(button, a, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-block-start: var(--tour-gap);
+  scroll-margin-block-end: var(--tour-gap);
 }

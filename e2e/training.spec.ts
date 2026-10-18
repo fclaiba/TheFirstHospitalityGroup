@@ -132,8 +132,12 @@ test("published program versions preserve earlier learner evidence", async ({
   await expect(
     page.getByText("Program version 2", { exact: true }),
   ).toBeVisible();
-  await expect(page.getByText("Program version 2", { exact: true })).toBeInViewport();
-  await expect(page.getByText("Program version 2", { exact: true })).toBeFocused();
+  await expect(
+    page.getByText("Program version 2", { exact: true }),
+  ).toBeInViewport();
+  await expect(
+    page.getByText("Program version 2", { exact: true }),
+  ).toBeFocused();
   await expectAccessible(page);
   await signInAs(page, /Ana Pérez/);
   await page.goto("/training");
@@ -146,14 +150,24 @@ test("published program versions preserve earlier learner evidence", async ({
   await expect(
     page.getByRole("heading", { name: "Evidencia de programas anteriores" }),
   ).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(page.viewportSize()!.width);
   const earlier = page.getByRole("button", { name: /Versión del programa 1/ });
   await expect(earlier).toHaveAttribute("aria-expanded", "false");
   await earlier.click();
   await expect(earlier).toHaveAttribute("aria-expanded", "true");
-  const archive = page.locator("section").filter({ has: page.getByRole("heading", { name: "Evidencia de programas anteriores" }) });
+  const archive = page
+    .locator("section")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "Evidencia de programas anteriores",
+      }),
+    });
   await archive.getByText("Historial de evidencia", { exact: true }).click();
-  await expect(archive.getByText("Espera revisión", { exact: true })).toBeVisible();
+  await expect(
+    archive.getByText("Espera revisión", { exact: true }),
+  ).toBeVisible();
   await expectAccessible(page);
 });
 
