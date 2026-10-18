@@ -132,6 +132,8 @@ test("published program versions preserve earlier learner evidence", async ({
   await expect(
     page.getByText("Program version 2", { exact: true }),
   ).toBeVisible();
+  await expect(page.getByText("Program version 2", { exact: true })).toBeInViewport();
+  await expect(page.getByText("Program version 2", { exact: true })).toBeFocused();
   await expectAccessible(page);
   await signInAs(page, /Ana Pérez/);
   await page.goto("/training");
