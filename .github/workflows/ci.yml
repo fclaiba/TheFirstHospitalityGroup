@@ -79,9 +79,7 @@ jobs:
       - name: Codegen and typecheck against the deployment
         if: env.CONVEX_DEPLOY_KEY != ''
         run: npx convex codegen --typecheck enable
-      - name: Deploy functions (main only)
-        if: env.CONVEX_DEPLOY_KEY != '' && github.ref == 'refs/heads/main'
-        run: npx convex deploy
+      # Backend releases are explicit, separately authorized operations. A frontend merge never deploys functions.
 
   e2e:
     if: github.event_name == 'pull_request'
