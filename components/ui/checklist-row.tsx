@@ -4,7 +4,7 @@ import { Camera, Check, Clock } from "@phosphor-icons/react";
 import { cn } from "@/lib/cn";
 
 /**
- * Checklist row (BLUEPRINT 4.2): 56 px, the check fills martini green with a 120 ms tick, a photo badge when evidence is
+ * Checklist row (BLUEPRINT 4.2): 56 px, the check fills burgundy with a 120 ms tick, a photo badge when evidence is
  * needed, a late badge for managers only. The whole row is the target.
  */
 export function ChecklistRow({

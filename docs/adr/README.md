@@ -28,6 +28,8 @@ ADRs are never edited after acceptance; a later ADR supersedes or amends them. T
 | [0022](0022-confirmations-schedule-menu.md) | Confirmations of schedule and menu | accepted |  |
 | [0023](0023-bar-shortages-list.md) | Bar shortage list | accepted |  |
 | [0024](0024-tip-policy-configuration.md) | Tip policy as configuration only | accepted (P3) |  |
-| [0025](0025-executive-brand-martini-lion.md) | Executive brand: martini green and the lion | accepted |  |
+| [0025](0025-executive-brand-martini-lion.md) | Executive brand: martini green and the lion | accepted, color superseded by 0029 | Executive direction and typography retained |
 | [0026](0026-chain-of-supervision.md) | Chain of supervision, no peer to peer | accepted |  |
 | [0027](0027-states-not-scores.md) | States, not scores | accepted |  |
+| [0028](0028-preview-runs-convex-handlers.md) | Preview executes the real Convex handlers in the browser | accepted, refines 0010 | Browser mock and test harness share the registered handlers |
+| [0029](0029-burgundy-brand.md) | Burgundy primary brand | accepted | Owner request, 2026-10-18 |
