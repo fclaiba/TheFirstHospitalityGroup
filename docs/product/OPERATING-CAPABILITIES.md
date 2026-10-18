@@ -28,6 +28,8 @@ Interfaces: `training.mine`, `training.requestReview`, `training.queue` (paginat
 
 ## Verification and continuation
 
+Current action increment: a manager assigns one named subordinate with instructions and due time, optionally from a submitted close. The person starts and submits evidence; a superior verifies or returns it. Reassignment preserves history; no closed report is rewritten. Due items widen through the configured chain, director and owner. Test the entire handoff, privacy, concurrency, source idempotence, cross-shift persistence, bounded pagination, offline behavior and escalation. This is one part of the full operating objective, not its completion.
+
 Required now: all 22 role playbooks; immutable programs; learner-to-supervisor-to-learner round trip; needs-practice resubmission; duplicate/stale/concurrent review refusal; cross-venue/company and peer/self restrictions; evidence preserved across revisions and reload; EN/ES parity, keyboard/mobile/axe, offline write controls, route budgets and existing journey regression.
 
 The full goal remains active after this increment. Next audits must address durable cross-shift corrective follow-up, owner/director action routing, complete real operator journeys, venue-content validation and production usability/load/restore evidence. None is proven complete by the training feature alone.
