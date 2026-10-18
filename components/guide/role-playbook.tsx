@@ -139,7 +139,7 @@ export function RolePlaybook() {
         {(["before", "during", "after"] as const).map((phase, i) => {
           const target = destinations(role)[i]!;
           const props = {
-            title: `${t(`operations.${phase}`)} Â· ${t(target.label)}`,
+            title: `${t(`operations.${phase}`)} · ${t(target.label)}`,
             subtitle: t(`operations.roles.${role}.${phase}`),
           };
           return canDo(me, target.action) ? (
