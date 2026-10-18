@@ -10,6 +10,7 @@
     "exit": "Salir de la guía",
     "step": "Paso {current} de {total}",
     "screen": "Esta pantalla",
+    "task": "Completa {title} aquí. Revisa las opciones disponibles y cierra la guía para continuar. Esta guía no envía ni guarda nada.",
     "navigation": "Tu navegación principal",
     "intro": "Empieza por el propósito de esta pantalla. Después sigue los controles disponibles en orden. Puedes salir de la guía y volver cuando la necesites.",
     "login": "Elige una cuenta de ejemplo para explorar un puesto. Para una cuenta real, usa tu usuario y contraseña.",

@@ -6,7 +6,12 @@ import type { Candidate, StepKind } from "@/lib/guides/plan";
 import { guideFor } from "@/lib/screen-guide";
 import { Button } from "@/components/ui/button";
 
-export type WalkthroughProps = { path: string; onClose: () => void };
+export type WalkthroughProps = {
+  path: string;
+  onClose: () => void;
+  scopeId?: string;
+  task?: { title: string; description?: string };
+};
 type Step = Candidate & { element: HTMLElement };
 type Box = {
   left: number;
@@ -37,8 +42,15 @@ function visible(element: HTMLElement) {
     !element.closest("[hidden],[data-tour-ui],[data-screen-guide]")
   );
 }
-function collect(fallback: string, navigation: string): Step[] {
-  const main = document.querySelector<HTMLElement>("main") ?? document.body;
+function collect(
+  fallback: string,
+  navigation: string,
+  scopeId?: string,
+): Step[] {
+  const main =
+    (scopeId
+      ? document.getElementById(scopeId)
+      : document.querySelector<HTMLElement>("main")) ?? document.body;
   const title =
     main.querySelector<HTMLElement>("h1") ??
     main.querySelector<HTMLElement>("h2") ??
@@ -64,7 +76,7 @@ function collect(fallback: string, navigation: string): Step[] {
     });
   };
   for (const el of main.querySelectorAll<HTMLElement>(
-    "h2,label,button,a[href],summary,[role=alert]",
+    "h2,label,button,a[href],summary,[role=alert],[role=radio],[role=switch]",
   )) {
     if (el === title || el.closest("[data-screen-guide],[data-tour-ui]"))
       continue;
@@ -78,6 +90,8 @@ function collect(fallback: string, navigation: string): Step[] {
         );
     } else if (el.tagName === "H2") add(el, "section", text(el));
     else if (el.getAttribute("role") === "alert") add(el, "status", text(el));
+    else if (el.matches("[role=radio],[role=switch]"))
+      add(el, "choice", text(el));
     else
       add(
         el,
@@ -89,30 +103,39 @@ function collect(fallback: string, navigation: string): Step[] {
         text(el),
       );
   }
-  const nav = document.querySelector<HTMLElement>("nav[aria-label]");
+  const nav = scopeId
+    ? null
+    : document.querySelector<HTMLElement>("nav[aria-label]");
   if (nav) add(nav, "navigation", navigation);
   return buildSteps(steps);
 }
-export function Walkthrough({ path, onClose }: WalkthroughProps) {
+export function Walkthrough({
+  path,
+  onClose,
+  scopeId,
+  task,
+}: WalkthroughProps) {
   const t = useT(),
     id = useId();
   const dialog = useRef<HTMLDialogElement>(null),
     panel = useRef<HTMLDivElement>(null);
   const originalScroll = useRef({ x: window.scrollX, y: window.scrollY });
   const [steps] = useState(() =>
-      collect(t("tour.screen"), t("tour.navigation")),
+      collect(task?.title ?? t("tour.screen"), t("tour.navigation"), scopeId),
     ),
     [index, setIndex] = useState(0),
     [box, setBox] = useState<Box | null>(null);
   const step = steps[index]!;
   const guide = guideFor(path);
-  const intro = guide
-    ? t(`screenGuide.routes.${guide[1]}`)
-    : path.startsWith("/login")
-      ? t("tour.login")
-      : path.startsWith("/legal")
-        ? t("tour.legal")
-        : t("tour.intro");
+  const intro = task
+    ? `${t("tour.task", { title: task.title })}${task.description ? ` ${task.description}` : ""}`
+    : guide
+      ? t(`screenGuide.routes.${guide[1]}`)
+      : path.startsWith("/login")
+        ? t("tour.login")
+        : path.startsWith("/legal")
+          ? t("tour.legal")
+          : t("tour.intro");
   useLayoutEffect(() => {
     const modal = dialog.current;
     const initialScroll = originalScroll.current;

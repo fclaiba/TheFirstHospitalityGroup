@@ -41,12 +41,20 @@ export function InteractiveGuide() {
     >
       <div className="mx-auto flex min-h-target w-full max-w-3xl flex-wrap items-center gap-3 px-4">
         <div id={GUIDE_REQUEST_SLOT} className="shrink-0 empty:hidden" />
-        <Launcher key={path} path={path} />
+        <GuideLauncher key={path} path={path} />
       </div>
     </aside>
   );
 }
-function Launcher({ path }: { path: string }) {
+export function GuideLauncher({
+  path,
+  scopeId,
+  task,
+}: {
+  path: string;
+  scopeId?: string;
+  task?: { title: string; description?: string };
+}) {
   const t = useT();
   const button = useRef<HTMLButtonElement>(null);
   const [Panel, setPanel] = useState<ComponentType<WalkthroughProps> | null>(
@@ -110,6 +118,8 @@ function Launcher({ path }: { path: string }) {
       {open && Panel ? (
         <Panel
           path={path}
+          scopeId={scopeId}
+          task={task}
           onClose={() => {
             setOpen(false);
             requestAnimationFrame(() =>
