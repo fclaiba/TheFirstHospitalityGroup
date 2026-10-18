@@ -193,6 +193,8 @@ Warnings are visible to the person and to their leaders; never to peers. Nobody 
 
 The expo is staffed from the floor (server or captain level) or by a chef `(to be validated)`. A promotion changes the primary position with a date, proposed by the GM and approved by the director `(to be validated)`; the account and its history stay. Each step can require a training checklist in the Guide and, for front of house, the menu quiz.
 
+**2026-10-18 operational enablement amendment (ADR 0031):** Every production position has a bilingual operating playbook: intended outcome, before-service preparation, service decisions, close/handoff and its configured reporting line. The Guide links these steps to authorized screens. Training is a persistent, human-reviewed workflow, separate from promotion or permission grants. Learners may request review of a published criterion for their primary or next ladder position. Only an ancestor of the *trained position* in the venue's configured chain may review, never the learner or a peer. The review records the observed evidence and either verifies the criterion or requests more practice. No scores, automatic discipline or automatic promotion. Company training programs are immutable versions; director/owner publish revisions. Old evidence is preserved, but cannot verify a new version. Owner responsibilities are documented without a self-certification workflow.
+
 ### 2.6 User stories with acceptance criteria
 
 **Sign in and settings**
@@ -577,6 +579,9 @@ Groups: `(public)`, `(app)` every position, `(lead)` area leads (captain, maîtr
 | `/company/org` | Director, owner | Organization chart by area and the chain of supervision |
 | `/company/setup/{venues,areas,positions,floor-plans,menu,rules,events,thresholds,tip-policy,import}` | Owner (director: rules, events, thresholds) | Company setup |
 | `/guide` | All | How-to per screen and training checklist per position |
+| `/training` | All | Own primary/next-position training, request review, supervisor feedback and evidence history |
+| `/lead/training` | Authorized supervisors | Paginated review queue for the configured reporting chain |
+| `/company/setup/training` | Director, owner | Publish versioned EN/ES training criteria and required demonstration |
 | `/legal/[doc]` | Public | Terms, privacy (staff notice) |
 
 #### 6.1.1 Bottom tabs per position (max 5)

@@ -34,3 +34,4 @@ ADRs are never edited after acceptance; a later ADR supersedes or amends them. T
 | [0028](0028-preview-runs-convex-handlers.md) | Preview executes the real Convex handlers in the browser | accepted, refines 0010 | Browser mock and test harness share the registered handlers |
 | [0029](0029-burgundy-brand.md) | Burgundy primary brand | accepted | Owner request, 2026-10-18 |
 | [0030](0030-preview-access-guidance-original-mark.md) | Reliable preview access, contextual guidance and original mark | accepted | Tab-local identity and original vector lion |
+| [0031](0031-role-playbooks-supervised-training.md) | Role playbooks and supervised training evidence | accepted | Versioned criteria, chain review, no scores or automatic promotion |
