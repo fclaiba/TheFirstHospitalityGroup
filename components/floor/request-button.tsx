@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { HandPalm } from "@phosphor-icons/react";
 import { canDo, useCurrentShift, useMe } from "@/hooks/use-app";
 import { useT } from "@/lib/i18n-client";
 import { RequestSheet } from "./request-sheet";
 import { Button } from "@/components/ui/button";
+import { useGuideRequestSlot } from "@/lib/guides/request-slot";
 
 /** Screens with their own sticky action bar or no floor context: the button stays out of their way. */
 const HIDDEN = [
@@ -29,6 +31,7 @@ export function RequestButton() {
   const pathname = usePathname();
   const { shift } = useCurrentShift();
   const [open, setOpen] = useState(false);
+  const slot = useGuideRequestSlot();
   const live = shift && (shift.status === "open" || shift.status === "closing");
   if (
     !me ||
@@ -39,23 +42,20 @@ export function RequestButton() {
     return null;
   if (!canDo(me, "requests.service") && !canDo(me, "requests.help"))
     return null;
-  return (
+  if (!slot) return null;
+  return createPortal(
     <>
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-(--safe-top) no-print">
-        <div className="mx-auto flex w-full max-w-3xl px-4">
-          <Button
-            variant="secondary"
-            size="md"
-            icon={<HandPalm weight="fill" className="size-5" aria-hidden />}
-            onClick={() => setOpen(true)}
-            aria-haspopup="dialog"
-            className="pointer-events-auto"
-          >
-            {t("requests.button")}
-          </Button>
-        </div>
-      </div>
+      <Button
+        variant="secondary"
+        size="md"
+        icon={<HandPalm weight="fill" className="size-5" aria-hidden />}
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+      >
+        {t("requests.button")}
+      </Button>
       <RequestSheet open={open} onOpenChange={setOpen} shiftId={shift._id} />
-    </>
+    </>,
+    slot,
   );
 }

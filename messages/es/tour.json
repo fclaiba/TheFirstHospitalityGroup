@@ -1,5 +1,8 @@
 {
   "tour": {
+    "tools": "Herramientas de ayuda",
+    "loadError": "No pudimos cargar la guía. Revisa tu conexión e inténtalo otra vez.",
+    "retry": "Reintentar guía",
     "open": "Guía interactiva",
     "previous": "Anterior",
     "next": "Siguiente",

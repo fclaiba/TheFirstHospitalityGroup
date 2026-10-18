@@ -205,6 +205,9 @@ export function Walkthrough({ path, onClose }: WalkthroughProps) {
     update();
     const observer = new ResizeObserver(update);
     observer.observe(step.element);
+    const work = document.querySelector("main");
+    if (work) observer.observe(work);
+    observer.observe(document.body);
     if (panel.current) observer.observe(panel.current);
     window.addEventListener("resize", update);
     window.addEventListener("scroll", update, true);

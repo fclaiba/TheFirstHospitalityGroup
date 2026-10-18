@@ -1,5 +1,8 @@
 {
   "tour": {
+    "tools": "Help tools",
+    "loadError": "We could not load the guide. Check your connection and try again.",
+    "retry": "Retry guide",
     "open": "Interactive guide",
     "previous": "Previous",
     "next": "Next",
