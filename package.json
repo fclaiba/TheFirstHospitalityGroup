@@ -12,7 +12,7 @@
     "build:webpack": "next build --webpack",
     "start": "next start -p 3300",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest",
     "test:e2e": "playwright test",
     "gen:api": "node scripts/gen-convex-api.mjs",
