@@ -14,6 +14,11 @@ async function transition(actionId: string, revision: number, command: string, n
   return w.m("actions:transition", { actionId, revision, command, note, ...extra });
 }
 describe("accountable operational follow-up", () => {
+  it("lets the immediate lead read escalation evidence but reserves approval to managers",async()=>{
+    const {actionId}=await create();await w.as("luis.c");
+    const action=await w.q<{canManage:boolean}>("actions:get",{actionId});expect(action.canManage).toBe(false);
+    expect(await w.code("actions:transition",{actionId,revision:1,command:"cancel",note:"Lead attempting to cancel."})).toBe("FORBIDDEN");
+  });
   it("keeps work across shifts, requires evidence and independent verification, and audits every transition", async () => {
     const { actionId } = await create();
     await w.as("ana.p");
