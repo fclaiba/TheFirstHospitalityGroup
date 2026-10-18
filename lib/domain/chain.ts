@@ -2,6 +2,7 @@
 // Each venue can override who a position reports to (`chainOverrides`).
 import { isAtLeast, layerOf, rankOf } from "./positions";
 import type { Position, RequestKind } from "./types";
+import { POSITIONS } from "./types";
 
 /** Default reporting line per position (BLUEPRINT 2.2 "Reports to"). */
 export const REPORTS_TO: Record<Position, Position | null> = {
@@ -34,6 +35,21 @@ export type Overrides = Partial<Record<Position, Position>>;
 
 export function reportsTo(p: Position, overrides: Overrides = {}): Position | null {
   return overrides[p] ?? REPORTS_TO[p];
+}
+
+/** Return a closed reporting cycle, including default edges, before configuration is written. */
+export function findChainCycle(overrides: Overrides): Position[] | null {
+  for (const start of POSITIONS) {
+    const path: Position[] = [];
+    let current: Position | null = start;
+    while (current) {
+      const repeated = path.indexOf(current);
+      if (repeated !== -1) return [...path.slice(repeated), current];
+      path.push(current);
+      current = reportsTo(current, overrides);
+    }
+  }
+  return null;
 }
 
 /** Everyone above a position, nearest first. Cycles in overrides are cut. */

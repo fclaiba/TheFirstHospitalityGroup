@@ -6,11 +6,11 @@ import { overridesOf, requireCan, requireUser, requireVenue } from "./lib/auth";
 import { appError } from "./lib/errors";
 import { audit } from "./lib/audit";
 import { parseOrThrow } from "./lib/validate";
-import { chainOverrideInput, companyLimitsInput, venueInput } from "../schemas";
+import { chainOverrideInput, companyLimitsInput, venueInput, positionSettingsInput } from "../schemas";
 import { AREAS, POSITIONS } from "../lib/domain/types";
 import type { Position } from "../lib/domain/types";
 import { areaOf, isAtLeast, isCorporate, layerOf } from "../lib/domain/positions";
-import { leadOf, reportsTo } from "../lib/domain/chain";
+import { leadOf, reportsTo, findChainCycle, type Overrides } from "../lib/domain/chain";
 
 /** Venues the caller can see: corporate all of the company's, everybody else their assignments. */
 export const venues = query({
@@ -211,6 +211,12 @@ export const chainOverrides = query({
 });
 
 /** Owner: change who a position reports to at one venue (null restores the default). */
+function assertAcyclic(rows: Doc<"chainOverrides">[], position: Position, parent: Position | null) {
+  const proposed = Object.fromEntries(rows.filter((row) => row.position !== position).map((row) => [row.position, row.reportsTo])) as Overrides;
+  if (parent) proposed[position] = parent;
+  if (findChainCycle(proposed)) throw appError("INVALID_INPUT", undefined, { fields: { reportsTo: "cycle" } });
+}
+
 export const setChainOverride = mutation({
   args: { venueId: v.id("venues"), position: v.string(), reportsTo: v.union(v.string(), v.null()) },
   handler: async (ctx, args) => {
@@ -224,10 +230,46 @@ export const setChainOverride = mutation({
       .query("chainOverrides")
       .withIndex("by_venue", (q) => q.eq("venueId", args.venueId))
       .collect();
+    assertAcyclic(rows, p.position, p.reportsTo);
     for (const r of rows.filter((x) => x.position === p.position)) await ctx.db.delete(r._id);
     let id: Id<"chainOverrides"> | null = null;
     if (p.reportsTo) id = await ctx.db.insert("chainOverrides", { venueId: args.venueId, position: p.position, reportsTo: p.reportsTo });
     await audit(ctx, { actorId: actor._id, venueId: args.venueId, action: "chain.changed", entity: "chainOverrides", entityId: id ?? args.venueId, meta: { position: p.position, reportsTo: p.reportsTo } });
     return { ok: true };
+  },
+});
+
+/** One reviewed position edit commits its name, reporting line and audit together. */
+export const setPositionSettings = mutation({
+  args: {
+    venueId: v.id("venues"), position: v.string(), reportsTo: v.union(v.string(), v.null()),
+    previousReportsTo: v.union(v.string(), v.null()),
+    localName: v.union(v.object({en:v.string(),es:v.string()}), v.null()),
+    previousLocalName: v.union(v.object({en:v.string(),es:v.string()}), v.null()),
+  },
+  handler: async (ctx, args) => {
+    const actor = await requireCan(ctx, "company.setup");
+    const p = parseOrThrow(positionSettingsInput, args);
+    requireVenue(actor, args.venueId);
+    const venue = await ctx.db.get(args.venueId);
+    if (!venue || venue.companyId !== actor.companyId) throw appError("NOT_FOUND");
+    const rows = await ctx.db.query("chainOverrides").withIndex("by_venue", (q) => q.eq("venueId", args.venueId)).collect();
+    const currentParent = rows.find((row) => row.position === p.position)?.reportsTo ?? null;
+    const currentName = venue.localNames.find((row) => row.position === p.position)?.name ?? null;
+    const sameName = (a: {en:string;es:string} | null, b: {en:string;es:string} | null) => a?.en === b?.en && a?.es === b?.es;
+    if (currentParent !== p.previousReportsTo || !sameName(currentName, p.previousLocalName)) throw appError("VERSION_STALE");
+    assertAcyclic(rows, p.position, p.reportsTo);
+    if (!sameName(currentName, p.localName)) {
+      const localNames = venue.localNames.filter((row) => row.position !== p.position);
+      if (p.localName) localNames.push({position:p.position,name:p.localName});
+      await ctx.db.patch(venue._id, {localNames});
+      await audit(ctx, { actorId:actor._id, venueId:venue._id, action:"venue.changed", entity:"venues", entityId:venue._id, meta:{position:p.position} });
+    }
+    if (currentParent !== p.reportsTo) {
+      for (const row of rows.filter((row) => row.position === p.position)) await ctx.db.delete(row._id);
+      const id = p.reportsTo ? await ctx.db.insert("chainOverrides", {venueId:venue._id,position:p.position,reportsTo:p.reportsTo}) : null;
+      await audit(ctx, {actorId:actor._id,venueId:venue._id,action:"chain.changed",entity:"chainOverrides",entityId:id ?? venue._id,meta:{position:p.position,reportsTo:p.reportsTo}});
+    }
+    return {ok:true};
   },
 });

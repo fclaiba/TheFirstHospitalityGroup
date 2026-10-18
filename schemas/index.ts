@@ -105,6 +105,11 @@ export const venueInput = z.object({
   active: z.boolean(),
 });
 export const chainOverrideInput = z.object({ venueId: z.string(), position: positionSchema, reportsTo: positionSchema.nullable() });
+export const positionSettingsInput = chainOverrideInput.extend({
+  localName: localizedReq(30).nullable(),
+  previousLocalName: localizedReq(30).nullable(),
+  previousReportsTo: positionSchema.nullable(),
+});
 
 export const menuItemInput = z.object({
   itemId: z.string().optional(),
