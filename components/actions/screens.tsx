@@ -7,7 +7,7 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "@/lib/backend/hooks";
 import { useRun } from "@/lib/backend/run";
-import { useVenue, useCan, useMe, canDo } from "@/hooks/use-app";
+import { useVenue, useMe, canDo } from "@/hooks/use-app";
 import { useOnline } from "@/hooks/use-online";
 import { useLocale } from "@/lib/i18n-client";
 import { formatDateTime } from "@/lib/i18n";
