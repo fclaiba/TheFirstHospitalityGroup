@@ -7,21 +7,33 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { DEMO_VERSION, emptyState } from "./state";
 import type { DemoState } from "./state";
 import { loadEngine } from "./load";
+import { parseSubject, sessionMatches } from "../domain/session";
 
 const KEY = "tfhg-preview-v1";
+const SESSION_KEY = "tfhg-preview-session";
+
+function savedSession(): string | null {
+  try {
+    return typeof window === "undefined" ? null : sessionStorage.getItem(SESSION_KEY);
+  } catch {
+    return null;
+  }
+}
 
 type Store = DemoState & { hydrated: boolean; seeding: boolean };
 
 export const useDemoStore = create<Store>()(
-  persist((): Store => ({ ...emptyState(), hydrated: false, seeding: false }), {
+  persist((): Store => ({ ...emptyState(), session: savedSession(), hydrated: false, seeding: false }), {
     name: KEY,
     storage: createJSONStorage(() => localStorage),
-    partialize: ({ hydrated: _h, seeding: _s, ...rest }) => rest,
+    partialize: ({ hydrated: _h, seeding: _s, session: _session, ...rest }) => rest,
+    // Legacy stores included identity. Never import another tab's identity with its shared records.
+    merge: (persisted, current) => ({ ...current, ...(persisted as Partial<DemoState>), session: current.session }),
     // Sync storage rehydrates inside create(), before useDemoStore is assigned: defer one microtask.
     onRehydrateStorage: () => (state) =>
       queueMicrotask(() => {
         if (!state?.tables?.users?.length || state.version !== DEMO_VERSION) void reseed();
-        else useDemoStore.setState({ hydrated: true });
+        else if (!useDemoStore.getState().hydrated) useDemoStore.setState({ hydrated: true });
       }),
   }),
 );
@@ -66,11 +78,26 @@ export async function reseed(keepSession = false): Promise<void> {
   const session = keepSession ? useDemoStore.getState().session : null;
   useDemoStore.setState({ ...emptyState(), seeding: true, hydrated: false });
   await commit("seed:demo", {}, { seeding: true });
-  useDemoStore.setState({ session, seeding: false, hydrated: true });
+  setSession(session);
+  useDemoStore.setState({ seeding: false, hydrated: true });
 }
 
 export function setSession(subject: string | null) {
+  try {
+    if (subject) sessionStorage.setItem(SESSION_KEY, subject);
+    else sessionStorage.removeItem(SESSION_KEY);
+  } catch {
+    // Storage restrictions still allow an in-memory preview for this visit.
+  }
   useDemoStore.setState({ session: subject });
+}
+
+/** Mirrors subject validity before mounting protected queries; handlers remain the permission authority. */
+export function hasValidSession(state: DemoState): boolean {
+  const subject = state.session && parseSubject(state.session);
+  if (!subject) return false;
+  return !!state.tables.users?.some((u) => u.active && sessionMatches(u.sessionVersion as number | undefined, subject) &&
+    (subject.kind === "user" ? u.username === subject.username : u.email === subject.email));
 }
 
 /** Stores a compressed photo for preview uploads and returns its _storage id. */

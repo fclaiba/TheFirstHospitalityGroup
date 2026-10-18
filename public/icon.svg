@@ -1,4 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#ffffff"><rect width="512" height="512" fill="#6b2337"/>
-  <!-- Neutral placeholder while the final lion is redesigned. Single source for UI mark references. -->
-  <path id="mark" fill-rule="evenodd" d="M128 128h256v256H128zm40 40v176h176V168z"/>
+  <title>The First Hospitality Group: lion</title>
+  <g id="mark" transform="scale(4)">
+    <path fill-rule="evenodd" d="M72 16C50 12 31 23 22 42L16 39L18 53L12 63L19 64L16 81L24 78L26 94L34 90L41 107L47 101L59 114L65 104L77 109L80 96C88 96 94 91 95 84L93 78L104 73L112 67L107 60L98 57L92 46C91 39 87 34 82 32L86 20L78 23L72 16Z
+M72 24L78 29L75 37L69 32L72 24Z
+M63 27C44 29 31 44 30 63C29 77 35 88 45 96C38 84 36 74 38 62C40 46 48 35 63 27Z
+M58 43C45 50 42 64 46 77C49 87 54 94 62 99C56 89 53 80 53 70C53 59 55 51 58 43Z
+M64 57C58 68 60 80 69 87C65 78 65 68 64 57Z
+M77 44L88 48L81 51L77 44Z
+M96 62L104 64L100 67L96 62Z
+M79 73C85 75 91 75 97 72L93 78C87 79 82 77 79 73Z"/>
+  </g>
 </svg>

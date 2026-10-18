@@ -138,19 +138,19 @@
     "noShiftBody": "Pre-shift notes are written once the shift is open."
   },
   "eightySix": {
-    "title": "86 tonight",
-    "tonight": "86 tonight",
+    "title": "Unavailable this service (86)",
+    "tonight": "Unavailable this service (86)",
     "badge": "86",
-    "none": "Nothing is 86 tonight.",
-    "add": "Mark an item 86",
-    "addHelp": "Everyone on the shift sees it at once in Today and on the menu.",
+    "none": "Every menu item is available for this service.",
+    "add": "Mark an item unavailable (86)",
+    "addHelp": "86 means unavailable for this service. Everyone sees the change in Today and on the menu until the shift closes.",
     "search": "Search the menu",
     "note": "Note",
     "notePlaceholder": "For example: back tomorrow",
-    "save": "Mark 86",
-    "added": "Marked 86",
+    "save": "Mark unavailable",
+    "added": "Marked unavailable for this service",
     "cleared": "Back on the menu",
-    "clear": "Take {item} off the 86 list"
+    "clear": "Make {item} available again"
   },
   "planEditor": {
     "title": "Floor plan",

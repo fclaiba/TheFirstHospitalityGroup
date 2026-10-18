@@ -47,7 +47,7 @@ export function MenuEditorScreen({ back, title }: { back?: string; title?: strin
   const canPropose = canDo(me, "menu.propose");
   const [tab, setTab] = useState<"catalog" | "proposals">(canEdit ? "catalog" : "proposals");
   if (!me) return <ScreenSkeleton />;
-  if (!canEdit && !canApprove && !canPropose) return <LockedState title={t("common.noAccess")} />;
+  if (!canEdit && !canApprove && !canPropose) return <LockedState title={t("common.noAccess")} body={t("screenGuide.menuAccess")} action={<ButtonLink href={canDo(me, "menu.availability") ? "/manage/setup/menu-availability" : "/menu"} variant="secondary">{t(canDo(me, "menu.availability") ? "menuEditor.availabilityLink" : "nav.menu")}</ButtonLink>} />;
   const tabs = [...(canEdit || canPropose ? (["catalog"] as const) : []), ...(canApprove || canPropose ? (["proposals"] as const) : [])];
   const view = tabs.includes(tab as never) ? tab : tabs[0]!;
   return (

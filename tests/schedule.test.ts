@@ -201,6 +201,10 @@ describe("swaps through the manager (ADR 0026)", () => {
     await w.m("schedule:publish", { venueId: w.venue("v1")._id, weekStart: nextWeek() });
     const anaShift = w.rows("shiftsPlanned").find((s) => s.userId === w.user("ana.p")._id && s.date === nextWeek() && !s.removed)!._id;
     await w.as("ana.p");
+    // The demo may already contain a pending request for this shift. Start this scenario with none.
+    for (const pending of w.rows("swaps").filter((s) => s.fromShiftId === anaShift && (s.status === "asked" || s.status === "accepted"))) {
+      await w.m("schedule:cancelSwap", { swapId: pending._id });
+    }
     const { swapId } = await w.m<{ swapId: string }>("schedule:requestSwap", { fromShiftId: anaShift, colleagueId: w.user("jade.w")._id, toShiftId: jadeShift });
     return { swapId, anaShift, jadeShift };
   }

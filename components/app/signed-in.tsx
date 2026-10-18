@@ -10,10 +10,10 @@ import { RequireAuth } from "./require-auth";
 export function SignedIn({ children }: { children: ReactNode }) {
   return (
     <BackendProvider>
-      <PrefsSync />
-      <AppShell>
-        <RequireAuth>{children}</RequireAuth>
-      </AppShell>
+      <RequireAuth>
+        <PrefsSync />
+        <AppShell>{children}</AppShell>
+      </RequireAuth>
     </BackendProvider>
   );
 }

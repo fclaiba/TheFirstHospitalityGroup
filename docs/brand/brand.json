@@ -1,8 +1,8 @@
 {
   "name": "The First Hospitality Group",
   "short_name": "The First",
-  "mark": "Neutral placeholder at public/brand/mark.svg, final lion pending",
-  "version": "3.0",
+  "mark": "Original right-facing lion, public/brand/mark.svg (ADR 0030)",
+  "version": "3.1",
   "updated": "2026-10-18",
   "color": {
     "canvas": "#FFFFFF",

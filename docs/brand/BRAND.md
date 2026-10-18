@@ -1,4 +1,4 @@
-> Updated 2026-10-18 under ADR 0029: burgundy is the current brand. Old lion drawings and martini-named logo files below are reference assets; delivery uses public/brand/mark.svg until the final lion arrives.
+> Delivery update 2026-10-18, ADR 0030: the owner commissioned a new logo from scratch. The original right-facing lion is `public/brand/mark.svg`; its outlined silhouette and negative-space mane cuts inherit the burgundy token. `npm run gen:brand` generates every current install icon. `LionMark` and the Figtree wordmark compose the UI lockup. Historical drawings and the old generation instructions below are reference material, not delivery sources.
 
 # The First Hospitality Group — Brand system 2.0
 

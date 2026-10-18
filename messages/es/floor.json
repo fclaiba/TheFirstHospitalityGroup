@@ -138,19 +138,19 @@
     "noShiftBody": "Las notas del pre-shift se escriben con el turno abierto."
   },
   "eightySix": {
-    "title": "86 de hoy",
-    "tonight": "86 de hoy",
+    "title": "No disponibles en este servicio (86)",
+    "tonight": "No disponibles en este servicio (86)",
     "badge": "86",
-    "none": "Hoy no hay nada en 86.",
-    "add": "Marcar un plato en 86",
-    "addHelp": "Todo el turno lo ve al instante en Hoy y en la carta.",
+    "none": "Todos los productos están disponibles en este servicio.",
+    "add": "Marcar un producto no disponible (86)",
+    "addHelp": "86 significa no disponible en este servicio. Todos ven el cambio en Hoy y en la carta hasta el cierre del turno.",
     "search": "Buscar en la carta",
     "note": "Nota",
     "notePlaceholder": "Por ejemplo: vuelve mañana",
-    "save": "Marcar 86",
-    "added": "Marcado en 86",
+    "save": "Marcar no disponible",
+    "added": "Marcado no disponible en este servicio",
     "cleared": "Volvió a la carta",
-    "clear": "Sacar {item} de la lista de 86"
+    "clear": "Volver a habilitar {item}"
   },
   "planEditor": {
     "title": "Plano del salón",

@@ -1,7 +1,7 @@
-// Final lion artwork is pending (build blueprint 0.7). Keep one replaceable mark asset.
+// Original vector lion, ADR 0030. UI and generated install icons share this source.
 import type { SVGProps } from "react";
 
-/** Retains the shared component contract while all screens use the neutral placeholder. */
+/** Single-color silhouette with negative-space cuts for app-header sizes. */
 export function LionMark({ title, simple, ...props }: Omit<SVGProps<SVGSVGElement>, "min"> & { title?: string; simple?: boolean }) {
   void simple;
   return (

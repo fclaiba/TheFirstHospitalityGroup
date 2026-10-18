@@ -455,7 +455,7 @@ flowchart LR
 ### 4.1 Direction: executive hospitality (ADR 0025, color superseded by ADR 0029 on 2026-10-18)
 - **Design read:** an executive operations app for a top-tier New York restaurant group. Light, calm, precise, quietly confident; daylight dining room, not nightlife. Dials: variance 3, motion 2, density 4.
 - **Color (2026-10-18, owner request):** white primary, ink `#111311` secondary, **burgundy** `#6B2337` brand (the mark, the primary action, the active tab, progress); pressed `#50182A`, selected surface `#F2DFE5`, dark brand `#D6A6B5`. Status colors are separate and carry meaning only. All text pairs AA; control borders 3:1.
-- **Logo:** a lion head in profile facing forward, one martini-green mass with three concentric negative curves in the mane; wordmark THE FIRST (Figtree SemiBold caps, tracked). Files in `docs/brand/logos/`.
+- **Logo (2026-10-18, owner request, ADR 0030):** an original lion head in right-facing profile, drawn from scratch in burgundy with negative-space mane cuts. Delivery source: `public/brand/mark.svg`; generated install icons share that source. THE FIRST uses Figtree SemiBold caps, tracked. This replaces the temporary neutral mark and historical reference drawings.
 - **Type:** Figtree for everything (body 17, inputs ≥ 16), IBM Plex Mono for times and table numbers. Large text × 1.18.
 - **Theme:** light by default; dark is an optional setting for dim rooms, never the default or the brand's face.
 - **States, not scores (ADR 0027):** chips and words (Confirmed, Pending, Late, Low, On track, Needs attention, Action required); no money, no percentages on any screen staff see.
@@ -600,6 +600,8 @@ Client shells per group, data from Convex. Static: `/`, `/guide`, `/legal/*`. Th
 
 ### 6.3 State and data
 `lib/backend/hooks.ts` (Convex or preview handlers, ADR 0010). Current venue, shift and position from `useCurrentShift()`. Preferences in the user record, mirrored in a cookie.
+
+Preview reliability amendment (2026-10-18, ADR 0030): sample records remain shared in localStorage; identity is private to each tab in sessionStorage. Rehydrating shared records preserves the tab identity and does not write them back. Query results and errors belong to a function, arguments and identity; signed-out protected queries do not run. Every operational page provides localized contextual instructions through its page header. Demo entry presents named sample accounts before manual credentials, explains their role, and reports failures inline.
 
 ### 6.4 Forms and validation
 Shared Zod schemas. Label above, error below. Photos compressed to ≤ 400 KB.
@@ -989,6 +991,7 @@ Section 15 gates green with numbers in `docs/DEVLOG.md`; pilot metrics measured 
 Proposal in `docs/PROPUESTA-COMERCIAL.md` (Spanish): implementation fee plus a monthly license per venue, anchored on what 7shifts plus separate apps cost (≈ USD 205 per venue per month, `docs/research/ESTUDIO-DE-MERCADO.md`). Amounts `(to be validated)`. Acceptance criteria = section 15. Not included: hardware, POS and reservations integrations (P3 quote), menu photography.
 
 ## 18. Amendment log
+- **2026-10-18 (preview access, didactic screens and original logo, ADR 0030):** Tab-local preview identities preserve shared sample records without cross-tab session replacement or storage feedback. Query results and errors are scoped to identity. Contextual EN/ES instructions explain the next action on operational screens; unavailable menu items explain the term 86. The owner commissions a new vector lion from scratch, replacing the neutral placeholder decisions below. Service acknowledgments appear without a fading transition to retain full text contrast.
 - **2026-10-18 (burgundy primary identity, ADR 0029):** The owner replaces martini green with burgundy. Section 4.1, the shared tokens, brand documentation, application controls and generated install icons follow the new palette. The final lion remains pending; delivery uses the single replaceable neutral mark. The host's existing Pre-shift tab reads notes without permission to publish or remove them, consistent with sections 2.4 and 6.1.1.
 - **2026-10-17 (frontend preview scope and brand delivery):** At the owner's request, this session works on the frontend and browser Convex mock only; no remote Convex or production deployment. The attached build blueprint section 0.7 supersedes the current lion drawing for delivery: use the THE FIRST wordmark and a neutral placeholder from `public/brand/mark.svg` until the final SVG is supplied. Existing lion artwork remains reference material. Browser mock mutations are serialized to preserve concurrent UI changes; failures roll back without blocking later saves.
   - Windows verification may use `npm run build:webpack` when Turbopack cannot start its loader subprocesses; the official Tailwind PostCSS adapter preserves the same token styles. Turbopack remains the default. `npm run gen:brand` derives the favicon and install PNGs from the single mark asset and brand tokens. Schedule and shared confirmation controls are read-only while offline; the persisted preview data remains readable after reload.
