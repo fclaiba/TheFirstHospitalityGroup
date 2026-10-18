@@ -37,3 +37,4 @@ ADRs are never edited after acceptance; a later ADR supersedes or amends them. T
 | [0031](0031-role-playbooks-supervised-training.md) | Role playbooks and supervised training evidence | accepted | Versioned criteria, chain review, no scores or automatic promotion |
 | [0032](0032-cross-shift-actions.md) | Accountable cross-shift operational actions | accepted | Durable handoff, evidence, independent verification and escalation |
 | [0033](0033-interactive-screen-guides.md) | Interactive screen guides | accepted | Voluntary spotlight walkthroughs with accessible modal navigation |
+| [0034](0034-contained-work-viewport.md) | Contained work viewport | accepted | Header and navigation do not cover work; tour restores nested scroll |

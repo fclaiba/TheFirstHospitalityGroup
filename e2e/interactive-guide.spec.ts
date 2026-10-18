@@ -11,10 +11,18 @@ test("guide spotlights the actual screen, moves both ways and restores keyboard 
     name: "Guía interactiva",
     exact: true,
   });
-  const before = await page.evaluate(() => localStorage.getItem("tfhg-preview-v1"));
-  const requestBox = await page.getByRole("button", { name: "Pedido", exact: true }).boundingBox();
+  const before = await page.evaluate(() =>
+    localStorage.getItem("tfhg-preview-v1"),
+  );
+  const requestBox = await page
+    .getByRole("button", { name: "Pedido", exact: true })
+    .boundingBox();
   const guideBox = await launcher.boundingBox();
   expect(requestBox?.y).toBe(guideBox?.y);
+  const work = page.locator("main");
+  await work.evaluate(el => { el.scrollTop = 200; });
+  const originalScroll = await work.evaluate(el => el.scrollTop);
+  expect(originalScroll).toBeGreaterThan(0);
   await launcher.click();
   const dialog = page.getByRole("dialog", {
     name: "Guía interactiva",
@@ -43,7 +51,10 @@ test("guide spotlights the actual screen, moves both ways and restores keyboard 
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(launcher).toBeFocused();
-  expect(await page.evaluate(() => localStorage.getItem("tfhg-preview-v1"))).toBe(before);
+  expect(await work.evaluate(el => el.scrollTop)).toBe(originalScroll);
+  expect(
+    await page.evaluate(() => localStorage.getItem("tfhg-preview-v1")),
+  ).toBe(before);
 });
 test("walkthroughs cover public and role views without submitting or navigating", async ({
   page,
@@ -101,21 +112,36 @@ test("walkthroughs cover public and role views without submitting or navigating"
   }
 });
 
-test("every registered operational view exposes a usable walkthrough",async({page})=>{
+test("every registered operational view exposes a usable walkthrough", async ({
+  page,
+}) => {
   test.setTimeout(240_000);
-  await signInAs(page,/Alexandra Reyes/);
-  const paths=[...new Set(SCREEN_GUIDES.map(([path])=>path))].filter(path=>path!=="/company/venues");
-  for(const path of paths){
+  await signInAs(page, /Alexandra Reyes/);
+  const paths = [...new Set(SCREEN_GUIDES.map(([path]) => path))].filter(
+    (path) => path !== "/company/venues",
+  );
+  for (const path of paths) {
     await page.goto(path);
-    const launcher=page.getByRole("button",{name:/^(Interactive guide|Guía interactiva)$/});
-    await expect(launcher).toBeVisible();await launcher.click();
-    const dialog=page.getByRole("dialog",{name:/^(Interactive guide|Guía interactiva)$/});
+    const launcher = page.getByRole("button", {
+      name: /^(Interactive guide|Guía interactiva)$/,
+    });
+    await expect(launcher).toBeVisible();
+    await launcher.click();
+    const dialog = page.getByRole("dialog", {
+      name: /^(Interactive guide|Guía interactiva)$/,
+    });
     await expect(dialog).toBeVisible();
-    for(let step=0;step<26;step++){
-      const finish=dialog.getByRole("button",{name:/^(Finish guide|Finalizar guía)$/});
-      if(await finish.isVisible()){await finish.click();break;}
-      await dialog.getByRole("button",{name:/^(Next|Siguiente)$/}).click();
+    for (let step = 0; step < 26; step++) {
+      const finish = dialog.getByRole("button", {
+        name: /^(Finish guide|Finalizar guía)$/,
+      });
+      if (await finish.isVisible()) {
+        await finish.click();
+        break;
+      }
+      await dialog.getByRole("button", { name: /^(Next|Siguiente)$/ }).click();
     }
-    await expect(dialog).not.toBeVisible();await expect(launcher).toBeFocused();
+    await expect(dialog).not.toBeVisible();
+    await expect(launcher).toBeFocused();
   }
 });
