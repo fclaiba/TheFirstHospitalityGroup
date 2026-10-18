@@ -3,7 +3,7 @@
 ## Deploy
 1. Open a PR. CI must be green (quality, convex, e2e) and the Vercel preview checked on a phone.
 2. Releases that change a staff flow (sign-in, tasks, warnings, close) need the owner's OK in the PR.
-3. Merge to `main`. Vercel runs `node scripts/vercel-build.mjs`: with `CONVEX_DEPLOY_KEY` it deploys Convex functions, then builds Next.js.
+3. Merge to `main`. Vercel runs `node scripts/vercel-build.mjs` to build Next.js only. It never deploys Convex functions, even if a deploy key is configured. A backend release is a separately authorized manual `npm run deploy:backend`, after checking backup and rollback. During frontend/browser-mock work, leave remote backend configuration and data untouched.
 4. Smoke test in production within 10 minutes: `/api/health` 200; sign in as each role with the smoke accounts; open and cancel a test shift in the test venue; send a test push to the tech account.
 5. Write the result in `docs/DEVLOG.md`.
 

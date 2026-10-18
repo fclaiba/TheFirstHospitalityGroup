@@ -1,3 +1,5 @@
+> Delivery update 2026-10-18, ADR 0030: the owner commissioned a new logo from scratch. The original right-facing lion is `public/brand/mark.svg`; its outlined silhouette and negative-space mane cuts inherit the burgundy token. `npm run gen:brand` generates every current install icon. `LionMark` and the Figtree wordmark compose the UI lockup. Historical drawings and the old generation instructions below are reference material, not delivery sources.
+
 # The First Hospitality Group — Brand system 2.0
 
 Last updated: 2026-10-13 (ADR 0025). Tokens: `tokens.css` and `brand.json` (same values). Board: `brand-board.png`.
@@ -9,7 +11,7 @@ The brand speaks like a top-tier hospitality group: calm, precise, confident and
 ## 2. Logo
 
 ### 2.1 The lion
-- A lion head in profile, facing forward (right), drawn as one solid mass in martini green.
+- A lion head in profile, facing forward (right), drawn as one solid mass in burgundy.
 - The mane is cut by three concentric curves in negative space: they give the rhythm of the locks and separate mane from face. The eye, brow, ear, mouth line and whisker dots are also negative space, so the mark works in a single color.
 - Built on a 512 grid; outlined paths only.
 - Two levels of detail: **full** (`mark-martini.svg`, `mark-ink.svg`, `mark-white.svg`) from 32 px up, and **min** (`mark-min.svg`, `favicon.svg`: boundary curve and eye) below 32 px.
@@ -20,7 +22,7 @@ The brand speaks like a top-tier hospitality group: calm, precise, confident and
 | File | Use |
 |---|---|
 | `logos/logo-horizontal.svg` | Default on white: lion in martini, THE FIRST in ink, HOSPITALITY GROUP in martini |
-| `logos/logo-horizontal-white.svg` | On martini green |
+| `logos/logo-horizontal-white.svg` | On burgundy |
 | `logos/logo-horizontal-reverse.svg` | On ink, for print and signage only |
 | `logos/logo-stacked.svg`, `logo-stacked-reverse.svg` | Square spaces: menus, uniforms, avatars |
 | `logos/wordmark.svg` | THE FIRST alone |
@@ -45,9 +47,9 @@ Regenerate every logo file with `python3 docs/brand/_src/generate-logos.py docs/
 | Surface | `--color-surface` | `#F6F7F3` | Grouped areas, input fill |
 | Secondary | `--color-ink` | `#111311` | Text, navigation, secondary buttons. 18.7:1 on white |
 | Muted text | `--color-ink-muted` | `#5E625B` | 6.2:1 on white |
-| **Brand: martini green** | `--color-brand` | `#4A6B3E` | The lion, the primary action, the active tab, progress. White text on it: 6.1:1 |
-| Brand pressed | `--color-brand-pressed` | `#36522F` | 8.7:1 with white |
-| Martini tints | `--color-martini-50/100/200` | `#EEF2E8` `#E3EBDB` `#C8D6BA` | Selected rows, progress track, quiet highlights |
+| **Brand: burgundy** | `--color-brand` | `#6B2337` | The lion, the primary action, the active tab, progress. White text on it: 10.9:1 |
+| Brand pressed | `--color-brand-pressed` | `#50182A` | 8.7:1 with white |
+| Burgundy tints | `--color-burgundy-50/100/200` | `#FAF1F4` `#F2DFE5` `#E4BFCB` | Selected rows, progress track, quiet highlights |
 | Control border | `--color-line-strong` | `#858A7F` | 3.5:1 on white (WCAG 1.4.11) |
 | Focus | `--color-focus` | `#2F5B8F` | Focus ring only |
 
@@ -60,7 +62,7 @@ Regenerate every logo file with `python3 docs/brand/_src/generate-logos.py docs/
 | Follow-up | `#9A3B0B` on `#FDE8D7` | 5.9:1 |
 | Review | `#912018` on `#FEE4E2` | 7.2:1 |
 
-Martini green is never used for "done" or for a warning state. Light is the default theme. An optional dark theme exists for dim dining rooms (brand lifts to `#9DB88A` with ink text, 8.6:1); it is a setting, never the brand's face.
+Burgundy is never used for "done" or for a warning state. Light is the default theme. An optional dark theme exists for dim dining rooms (brand lifts to `#D6A6B5` with ink text, 8.9:1); it is a setting, never the brand's face.
 
 ## 4. Type
 | Role | Face | Size | Notes |
@@ -73,7 +75,7 @@ Body 17 px; inputs never under 16 px; Large text multiplies the scale by 1.18. O
 ## 5. Executive UI principles (ADR 0025, 0027)
 - **States, not scores.** The app shows words and status chips (Up to date, Confirmed, Pending, Late, Low), never money and never percentages to staff. Managers see names and states; the owner sees each venue's state.
 - **Calm surfaces.** White canvas, hairline dividers, one lifted card per screen at most, generous spacing.
-- **One primary action per screen**, in martini green.
+- **One primary action per screen**, in burgundy.
 - **Plain, respectful language.** Corporate, not chatty; never slang, never emojis.
 - **Light by default.** The app is used before and during service in lit rooms and offices.
 

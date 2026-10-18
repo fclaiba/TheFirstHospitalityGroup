@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
+import { InteractiveGuide } from "@/components/guide/interactive-guide";
 import { cookies } from "next/headers";
 import { LocaleProvider } from "@/lib/i18n-client";
 import { PwaRoot, AppToaster } from "@/components/app/misc";
@@ -45,11 +47,16 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   const prefs = parsePrefs((await cookies()).get(PREFS_COOKIE)?.value);
   return (
     <html lang={locale === "es" ? "es-US" : "en-US"} data-large-text={prefs.largeText ? "true" : "false"} data-theme={prefs.theme === "system" ? undefined : prefs.theme} suppressHydrationWarning>
-      <body className="min-h-dvh antialiased">
+      <head>
+        <link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/figtree-latin-600-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+      </head>
+      <body className="min-h-dvh pt-(--guide-bar-height) antialiased">
         <a href="#main" className="sr-only z-50 rounded-pill bg-ink px-4 py-2 text-small text-on-ink focus:not-sr-only focus:fixed focus:top-3 focus:left-3">
           {t("common.skipToContent")}
         </a>
         <LocaleProvider locale={locale}>
+          <Suspense fallback={null}><InteractiveGuide /></Suspense>
           {children}
           <AppToaster />
         </LocaleProvider>

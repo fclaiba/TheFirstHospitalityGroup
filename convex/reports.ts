@@ -112,7 +112,9 @@ async function venueInputs(ctx: QueryCtx, venue: Doc<"venues">, now: number): Pr
       .collect()
   ).filter((p) => now - p.at > 24 * 3600_000 || proposalStale(p, now)).length;
   const sw = await sideWorkRows(ctx, venue, weekOf(nyDateKey(now)));
+  const overdueAction = await ctx.db.query("operatingActions").withIndex("by_venue_archived_due", q => q.eq("venueId", venue._id).eq("archived", false).lte("dueAt", now)).first();
   return {
+    hasOverdueActions: !!overdueAction,
     closesMissing,
     autoClosed,
     unconfirmed,

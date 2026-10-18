@@ -1,18 +1,21 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { World } from "./support/engine";
-import { addDays, nyDateKey, nyWallParts } from "../lib/time";
+import { addDays, nyDateKey, nyTimeOn, nyWallParts } from "../lib/time";
 import { weekOf } from "../lib/domain/schedule";
 
 // The schedule core (ADR 0019, BLUEPRINT 15 schedule and concurrency gates) over the real handlers (ADR 0028).
 
 let w: World;
 beforeEach(async () => {
+  // Keep the seeded swap fixtures on the same service week on every CI run.
+  vi.spyOn(Date, "now").mockReturnValue(new Date("2026-10-17T18:00:00Z").getTime());
   w = await World.create();
 }, 30_000);
 
 const today = () => nyDateKey(Date.now());
 const thisWeek = () => weekOf(today());
 const nextWeek = () => addDays(thisWeek(), 7);
+afterEach(() => vi.restoreAllMocks());
 
 type Shift = { _id: string; userId: string | null; date: string; start: string; position: string; pending: boolean; removed: boolean; eventId: string | null };
 type WeekView = { version: number; status: string; hasPendingChanges: boolean; shifts: Shift[]; events: Array<{ _id: string; coverage: Array<{ position: string; required: number; filled: number; staffed: boolean }> }> };
@@ -198,6 +201,10 @@ describe("swaps through the manager (ADR 0026)", () => {
     await w.m("schedule:publish", { venueId: w.venue("v1")._id, weekStart: nextWeek() });
     const anaShift = w.rows("shiftsPlanned").find((s) => s.userId === w.user("ana.p")._id && s.date === nextWeek() && !s.removed)!._id;
     await w.as("ana.p");
+    // The demo may already contain a pending request for this shift. Start this scenario with none.
+    for (const pending of w.rows("swaps").filter((s) => s.fromShiftId === anaShift && (s.status === "asked" || s.status === "accepted"))) {
+      await w.m("schedule:cancelSwap", { swapId: pending._id });
+    }
     const { swapId } = await w.m<{ swapId: string }>("schedule:requestSwap", { fromShiftId: anaShift, colleagueId: w.user("jade.w")._id, toShiftId: jadeShift });
     return { swapId, anaShift, jadeShift };
   }
@@ -329,6 +336,8 @@ describe("events, attendance, time off, hours, reminders", () => {
   });
 
   it("pushes about an hour before a published shift, once", async () => {
+    // Keep seeded lunch shifts outside the reminder window, regardless of when CI runs.
+    vi.spyOn(Date, "now").mockReturnValue(nyTimeOn(today(), "06:00"));
     const soon = Date.now() + 30 * 60_000;
     const date = nyDateKey(soon);
     const p = nyWallParts(soon);

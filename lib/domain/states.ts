@@ -6,6 +6,7 @@ import type { ConfirmState, VenueState, WarningState } from "./types";
 export type Reason = { key: string; count?: number; names?: string[]; level: Exclude<VenueState, "on_track"> };
 
 export type VenueInputs = {
+  hasOverdueActions?: boolean;
   /** Shifts that ended without a submitted close (last 7 days). */
   closesMissing: number;
   /** Auto-closed shifts not yet reviewed. */
@@ -48,6 +49,7 @@ export const EMPTY_VENUE_INPUTS: VenueInputs = {
 export function venueState(i: VenueInputs): { state: VenueState; reasons: Reason[] } {
   const reasons: Reason[] = [];
   const add = (cond: boolean, r: Reason) => cond && reasons.push(r);
+  add(!!i.hasOverdueActions, { key: "actionsOverdue", level: "action_required" });
   add(i.closesMissing > 0, { key: "closeMissing", count: i.closesMissing, level: "action_required" });
   add(i.autoClosed > 0, { key: "autoClosed", count: i.autoClosed, level: "action_required" });
   add(i.lateConfirmations.length > 0, { key: "confirmationsLate", count: i.lateConfirmations.length, names: i.lateConfirmations, level: "action_required" });

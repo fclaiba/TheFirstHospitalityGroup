@@ -18,6 +18,8 @@ const eslintConfig = defineConfig([
     "k6/**",
     "test-results/**",
     "playwright-report/**",
+    ".tmp/**",
+    "graphify-out/**",
   ]),
   {
     rules: {

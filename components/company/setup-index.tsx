@@ -9,6 +9,7 @@ import { LinkRow, List, PageHeader } from "@/components/ui/layout";
 import { ScreenSkeleton } from "@/components/ui/states";
 
 const ITEMS: Array<{ key: string; href: string; action: Action; icon: ReactNode }> = [
+  { key: "training", href: "/company/setup/training", action: "training.manage", icon: <Stack weight="bold" className="size-6" /> },
   { key: "venues", href: "/company/setup/venues", action: "company.setup", icon: <Buildings weight="bold" className="size-6" /> },
   { key: "areas", href: "/company/setup/areas", action: "company.view", icon: <Stack weight="bold" className="size-6" /> },
   { key: "positions", href: "/company/setup/positions", action: "company.setup", icon: <TreeStructure weight="bold" className="size-6" /> },

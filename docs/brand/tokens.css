@@ -1,14 +1,20 @@
 /*
- * The First Hospitality Group — design tokens (ADR 0009, 0025)
+ * The First Hospitality Group — design tokens (ADR 0009, 0025, 0029)
  * Layout concept: executive hospitality, mobile-first; one task per screen, white canvas,
- * ink text, martini green reserved for the brand, the lion and the single primary action.
+ * ink text, burgundy reserved for the brand, the lion and the single primary action.
  * Single source of truth: copy into app/globals.css (@theme). tests/tokens.test.ts
  * rejects any hex, rgb() or arbitrary size outside this file.
  * Contrast (WCAG 2.2): checked in docs/brand/BRAND.md, section 3.
  */
 
 :root {
-  /* Neutrals: white main, ink secondary (green-biased so it sits with the martini) */
+  --guide-bar-height: calc(var(--size-target) + var(--safe-top, 0px));
+  --tour-blur: 6px;
+  --tour-gap: 16px;
+  --tour-target-pad: 6px;
+  --tour-panel-width: 384px;
+  --tour-panel-height: 55dvh;
+  /* Neutrals: white main, ink secondary (green-biased so it sits with the burgundy) */
   --color-canvas: #ffffff;        /* page background */
   --color-surface: #f6f7f3;       /* grouped areas, input fill */
   --color-surface-raised: #ffffff;/* sheets, cards that must lift */
@@ -19,17 +25,18 @@
   --color-ink-subtle: #6b6f68;    /* captions, 5.1:1 on white (never below AA) */
   --color-on-ink: #ffffff;
 
-  /* Brand: martini green. Primary action, active tab, the lion. Never a status. */
-  --color-martini-50: #eef2e8;
-  --color-martini-100: #e3ebdb;
-  --color-martini-200: #c8d6ba;
-  --color-martini-300: #9db88a;
-  --color-martini-500: #4a6b3e;     /* brand, 6.1:1 with white text */
-  --color-martini-600: #36522f;     /* pressed, 8.7:1 with white text */
-  --color-martini-800: #2e4729;
-  --color-martini-900: #1e2e1b;
-  --color-brand: var(--color-martini-500);
-  --color-brand-pressed: var(--color-martini-600);
+  /* Brand: burgundy. Primary action, active tab, the lion. Never a status. */
+  --color-burgundy-50: #faf1f4;
+  --color-burgundy-100: #f2dfe5;
+  --color-burgundy-200: #e4bfcb;
+  --color-burgundy-300: #d6a6b5;
+  --color-burgundy-500: #6b2337;     /* brand, 10.9:1 with white text */
+  --color-burgundy-600: #50182a;     /* pressed, 14.0:1 with white text */
+  --color-burgundy-800: #3b1220;
+  --color-burgundy-900: #260b14;
+  --color-brand: var(--color-burgundy-500);
+  --color-brand-pressed: var(--color-burgundy-600);
+  --color-brand-soft: var(--color-burgundy-100);
   --color-on-brand: #ffffff;
   --color-focus: #2f5b8f;         /* focus ring: blue so it never reads as brand or status */
 
@@ -42,7 +49,7 @@
   --color-danger: #b42318;                                  /* destructive actions */
 
   /* Type */
-  --font-display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif; /* wordmark, venue names, owner headlines only */
+  --font-display: "Figtree", "Segoe UI", system-ui, sans-serif; /* wordmark, venue names, owner headlines only */
   --font-sans: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif; /* all UI */
   --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace; /* codes, quantities in tables */
 
@@ -59,7 +66,7 @@
   --leading-tight: 1.15;
   --leading-body: 1.5;
   --tracking-label: 0.06em;
-  --tracking-wordmark: 0.10em;
+  --tracking-wordmark: 0.16em;
   --text-scale: 1;        /* set to 1.18 by the Large text preference */
 
   /* Shape: one soft scale */
@@ -100,8 +107,9 @@
     --color-ink-muted: #b6bbae;
     --color-ink-subtle: #a2a79a;
     --color-on-ink: #111311;
-    --color-brand: var(--color-martini-300);
-    --color-brand-pressed: var(--color-martini-200);
+    --color-brand: var(--color-burgundy-300);
+    --color-brand-pressed: var(--color-burgundy-200);
+    --color-brand-soft: #321b24;
     --color-on-brand: #111311;
     --color-focus: #8fb4e3;
     --color-ok-fg: #8fd1b3;   --color-ok-bg: #16281f;
@@ -122,9 +130,10 @@
   --color-ink-muted: #b6bbae;
   --color-ink-subtle: #a2a79a;
   --color-on-ink: #111311;
-  --color-brand: var(--color-martini-300);
-  --color-brand-pressed: var(--color-martini-200);
-  --color-on-brand: #111311;
+  --color-brand: var(--color-burgundy-300);
+  --color-brand-pressed: var(--color-burgundy-200);
+  --color-brand-soft: #321b24;
+    --color-on-brand: #111311;
   --color-focus: #8fb4e3;
   --color-ok-fg: #8fd1b3;   --color-ok-bg: #16281f;
   --color-info-fg: #9dbfe6; --color-info-bg: #15202d;

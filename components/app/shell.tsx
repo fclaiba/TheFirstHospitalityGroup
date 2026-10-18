@@ -89,8 +89,8 @@ function VenueTitle({ name, role }: { name: string; role: string }) {
 }
 
 /**
- * The signed-in shell (BLUEPRINT 4.2, 4.4): a translucent header and tab bar that content scrolls under, safe areas,
- * 100dvh, the floating Request button on staff screens. One primary action per screen lives in the page itself.
+ * The signed-in shell (ADR 0034): work scrolls between the header and tabs, never underneath them.
+ * The reserved utility row holds help controls. One primary action per screen lives in the work area.
  */
 export function AppShell({ children }: { children: ReactNode }) {
   const t = useT();
@@ -107,7 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="app-shell flex flex-col">
-      <header className="material sticky top-0 z-30 border-b border-line/70 pt-(--safe-top) no-print">
+      <header className="z-30 shrink-0 border-b border-line/70 bg-canvas no-print">
         <div className="mx-auto flex h-14 w-full max-w-3xl items-center gap-2 px-3">
           <Link href={HREF[tabs[0]!]} aria-label={t("brand.name")} className="pressable flex size-target items-center justify-center rounded-control text-brand">
             <LionMark className="size-8 text-brand" simple />
@@ -141,11 +141,11 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <OfflineBanner />
-      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 pt-3 pb-[calc(var(--nav-height)+6rem+var(--safe-bottom))]">
+      <main key={pathname} id="main" tabIndex={0} className="mx-auto min-h-0 w-full max-w-3xl flex-1 overflow-y-auto overscroll-contain px-4 pt-3 pb-28">
         {children}
       </main>
       <RequestButton />
-      <nav aria-label={t("nav.mainNav")} className="material fixed inset-x-0 bottom-0 z-30 border-t border-line/70 pb-(--safe-bottom) no-print">
+      <nav aria-label={t("nav.mainNav")} className="z-30 shrink-0 border-t border-line/70 bg-canvas pb-(--safe-bottom) no-print">
         <ul className="mx-auto grid h-(--nav-height) max-w-3xl" style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
           {tabs.map((key) => {
             const href = HREF[key];

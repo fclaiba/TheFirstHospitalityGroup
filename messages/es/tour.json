@@ -1,0 +1,31 @@
+{
+  "tour": {
+    "tools": "Herramientas de ayuda",
+    "loadError": "No pudimos cargar la guía. Revisa tu conexión e inténtalo otra vez.",
+    "retry": "Reintentar guía",
+    "open": "Guía interactiva",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "finish": "Finalizar guía",
+    "exit": "Salir de la guía",
+    "step": "Paso {current} de {total}",
+    "screen": "Esta pantalla",
+    "task": "Completa {title} aquí. Revisa las opciones disponibles y cierra la guía para continuar. Esta guía no envía ni guarda nada.",
+    "navigation": "Tu navegación principal",
+    "intro": "Empieza por el propósito de esta pantalla. Después sigue los controles disponibles en orden. Puedes salir de la guía y volver cuando la necesites.",
+    "login": "Elige una cuenta de ejemplo para explorar un puesto. Para una cuenta real, usa tu usuario y contraseña.",
+    "legal": "Lee el documento y consulta a la gerencia si necesitas una corrección o aclaración. La guía no acepta condiciones por ti.",
+    "readOnly": "Esta guía explica. Nunca guarda, confirma ni envía nada por ti.",
+    "kind": {
+      "overview": "Revisa el propósito de la pantalla antes de continuar.",
+      "section": "Revisa esta sección antes de avanzar. La información de {label} te ayuda a decidir tu siguiente acción.",
+      "field": "Completa {label}. Sigue la ayuda del campo y corrige los errores antes de guardar.",
+      "choice": "Usa {label} para elegir la persona, el período o la opción que necesitas.",
+      "action": "Usa {label} cuando la información esté lista. La guía no ejecuta esta acción.",
+      "link": "Abre {label} para ver los detalles o continuar en la siguiente pantalla.",
+      "details": "Despliega {label} cuando necesites las instrucciones u opciones adicionales. Cierra esta guía primero para interactuar con la pantalla.",
+      "status": "Lee este estado o explicación antes de continuar: {label}. Si la pantalla está bloqueada o una solicitud falló, sigue las instrucciones de recuperación que aparecen aquí.",
+      "navigation": "Estas son las pantallas principales de tu puesto. Úsalas para moverte entre tus tareas diarias; las herramientas adicionales están en Yo. Tu pantalla actual está marcada."
+    }
+  }
+}

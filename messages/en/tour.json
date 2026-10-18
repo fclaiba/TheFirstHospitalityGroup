@@ -1,0 +1,31 @@
+{
+  "tour": {
+    "tools": "Help tools",
+    "loadError": "We could not load the guide. Check your connection and try again.",
+    "retry": "Retry guide",
+    "open": "Interactive guide",
+    "previous": "Previous",
+    "next": "Next",
+    "finish": "Finish guide",
+    "exit": "Exit guide",
+    "step": "Step {current} of {total}",
+    "screen": "This screen",
+    "task": "Complete {title} here. Review the available choices, then close the guide to continue. Nothing is sent or saved by this guide.",
+    "navigation": "Your main navigation",
+    "intro": "Start with the screen's purpose. Then follow the available controls in order. You can leave this guide and return whenever you need it.",
+    "login": "Choose a sample account to explore a position. For a real account, use your username and password.",
+    "legal": "Read the document and contact management if you need a correction or clarification. The guide does not accept terms on your behalf.",
+    "readOnly": "This guide explains. It never saves, confirms or sends anything for you.",
+    "kind": {
+      "overview": "Review the screen's purpose before continuing.",
+      "section": "Review this section before moving on. The information under {label} helps you decide your next action.",
+      "field": "Complete {label}. Follow its help text and fix any error before saving.",
+      "choice": "Use {label} to choose the person, period or option you need.",
+      "action": "Use {label} when the information is ready. This guide does not activate it.",
+      "link": "Open {label} to see the details or continue on the next screen.",
+      "details": "Expand {label} when you need the additional instructions or options. Close this guide first to interact with the screen.",
+      "status": "Read this status or explanation before proceeding: {label}. If the screen is locked or a request failed, follow the recovery instructions shown here.",
+      "navigation": "These are the main screens available to your position. Use them to move between your daily work; extra tools are under Me. Your current screen is marked."
+    }
+  }
+}

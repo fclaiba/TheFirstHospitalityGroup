@@ -214,6 +214,7 @@
     "corporate": "Corporativo"
   },
   "reasons": {
+    "actionsOverdue": "Hay seguimiento operativo vencido",
     "closeMissing": "Faltan {count} cierres",
     "autoClosed": "{count} turnos se cerraron solos, para revisar",
     "confirmationsLate": "{count} personas no confirmaron el horario después de 24 horas",

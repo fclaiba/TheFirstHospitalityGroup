@@ -96,7 +96,9 @@
       "import": "Importar desde 7shifts",
       "importHint": "Personas, puestos y el horario",
       "audit": "Registro de auditoría",
-      "auditHint": "Quién hizo qué y cuándo"
+      "auditHint": "Quién hizo qué y cuándo",
+      "training": "Estándares de formación",
+      "trainingHint": "Publica criterios y demostraciones requeridas por puesto."
     },
     "venues": {
       "title": "Locales y servicios",
@@ -149,6 +151,9 @@
       "venue": "Local",
       "localName": "Nombre local",
       "localNameHelp": "Déjalo vacío para usar el nombre estándar.",
+      "bothNames": "Completa ambos nombres o deja ambos vacíos para usar el nombre estándar.",
+      "cycle": "Esto crearía una cadena circular: {path}. Elige otro supervisor.",
+      "stale": "Tus cambios no se guardaron. La configuración cambió en otro lugar. Cierra y vuelve a abrir este puesto para revisar la configuración actual.",
       "nameEn": "Nombre en inglés",
       "nameEs": "Nombre en español",
       "reportsTo": "Responde a",

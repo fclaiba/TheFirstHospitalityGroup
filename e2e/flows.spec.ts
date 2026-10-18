@@ -164,3 +164,20 @@ test("Spanish and Large text", async ({ page }) => {
   await expect(page.getByText(/Buen|Hola/).first()).toBeVisible();
   await expectAccessible(page);
 });
+
+test("the mock schedule survives an offline reload without accepting confirmations", async ({ page, context }) => {
+  await signInAs(page, /Jade Williams/);
+  await page.goto("/schedule");
+  await page.evaluate(async () => { await navigator.serviceWorker.ready; });
+  await page.reload();
+  const confirm = page.getByRole("button", { name: /I saw my schedule|Lo vi/ }).first();
+  await expect(confirm).toBeEnabled();
+  const week = await page.locator("main ol").innerText();
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.locator("main ol")).toHaveText(week, { useInnerText: true });
+  await expect(confirm).toBeDisabled();
+  await expect(page.getByRole("button", { name: /Ask for a swap|Pedir un cambio/ }).first()).toBeDisabled();
+  await context.setOffline(false);
+  await expect(confirm).toBeEnabled();
+});

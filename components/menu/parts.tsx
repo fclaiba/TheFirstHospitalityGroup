@@ -107,7 +107,7 @@ export function MenuPhoto({ url, alt, className, priority }: { url: string | nul
   if (!url || failed) {
     return (
       <div className={cn("flex aspect-[4/3] w-full flex-col items-center justify-center gap-2 bg-surface", className)} role="img" aria-label={t("menu.noPhoto")}>
-        <LionMark className="size-10 text-martini-200" />
+        <LionMark className="size-10 text-burgundy-200" />
       </div>
     );
   }

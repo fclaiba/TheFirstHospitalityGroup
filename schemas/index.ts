@@ -42,6 +42,20 @@ export const usernameSchema = z
   .regex(/^[a-z0-9._-]{3,24}$/);
 export const positionSchema = z.enum(POSITIONS);
 
+export const trainingStepInput = z.object({
+  key: z.string().regex(/^[a-z][a-z0-9_]{0,39}$/),
+  label: localizedReq(160),
+  evidence: localizedReq(500),
+});
+export const trainingProgramInput = z.object({
+  position: positionSchema.refine((p) => p !== "owner" && p !== "dev"),
+  expectedVersion: z.number().int().min(1),
+  title: localizedReq(120),
+  steps: z.array(trainingStepInput).min(1).max(12).refine((steps) => new Set(steps.map((s) => s.key)).size === steps.length),
+});
+export const trainingRequestInput = z.object({ position: positionSchema, version: z.number().int().min(1), stepKey: req(40), note: opt(text(500)) });
+export const trainingReviewInput = z.object({ revision: z.number().int().min(0), decision: z.enum(["verified", "needs_practice"]), note: z.string().trim().min(5).max(500) });
+
 /** Username (or a leader's verified email) + password (ADR 0003). */
 export const signInSchema = z.object({ login: usernameSchema.or(emailSchema), password: z.string().min(1).max(128) });
 export const newPasswordSchema = z.string().min(10).max(128);
@@ -91,6 +105,11 @@ export const venueInput = z.object({
   active: z.boolean(),
 });
 export const chainOverrideInput = z.object({ venueId: z.string(), position: positionSchema, reportsTo: positionSchema.nullable() });
+export const positionSettingsInput = chainOverrideInput.extend({
+  localName: localizedReq(30).nullable(),
+  previousLocalName: localizedReq(30).nullable(),
+  previousReportsTo: positionSchema.nullable(),
+});
 
 export const menuItemInput = z.object({
   itemId: z.string().optional(),
@@ -264,3 +283,15 @@ export function fieldErrors(err: z.ZodError): Record<string, string> {
   }
   return out;
 }
+
+export const operatingActionInput = z.object({
+  venueId: z.string(), assigneeId: z.string().min(1), instructions: localizedReq(600),
+  dueAt: z.number().int().positive().max(8640000000000000),
+  sourceShiftId: z.string().optional(), sourceItem: z.number().int().min(0).max(99).optional(),
+}).refine(v => !!v.sourceShiftId === (v.sourceItem !== undefined), { message: "source", path: ["sourceItem"] });
+export const operatingActionTransitionInput = z.object({
+  actionId: z.string(), revision: z.number().int().min(1),
+  command: z.enum(["start", "submit", "return", "verify", "cancel", "reassign"]),
+  note: text(600).trim(), assigneeId: z.string().optional(), dueAt: z.number().int().positive().optional(),
+}).refine(v => v.command === "start" || v.note.length >= 5, { message: "required", path: ["note"] })
+  .refine(v => v.command !== "reassign" || (!!v.assigneeId && !!v.dueAt), { message: "required", path: ["assigneeId"] });

@@ -9,7 +9,7 @@ export default function PersonPage() {
   const { userId } = useParams<{ userId: string }>();
   return (
     <RequireAuth action="team.view">
-      <PersonDetail userId={userId as Id<"users">} />
+      <PersonDetail userId={decodeURIComponent(userId) as Id<"users">} />
     </RequireAuth>
   );
 }

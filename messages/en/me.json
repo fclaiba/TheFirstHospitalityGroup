@@ -45,6 +45,7 @@
     "pushActive": "On",
     "tools": "More",
     "tool": {
+      "actions": "Operational follow-up",
       "today": "Today",
       "messages": "Announcements",
       "tasks": "My side work",
@@ -72,7 +73,10 @@
       "company": "Company",
       "org": "Organization chart",
       "companySetup": "Company setup",
-      "guide": "Guide"
+      "guide": "Guide",
+      "training": "My training",
+      "trainingReview": "Review team training",
+      "trainingSetup": "Training standards"
     },
     "account": "Account",
     "signOutEverywhere": "Sign out other devices",

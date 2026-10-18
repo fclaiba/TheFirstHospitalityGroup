@@ -5,6 +5,7 @@ node_modules/
 .env
 !.env.example
 coverage/
+.tmp/
 playwright-report/
 test-results/
 graphify-out/

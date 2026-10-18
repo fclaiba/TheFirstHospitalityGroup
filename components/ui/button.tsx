@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/cn";
 
-// Buttons (BLUEPRINT 4.2, ADR 0009): primary martini green (one per screen), secondary ink outline, quiet text,
+// Buttons (BLUEPRINT 4.2, ADR 0009): primary burgundy (one per screen), secondary ink outline, quiet text,
 // destructive only through the two-tap ConfirmButton. Press feedback on pointer-down (.pressable).
 type Variant = "primary" | "secondary" | "quiet" | "destructive" | "ink";
 type Size = "md" | "lg";

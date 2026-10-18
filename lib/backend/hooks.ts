@@ -6,7 +6,7 @@ import { getFunctionName } from "convex/server";
 import type { FunctionArgs, FunctionReference, FunctionReturnType } from "convex/server";
 import { PREVIEW } from "./config";
 import { loadEngine } from "../demo/load";
-import { commit, useDemoStore } from "../demo/store";
+import { commit, hasValidSession, useDemoStore } from "../demo/store";
 
 // One data API for the UI (BLUEPRINT 6.3, ported from OSCURA): Convex when NEXT_PUBLIC_CONVEX_URL is set, the preview
 // engine otherwise (ADR 0010, 0018). Both run the same handlers in convex/.
@@ -17,27 +17,26 @@ type AnyMutation = FunctionReference<"mutation">;
 function usePreviewQuery<Q extends AnyQuery>(ref: Q, args: FunctionArgs<Q> | "skip"): FunctionReturnType<Q> | undefined {
   const state = useDemoStore();
   const name = getFunctionName(ref);
-  const key = args === "skip" ? "skip" : JSON.stringify(args);
+  const serializedArgs = args === "skip" ? "skip" : JSON.stringify(args);
+  const authenticated = hasValidSession(state);
+  const key = JSON.stringify([name, serializedArgs, authenticated ? state.session : null]);
   const [out, setOut] = useState<{ key: string; value: unknown } | null>(null);
-  const [, setError] = useState<unknown>(null);
+  const [error, setError] = useState<{ key: string; value: unknown } | null>(null);
   useEffect(() => {
-    if (!state.hydrated || key === "skip") return;
+    if (!state.hydrated || serializedArgs === "skip" || !authenticated) return;
     let alive = true;
     Promise.resolve()
-      .then(async () => (await loadEngine()).runQuery(state, name, JSON.parse(key)))
+      .then(async () => (await loadEngine()).runQuery(state, name, JSON.parse(serializedArgs)))
       .then(
-        (value) => alive && setOut({ key, value }),
-        // Throw inside render so the route's error boundary shows it, as a failing Convex query would.
-        (e) =>
-          alive &&
-          setError(() => {
-            throw e;
-          }),
+        (value) => { if (alive) { setError(null); setOut({ key, value }); } },
+        (value) => { if (alive) setError({ key, value }); },
       );
     return () => {
       alive = false;
     };
-  }, [state, name, key]);
+  }, [state, name, key, serializedArgs, authenticated]);
+  if (!authenticated) return (name === "auth:me" && state.hydrated ? null : undefined) as FunctionReturnType<Q> | undefined;
+  if (error?.key === key) throw error.value;
   // Keep the last result while the same query recomputes; a different query starts as loading.
   return out && out.key === key ? (out.value as FunctionReturnType<Q>) : undefined;
 }
@@ -62,8 +61,8 @@ export const useMutation: <M extends AnyMutation>(ref: M) => (args: FunctionArgs
 export function useAuthState(): { isLoading: boolean; isAuthenticated: boolean } {
   if (PREVIEW) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { hydrated, session } = useDemoStore();
-    return { isLoading: !hydrated, isAuthenticated: !!session };
+    const state = useDemoStore();
+    return { isLoading: !state.hydrated, isAuthenticated: hasValidSession(state) };
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks
   return useConvexAuth();

@@ -6,6 +6,7 @@ import { CalendarCheck, CaretRight, CheckCircle, ForkKnife, Megaphone, NotePenci
 import { cn } from "@/lib/cn";
 import { useT } from "@/lib/i18n-client";
 import { Button } from "@/components/ui/button";
+import { useOnline } from "@/hooks/use-online";
 
 // Confirmations (ADR 0022): what is published records who confirmed it. Pending items show first in Today as a
 // ConfirmCard; the screen that holds the item ends with an AckBanner, the "I saw it" button.
@@ -40,6 +41,7 @@ export function ConfirmCard({ kind, title, body, href }: { kind: ConfirmKind; ti
 /** The "I saw it" bar at the end of a published item. After confirming it reads "Confirmed" with the time. */
 export function AckBanner({ label, confirmedLabel, confirmed, onConfirm, loading, className }: { label: string; confirmedLabel: string; confirmed: boolean; onConfirm: () => void; loading?: boolean; className?: string }) {
   const t = useT();
+  const online = useOnline();
   if (confirmed) {
     return (
       <p role="status" className={cn("flex min-h-target items-center gap-2 rounded-card bg-ok-bg px-4 text-body font-semibold text-ok-fg", className)}>
@@ -50,7 +52,7 @@ export function AckBanner({ label, confirmedLabel, confirmed, onConfirm, loading
   }
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      <Button block loading={loading} onClick={onConfirm} icon={<CheckCircle weight="bold" />}>
+      <Button block loading={loading} disabled={!online} onClick={onConfirm} icon={<CheckCircle weight="bold" />}>
         {label}
       </Button>
       <p className="text-center text-small text-ink-muted">{t("confirm.recorded")}</p>

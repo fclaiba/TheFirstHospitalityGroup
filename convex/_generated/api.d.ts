@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as actions from "../actions.js";
 import type * as audit from "../audit.js";
 import type * as auth from "../auth.js";
 import type * as bar from "../bar.js";
@@ -46,6 +47,8 @@ import type * as tableNotes from "../tableNotes.js";
 import type * as tasks from "../tasks.js";
 import type * as tips from "../tips.js";
 import type * as today from "../today.js";
+import type * as training from "../training.js";
+import type * as trainingDefaults from "../trainingDefaults.js";
 import type * as warnings from "../warnings.js";
 
 import type {
@@ -55,6 +58,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  actions: typeof actions;
   audit: typeof audit;
   auth: typeof auth;
   bar: typeof bar;
@@ -93,6 +97,8 @@ declare const fullApi: ApiFromModules<{
   tasks: typeof tasks;
   tips: typeof tips;
   today: typeof today;
+  training: typeof training;
+  trainingDefaults: typeof trainingDefaults;
   warnings: typeof warnings;
 }>;
 

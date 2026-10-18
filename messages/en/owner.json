@@ -96,7 +96,9 @@
       "import": "Import from 7shifts",
       "importHint": "People, positions and the schedule",
       "audit": "Audit log",
-      "auditHint": "Who did what and when"
+      "auditHint": "Who did what and when",
+      "training": "Training standards",
+      "trainingHint": "Publish criteria and required demonstrations by position."
     },
     "venues": {
       "title": "Venues and services",
@@ -149,6 +151,9 @@
       "venue": "Venue",
       "localName": "Local name",
       "localNameHelp": "Leave empty to use the standard name.",
+      "bothNames": "Complete both names, or leave both empty to use the standard name.",
+      "cycle": "This would create circular reporting: {path}. Choose a different supervisor.",
+      "stale": "Your changes were not saved. Settings changed elsewhere. Close and reopen this position to review the current settings.",
       "nameEn": "Name in English",
       "nameEs": "Name in Spanish",
       "reportsTo": "Reports to",

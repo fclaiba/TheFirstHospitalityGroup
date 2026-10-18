@@ -5,6 +5,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { cn } from "@/lib/cn";
 import { useT } from "@/lib/i18n-client";
+import { ScreenGuide } from "@/components/app/screen-guide";
 
 // Page structure: a large title that reads first (apple-design 15), grouped inset lists, cards that lift only when
 // they must. No cards inside cards.
@@ -27,6 +28,7 @@ export function PageHeader({ title, eyebrow, subtitle, back, action }: { title: 
         {action}
       </div>
       {subtitle ? <p className="text-body text-ink-muted">{subtitle}</p> : null}
+      <ScreenGuide />
     </header>
   );
 }
@@ -67,8 +69,8 @@ function RowBody({ title, subtitle, leading, trailing, chevron }: RowProps) {
     <>
       {leading ? <span className="flex shrink-0 items-center text-ink-muted">{leading}</span> : null}
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate text-body font-medium text-ink">{title}</span>
-        {subtitle ? <span className="truncate text-small text-ink-muted">{subtitle}</span> : null}
+        <span className="text-body font-medium wrap-break-word text-ink">{title}</span>
+        {subtitle ? <span className="text-small wrap-break-word text-ink-muted">{subtitle}</span> : null}
       </span>
       {trailing ? <span className="flex shrink-0 items-center gap-2 text-small text-ink-muted">{trailing}</span> : null}
       {chevron ? <CaretRight weight="bold" aria-hidden className="size-4 shrink-0 text-ink-subtle" /> : null}
@@ -96,10 +98,10 @@ export function LinkRow({ href, ...props }: RowProps & { href: string }) {
   );
 }
 
-export function ButtonRow({ onClick, disabled, ...props }: RowProps & { onClick: () => void; disabled?: boolean }) {
+export function ButtonRow({ onClick, disabled, expanded, controls, ...props }: RowProps & { onClick: () => void; disabled?: boolean; expanded?: boolean; controls?: string }) {
   return (
     <li>
-      <button type="button" onClick={onClick} disabled={disabled} className={cn(rowCls, "pressable-row hover-surface transition-colors disabled:opacity-45", props.className)}>
+      <button type="button" onClick={onClick} disabled={disabled} aria-expanded={expanded} aria-controls={controls} className={cn(rowCls, "pressable-row hover-surface transition-colors disabled:opacity-45", props.className)}>
         <RowBody {...props} />
       </button>
     </li>

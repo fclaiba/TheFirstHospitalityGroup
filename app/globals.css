@@ -2,7 +2,7 @@
 
 /*
  * The First Hospitality Group design tokens (ADR 0009). Single source: docs/brand/tokens.css. Keep both in sync;
- * tests/tokens.test.ts rejects literals in app/ and components/. White canvas, ink text, martini for the brand and the
+ * tests/tokens.test.ts rejects literals in app/ and components/. White canvas, ink text, burgundy for the brand and the
  * single primary action, status colours for meaning only.
  */
 @theme {
@@ -20,17 +20,17 @@
   --color-ink-subtle: #6b6f68;
   --color-on-ink: #ffffff;
 
-  --color-martini-50: #eef2e8;
-  --color-martini-100: #e3ebdb;
-  --color-martini-200: #c8d6ba;
-  --color-martini-300: #9db88a;
-  --color-martini-500: #4a6b3e;
-  --color-martini-600: #36522f;
-  --color-martini-800: #2e4729;
-  --color-martini-900: #1e2e1b;
-  --color-brand: #4a6b3e;
-  --color-brand-pressed: #36522f;
-  --color-brand-soft: #e3ebdb;
+  --color-burgundy-50: #faf1f4;
+  --color-burgundy-100: #f2dfe5;
+  --color-burgundy-200: #e4bfcb;
+  --color-burgundy-300: #d6a6b5;
+  --color-burgundy-500: #6b2337;
+  --color-burgundy-600: #50182a;
+  --color-burgundy-800: #3b1220;
+  --color-burgundy-900: #260b14;
+  --color-brand: #6b2337;
+  --color-brand-pressed: #50182a;
+  --color-brand-soft: #f2dfe5;
   --color-on-brand: #ffffff;
   --color-focus: #2f5b8f;
 
@@ -76,7 +76,7 @@
   --text-display--letter-spacing: -0.025em;
 
   --tracking-label: 0.06em;
-  --tracking-wordmark: 0.1em;
+  --tracking-wordmark: 0.16em;
 
   --radius-check: 6px;
   --radius-input: 10px;
@@ -100,11 +100,11 @@
   --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
-@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
-@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
-@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
-@font-face { font-family: "Figtree"; src: url("./fonts/figtree-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
-@font-face { font-family: "IBM Plex Mono"; src: url("./fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("/fonts/figtree-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("/fonts/figtree-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("/fonts/figtree-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Figtree"; src: url("/fonts/figtree-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
 
 :root {
   --text-scale: 1;
@@ -128,9 +128,9 @@
     --color-ink-muted: #b6bbae;
     --color-ink-subtle: #a2a79a;
     --color-on-ink: #111311;
-    --color-brand: #9db88a;
-    --color-brand-pressed: #c8d6ba;
-    --color-brand-soft: #262d17;
+    --color-brand: #d6a6b5;
+    --color-brand-pressed: #e4bfcb;
+    --color-brand-soft: #321b24;
     --color-on-brand: #111311;
     --color-focus: #8fb4e3;
     --color-ok-fg: #8fd1b3; --color-ok-bg: #16281f;
@@ -153,9 +153,9 @@
   --color-ink-muted: #b6bbae;
   --color-ink-subtle: #a2a79a;
   --color-on-ink: #111311;
-  --color-brand: #9db88a;
-  --color-brand-pressed: #c8d6ba;
-  --color-brand-soft: #262d17;
+  --color-brand: #d6a6b5;
+  --color-brand-pressed: #e4bfcb;
+  --color-brand-soft: #321b24;
   --color-on-brand: #111311;
   --color-focus: #8fb4e3;
   --color-ok-fg: #8fd1b3; --color-ok-bg: #16281f;
@@ -185,7 +185,7 @@ body {
   line-height: 1.5;
   overscroll-behavior: none;
 }
-::selection { background: var(--color-martini-200); color: var(--color-martini-900); }
+::selection { background: var(--color-burgundy-200); color: var(--color-burgundy-900); }
 
 input, textarea, select { font-size: max(16px, var(--text-control)); }
 button, a, [role="button"], label[for], summary { touch-action: manipulation; }
@@ -198,7 +198,7 @@ button, [role="button"], [role="tab"], .no-select { user-select: none; -webkit-u
   p { text-wrap-style: pretty; }
 }
 
-.app-shell { min-height: 100dvh; }
+.app-shell { height: calc(100dvh - var(--guide-bar-height)); overflow: hidden; }
 .tabular { font-variant-numeric: tabular-nums; }
 .scrollbar-none { scrollbar-width: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
@@ -271,4 +271,29 @@ button, [role="button"], [role="tab"], .no-select { user-select: none; -webkit-u
 @media print {
   .no-print { display: none !important; }
   html, body { background: #fff; color: #000; }
+}
+
+:root {
+  --guide-bar-height: calc(var(--size-target) + var(--safe-top, 0px));
+  --size-target: var(--spacing-target);
+  --tour-blur: 6px;
+  --tour-gap: 16px;
+  --tour-target-pad: 6px;
+  --tour-panel-width: 384px;
+  --tour-panel-height: 55dvh;
+}
+.tour-modal::backdrop { background: transparent; }
+
+:where(button, a, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-block-start: calc(var(--guide-bar-height) + var(--spacing-target-lg) + var(--tour-gap));
+  scroll-margin-block-end: calc(var(--nav-height) + var(--safe-bottom) + var(--spacing-target-lg));
+}
+
+.app-shell main {
+  scroll-padding-block-start: var(--tour-gap);
+  scroll-padding-block-end: calc(var(--spacing-target-lg) + var(--tour-gap) * 2);
+}
+.app-shell main :where(button, a, input, select, textarea, summary, [tabindex]) {
+  scroll-margin-block-start: var(--tour-gap);
+  scroll-margin-block-end: var(--tour-gap);
 }

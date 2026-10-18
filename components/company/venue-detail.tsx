@@ -6,7 +6,7 @@ import type { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "@/lib/backend/hooks";
 import { useLocale } from "@/lib/i18n-client";
 import { dateShort } from "@/lib/format";
-import { Card, List, PageHeader, Row, Section } from "@/components/ui/layout";
+import { Card, List, LinkRow, PageHeader, Row, Section } from "@/components/ui/layout";
 import { EmptyState, ScreenSkeleton } from "@/components/ui/states";
 import { StateChip, PositionBadge } from "@/components/ui/status";
 import { ReasonList } from "@/components/app/venue-state";
@@ -57,6 +57,7 @@ export function VenueDetail({ venueId }: { venueId: Id<"venues"> }) {
       </div>
 
       <Section title={t("company.venue.people")}>
+        <List><LinkRow href={`/actions?venue=${venueId}`} title={t("actions.all")} /></List>
         {team === undefined ? (
           <ScreenSkeleton rows={2} />
         ) : team.people.length === 0 ? (

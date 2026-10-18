@@ -13,6 +13,7 @@ import type { Position } from "@/lib/domain/types";
 import { Button } from "@/components/ui/button";
 import { Card, PageHeader, Section } from "@/components/ui/layout";
 import { PositionBadge } from "@/components/ui/status";
+import { RolePlaybook } from "./role-playbook";
 
 /** Which screens a position uses (BLUEPRINT 6.1): a section shows when the position can do its action. */
 export const GUIDE_SECTIONS: Array<{ key: string; action: Action }> = [
@@ -77,6 +78,7 @@ export function GuideScreen() {
   return (
     <div className="flex flex-col gap-7">
       <PageHeader title={t("guide.title")} subtitle={t("guide.subtitle")} />
+      <RolePlaybook />
 
       <nav aria-label={t("guide.contents")} className="scrollbar-none -mx-4 flex gap-2 overflow-x-auto px-4">
         {sections.map((s) => (

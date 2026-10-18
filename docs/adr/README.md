@@ -28,6 +28,13 @@ ADRs are never edited after acceptance; a later ADR supersedes or amends them. T
 | [0022](0022-confirmations-schedule-menu.md) | Confirmations of schedule and menu | accepted |  |
 | [0023](0023-bar-shortages-list.md) | Bar shortage list | accepted |  |
 | [0024](0024-tip-policy-configuration.md) | Tip policy as configuration only | accepted (P3) |  |
-| [0025](0025-executive-brand-martini-lion.md) | Executive brand: martini green and the lion | accepted |  |
+| [0025](0025-executive-brand-martini-lion.md) | Executive brand: martini green and the lion | accepted, color superseded by 0029 | Executive direction and typography retained |
 | [0026](0026-chain-of-supervision.md) | Chain of supervision, no peer to peer | accepted |  |
 | [0027](0027-states-not-scores.md) | States, not scores | accepted |  |
+| [0028](0028-preview-runs-convex-handlers.md) | Preview executes the real Convex handlers in the browser | accepted, refines 0010 | Browser mock and test harness share the registered handlers |
+| [0029](0029-burgundy-brand.md) | Burgundy primary brand | accepted | Owner request, 2026-10-18 |
+| [0030](0030-preview-access-guidance-original-mark.md) | Reliable preview access, contextual guidance and original mark | accepted | Tab-local identity and original vector lion |
+| [0031](0031-role-playbooks-supervised-training.md) | Role playbooks and supervised training evidence | accepted | Versioned criteria, chain review, no scores or automatic promotion |
+| [0032](0032-cross-shift-actions.md) | Accountable cross-shift operational actions | accepted | Durable handoff, evidence, independent verification and escalation |
+| [0033](0033-interactive-screen-guides.md) | Interactive screen guides | accepted | Voluntary spotlight walkthroughs with accessible modal navigation |
+| [0034](0034-contained-work-viewport.md) | Contained work viewport | accepted | Header and navigation do not cover work; tour restores nested scroll |

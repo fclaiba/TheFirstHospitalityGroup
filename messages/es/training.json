@@ -1,0 +1,239 @@
+{
+  "training": {
+    "title": "Formación",
+    "body": "Lee el criterio, practica con tu equipo y solicita una observación del supervisor. Leer no verifica una habilidad.",
+    "reviewTitle": "Formación por revisar",
+    "reviewBody": "Observa la demostración antes de decidir. Solo ves puestos bajo tu supervisión en la cadena de este local.",
+    "setupTitle": "Estándares de formación",
+    "setupBody": "Publica criterios claros en ambos idiomas. Una versión nueva conserva la evidencia anterior y requiere nuevas observaciones.",
+    "role": "Puesto para aprender",
+    "version": "Versión del programa {version}",
+    "defaultNote": "Programa inicial. Tu empresa puede reemplazar estos criterios con sus procedimientos aprobados.",
+    "noCourse": "Tu puesto dirige el sistema de formación",
+    "noCourseBody": "Usa el proceso operativo, revisa demostraciones del equipo o publica estándares. No certificas tu propio trabajo.",
+    "request": "Ya practiqué; solicitar revisión",
+    "requestNote": "¿Qué practicaste?",
+    "requestHelp": "Describe solo el trabajo. No incluyas información de comensales ni datos personales privados.",
+    "requested": "Tu solicitud espera una observación del supervisor.",
+    "demonstrate": "Qué debes demostrar",
+    "history": "Historial de evidencia",
+    "reviewNote": "Evidencia observada o siguiente práctica",
+    "reviewHelp": "Al menos 5 caracteres. Explica qué observaste o qué debe practicar a continuación.",
+    "verify": "Verificar demostración",
+    "practice": "Necesita más práctica",
+    "reviewed": "Observación registrada.",
+    "empty": "No hay demostraciones pendientes",
+    "emptyBody": "Aquí aparecen solicitudes de tu cadena. Las versiones nuevas requieren solicitudes nuevas.",
+    "more": "Cargar siguientes solicitudes",
+    "previous": "Solicitudes anteriores",
+    "current": "Solicitudes actuales",
+    "learner": "Persona en formación",
+    "reviewer": "Registrado por {name}",
+    "on": "{date} a las {time}",
+    "archived": "Evidencia de programas anteriores",
+    "archivedBody": "La evidencia anterior se conserva y no verifica la versión actual. Se muestran los últimos 50 registros.",
+    "noHistory": "Todavía no hay observaciones.",
+    "historyLimit": "Últimos 20 eventos por criterio. Las observaciones anteriores se conservan.",
+    "publish": "Publicar versión nueva del programa",
+    "published": "Versión nueva de formación publicada.",
+    "programTitle": "Título del programa",
+    "criterion": "Criterio",
+    "evidence": "Demostración requerida",
+    "add": "Agregar un criterio",
+    "remove": "Quitar criterio",
+    "invalid": "Completa ambos idiomas en títulos, criterios y demostraciones.",
+    "key": "Clave estable del criterio",
+    "keyHelp": "Letras minúsculas, números y guion bajo. Conserva la clave al revisar la misma habilidad.",
+    "changed": "Estos cambios se aplicarán a toda la empresa. Las versiones anteriores quedan en el historial.",
+    "noAutomatic": "La verificación registra aprendizaje. No habilita un puesto ni aprueba un ascenso.",
+    "defaultEvidence": "Demuestra: {skill}. Sigue el procedimiento vigente del local; el supervisor registra lo observado.",
+    "open": "Abrir mi formación",
+    "queue": "Revisar formación del equipo",
+    "manage": "Gestionar estándares de formación",
+    "states": {
+      "not_started": "Practica primero",
+      "ready": "Espera revisión",
+      "needs_practice": "Practica de nuevo",
+      "verified": "Verificado"
+    },
+    "defaults": {
+      "chef_de_cuisine": {
+        "i1": "Publicar ingredientes y alérgenos correctos",
+        "i2": "Informar a cocina sobre cambios de carta",
+        "i3": "Revisar una demostración de estación con comentarios",
+        "i4": "Comunicar asuntos pendientes de cocina"
+      },
+      "floor_manager": {
+        "i1": "Abrir y preparar un servicio",
+        "i2": "Resolver una solicitud mediante el puesto responsable",
+        "i3": "Registrar asistencia y gestionar una propuesta formal",
+        "i4": "Revisar evidencia y registrar un cierre completo"
+      },
+      "agm": {
+        "i1": "Armar una semana usando puestos y disponibilidad",
+        "i2": "Cubrir eventos y publicar un horario revisado",
+        "i3": "Resolver un cambio mediante los pasos de colega y gerente",
+        "i4": "Revisar confirmaciones y comunicar falta de cobertura"
+      },
+      "gm": {
+        "i1": "Explicar el estado del local y sus motivos",
+        "i2": "Revisar cierres de gerentes y asuntos pendientes",
+        "i3": "Proponer un ascenso documentado mediante la cadena",
+        "i4": "Acompañar a un gerente con evidencia observada"
+      },
+      "director": {
+        "i1": "Revisar excepciones de locales en la empresa",
+        "i2": "Publicar un estándar claro en ambos idiomas",
+        "i3": "Revisar un ascenso con evidencia y fecha efectiva",
+        "i4": "Coordinar prioridades correctivas mediante gerentes generales"
+      }
+    },
+    "stale": "El programa o la observación cambió. Recarga la pantalla y revisa la versión actual antes de intentarlo de nuevo.",
+    "handled": "Esta solicitud ya fue atendida. Recarga la pantalla para ver la decisión registrada."
+  },
+  "operations": {
+    "title": "Tu proceso operativo",
+    "role": "Explorar un puesto",
+    "outcome": "Tu responsabilidad",
+    "before": "Antes del servicio",
+    "during": "Durante el servicio",
+    "after": "Cerrar y comunicar pendientes",
+    "reportsTo": "Reporta a",
+    "governance": "Dirección de la empresa",
+    "scope": "Estos pasos orientan tu trabajo. Las reglas publicadas y las indicaciones del gerente definen el procedimiento exacto.",
+    "roles": {
+      "polisher": {
+        "outcome": "Mantener las estaciones listas con material limpio y revisado.",
+        "before": "Confirma tu turno; revisa la cristalería y repón tu estación.",
+        "during": "Retira las piezas dañadas y sigue las prioridades del capitán.",
+        "after": "Completa el cierre e informa material faltante o dañado."
+      },
+      "busser": {
+        "outcome": "Mantener tu sección limpia y lista para cada comensal.",
+        "before": "Lee tu sección asignada y prepara agua y material de montaje.",
+        "during": "Atiende solicitudes de agua y retiro; coordina montajes con el capitán.",
+        "after": "Repón estaciones, completa tus tareas e informa solicitudes pendientes."
+      },
+      "runner": {
+        "outcome": "Llevar el plato correcto a la mesa y asiento correctos.",
+        "before": "Revisa carta, alérgenos, productos no disponibles y números de mesa.",
+        "during": "Sigue las indicaciones del expo; consulta si una alergia o asiento no está claro.",
+        "after": "Termina las tareas de estación e informa material faltante a tu responsable."
+      },
+      "server": {
+        "outcome": "Guiar a tus mesas durante un servicio informado y coordinado.",
+        "before": "Confirma cambios, revisa tu sección y lee las indicaciones del servicio.",
+        "during": "Registra alergias con mesa y asiento; coordina apoyo mediante solicitudes.",
+        "after": "Completa tus tareas y comunica al capitán los asuntos pendientes de tus mesas."
+      },
+      "captain": {
+        "outcome": "Coordinar al equipo de tu sección y verificar estándares.",
+        "before": "Revisa la cobertura, asigna secciones e informa a tu equipo.",
+        "during": "Resuelve solicitudes, observa prácticas y escala problemas al gerente.",
+        "after": "Revisa trabajo pendiente y comunica hechos mediante la cadena de supervisión."
+      },
+      "host": {
+        "outcome": "Recibir a los comensales según el plano actual del salón.",
+        "before": "Lee el plano, las secciones asignadas y las indicaciones del servicio.",
+        "during": "Coordina las mesas con el maître; usa por separado el sistema de reservas del local.",
+        "after": "Comunica asuntos pendientes de llegadas y completa las tareas de recepción."
+      },
+      "maitre_d": {
+        "outcome": "Coordinar recepción y salón como un solo servicio.",
+        "before": "Revisa secciones e informa a hosts y capitanes sobre el plan del servicio.",
+        "during": "Ordena prioridades del salón, apoya a capitanes y revisa demostraciones de formación.",
+        "after": "Informa al gerente los asuntos pendientes y necesidades del equipo."
+      },
+      "expo": {
+        "outcome": "Cuidar la coordinación entre cocina y salón.",
+        "before": "Revisa alergias, asientos, cambios de carta y productos no disponibles.",
+        "during": "Confirma alergias, verifica la entrega de platos y publica productos no disponibles.",
+        "after": "Comunica al chef y gerente las alergias y disponibilidad pendientes."
+      },
+      "barback": {
+        "outcome": "Mantener abastecida la barra e informar faltantes a tiempo.",
+        "before": "Prepara hielo, cristalería y guarniciones; lee las tareas de barra.",
+        "during": "Reporta productos Bajos o Agotados y repón según indique el bartender.",
+        "after": "Limpia y repón; deja documentados los faltantes para el siguiente servicio."
+      },
+      "bartender": {
+        "outcome": "Preparar bebidas consistentes y mantener la barra lista.",
+        "before": "Lee cambios de bebidas, alérgenos y faltantes actuales.",
+        "during": "Sigue las especificaciones del local, reporta faltantes y acompaña la práctica del barback.",
+        "after": "Completa el cierre de barra y comunica faltantes pendientes al jefe de barra."
+      },
+      "head_bartender": {
+        "outcome": "Liderar la preparación, estándares y reposición de barra.",
+        "before": "Revisa personal, faltantes e indicaciones de bebidas.",
+        "during": "Apoya a bartenders, actualiza decisiones sobre faltantes y propone cambios de carta.",
+        "after": "Verifica las tareas de cierre y comunica asuntos pendientes al gerente."
+      },
+      "sommelier": {
+        "outcome": "Hacer que el conocimiento de vinos llegue al equipo.",
+        "before": "Revisa disponibilidad de vinos, maridajes y cambios de carta.",
+        "during": "Apoya el servicio de vinos y propone cambios mediante el flujo de carta.",
+        "after": "Comunica al maître problemas de disponibilidad y necesidades de formación."
+      },
+      "dishwasher": {
+        "outcome": "Mantener disponibles utensilios limpios y áreas de trabajo ordenadas.",
+        "before": "Lee las tareas de estación y revisa equipos según las instrucciones del local.",
+        "during": "Separa material limpio y usado; informa desperfectos al sous chef.",
+        "after": "Completa la evidencia de limpieza e informa riesgos o tareas pendientes."
+      },
+      "prep_cook": {
+        "outcome": "Preparar una estación organizada siguiendo las indicaciones de cocina.",
+        "before": "Lee tareas de estación, cambios e indicaciones de cocina.",
+        "during": "Sigue las instrucciones del chef; informa faltantes y dudas sobre alérgenos.",
+        "after": "Completa limpieza y etiquetado; comunica pendientes al sous chef."
+      },
+      "line_cook": {
+        "outcome": "Operar tu estación de forma consistente dentro del equipo.",
+        "before": "Revisa la estación, cambios de carta y notas de alergia.",
+        "during": "Sigue al sous chef y expo; informa de inmediato los productos no disponibles.",
+        "after": "Completa el cierre de estación e informa problemas pendientes de equipos o preparación."
+      },
+      "sous_chef": {
+        "outcome": "Coordinar la ejecución de cocina y preparación de estaciones.",
+        "before": "Revisa cobertura de cocina, tareas de estación y cambios del servicio.",
+        "during": "Coordina la línea, verifica el manejo de alergias y observa prácticas del personal.",
+        "after": "Revisa trabajo pendiente y comunica asuntos de cocina al chef de cocina."
+      },
+      "chef_de_cuisine": {
+        "outcome": "Responder por los estándares de cocina e información correcta de carta.",
+        "before": "Revisa cobertura, cambios de carta, alérgenos y necesidades de formación.",
+        "during": "Apoya al sous chef, publica información correcta de carta y verifica estándares de cocina.",
+        "after": "Comunica excepciones de cocina y prioridades siguientes al gerente general y gerente de turno."
+      },
+      "floor_manager": {
+        "outcome": "Dirigir el servicio y dejar un traspaso operativo completo.",
+        "before": "Revisa cobertura y confirmaciones; abre el servicio y asigna secciones.",
+        "during": "Apoya a responsables, decide solicitudes y registra asistencia e incidencias formales.",
+        "after": "Revisa pendientes, faltantes y limpieza antes de registrar el cierre."
+      },
+      "agm": {
+        "outcome": "Convertir el plan del local en una semana cubierta y confirmada.",
+        "before": "Revisa disponibilidad, permisos, personal de eventos y cobertura.",
+        "during": "Publica horarios revisados, resuelve solicitudes y apoya al gerente de turno.",
+        "after": "Revisa confirmaciones y cierres; informa al gerente general necesidades de cobertura."
+      },
+      "gm": {
+        "outcome": "Responder por estándares, decisiones de equipo y excepciones del local.",
+        "before": "Revisa el estado del local, sus motivos, personal y traspaso anterior.",
+        "during": "Apoya a gerentes, revisa estándares y propone decisiones de personal justificadas.",
+        "after": "Revisa cierres y pendientes; escala las necesidades del local a operaciones."
+      },
+      "director": {
+        "outcome": "Mantener la ejecución de locales alineada con estándares de empresa.",
+        "before": "Revisa el estado de cada local e identifica decisiones pendientes.",
+        "during": "Trabaja mediante gerentes generales, revisa ascensos y publica estándares claros.",
+        "after": "Revisa excepciones pendientes y presenta al dueño las decisiones de empresa."
+      },
+      "owner": {
+        "outcome": "Dirigir estándares de empresa y dar seguimiento a operaciones.",
+        "before": "Revisa estados de locales, motivos críticos y decisiones por autorizar.",
+        "during": "Define estándares y configuración; dirige el seguimiento mediante operaciones.",
+        "after": "Revisa el historial de decisiones y confirma prioridades con el director."
+      }
+    }
+  }
+}
