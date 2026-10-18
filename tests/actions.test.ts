@@ -74,11 +74,11 @@ describe("accountable operational follow-up", () => {
     expect(await w.code("actions:create", {...args, sourceItem: 9})).toBe("INVALID_INPUT");
   });
   it("paginates own work and never returns a peer's action", async () => {
-    for (let i=0;i<12;i++) await create(i===0?"tom.b":"ana.p");
+    await w.as("maria.m"); for (let i=0;i<12;i++) await w.m("actions:create", {venueId:w.venue("v1")._id,assigneeId:w.user(i===0?"tom.b":"ana.p")._id,instructions,dueAt:Date.now()+3600_000});
     await w.as("ana.p");
     let cursor: string|null = null; const ids: string[]=[];
     for(let n=0;n<5;n++) {
-      const result = await w.q<{page:Array<{_id:string}>,isDone:boolean,continueCursor:string}>("actions:list", { venueId: w.venue("v1")._id, scope: "mine", archive:false, paginationOpts:{numItems:3,cursor} });
+      const result: {page:Array<{_id:string}>,isDone:boolean,continueCursor:string} = await w.q("actions:list", { venueId: w.venue("v1")._id, scope: "mine", archive:false, paginationOpts:{numItems:3,cursor} });
       ids.push(...result.page.map(a=>a._id)); if(result.isDone) break; cursor=result.continueCursor;
     }
     expect(new Set(ids).size).toBe(11);
@@ -97,4 +97,6 @@ describe("accountable operational follow-up", () => {
     vi.setSystemTime(dueAt+96*3600_000); await w.m("actions:sweep"); expect(count()).toBe(3);
   });
 });
+
+
 

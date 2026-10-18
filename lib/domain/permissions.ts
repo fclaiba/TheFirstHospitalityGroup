@@ -4,6 +4,8 @@ import { areaOf, isAtLeast, layerOf } from "./positions";
 import type { Layer, Position } from "./types";
 
 export type Action =
+  | "actions.own"
+  | "actions.manage"
   | "training.own"
   | "training.review"
   | "training.manage"
@@ -65,6 +67,7 @@ export type Action =
   | "org.chart";
 
 const STAFF: Action[] = [
+  "actions.own",
   "training.own",
   "today.view",
   "schedule.own",
@@ -97,6 +100,7 @@ const LEAD: Action[] = [
 ];
 
 const MANAGER: Action[] = [
+  "actions.manage",
   ...LEAD,
   "schedule.manage",
   "events.manage",

@@ -1,5 +1,8 @@
 {
   "notify": {
+    "actionAssigned": { "title": "Un pendiente necesita tu atención", "body": "Abre The First para ver las instrucciones y la fecha límite." },
+    "actionUpdated": { "title": "Seguimiento operativo actualizado", "body": "Abre The First para ver el siguiente paso." },
+    "actionOverdue": { "title": "Un pendiente operativo está vencido", "body": "Abre The First para revisar el pendiente asignado." },
     "shiftOpen": {
       "title": "El turno está abierto",
       "body": "{venue}: tu trabajo del turno está listo."

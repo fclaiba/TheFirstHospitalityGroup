@@ -38,6 +38,9 @@ import enTraining from "./en/training.json";
 import esTraining from "./es/training.json";
 
 type Dict = { [k: string]: string | Dict };
+import enActions from "./en/actions.json";
+import esActions from "./es/actions.json";
 
-export const en: Dict = { ...enCommon, ...enAuth, ...enToday, ...enTasks, ...enRules, ...enMenu, ...enSchedule, ...enGuide, ...enFloor, ...enManage, ...enOwner, ...enPeople, ...enMine, ...enBar, ...enNotify, ...enScreenGuide, ...enTraining };
-export const es: Dict = { ...esCommon, ...esAuth, ...esToday, ...esTasks, ...esRules, ...esMenu, ...esSchedule, ...esGuide, ...esFloor, ...esManage, ...esOwner, ...esPeople, ...esMine, ...esBar, ...esNotify, ...esScreenGuide, ...esTraining };
+export const en: Dict = { ...enCommon, ...enAuth, ...enToday, ...enTasks, ...enRules, ...enMenu, ...enSchedule, ...enGuide, ...enFloor, ...enManage, ...enOwner, ...enPeople, ...enMine, ...enBar, ...enNotify, ...enScreenGuide, ...enTraining, ...enActions };
+export const es: Dict = { ...esCommon, ...esAuth, ...esToday, ...esTasks, ...esRules, ...esMenu, ...esSchedule, ...esGuide, ...esFloor, ...esManage, ...esOwner, ...esPeople, ...esMine, ...esBar, ...esNotify, ...esScreenGuide, ...esTraining, ...esActions };
+

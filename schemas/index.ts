@@ -278,3 +278,15 @@ export function fieldErrors(err: z.ZodError): Record<string, string> {
   }
   return out;
 }
+
+export const operatingActionInput = z.object({
+  venueId: z.string(), assigneeId: z.string().min(1), instructions: localizedReq(600),
+  dueAt: z.number().int().positive().max(8640000000000000),
+  sourceShiftId: z.string().optional(), sourceItem: z.number().int().min(0).max(99).optional(),
+}).refine(v => !!v.sourceShiftId === (v.sourceItem !== undefined), { message: "source", path: ["sourceItem"] });
+export const operatingActionTransitionInput = z.object({
+  actionId: z.string(), revision: z.number().int().min(1),
+  command: z.enum(["start", "submit", "return", "verify", "cancel", "reassign"]),
+  note: text(600).trim(), assigneeId: z.string().optional(), dueAt: z.number().int().positive().optional(),
+}).refine(v => v.command === "start" || v.note.length >= 5, { message: "required", path: ["note"] })
+  .refine(v => v.command !== "reassign" || (!!v.assigneeId && !!v.dueAt), { message: "required", path: ["assigneeId"] });

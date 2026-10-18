@@ -1,5 +1,8 @@
 {
   "notify": {
+    "actionAssigned": { "title": "An action needs your attention", "body": "Open The First to see the instructions and due date." },
+    "actionUpdated": { "title": "Operational follow-up updated", "body": "Open The First to see the next step." },
+    "actionOverdue": { "title": "Operational follow-up is overdue", "body": "Open The First to review the assigned action." },
     "shiftOpen": {
       "title": "The shift is open",
       "body": "{venue}: your side work is ready."
