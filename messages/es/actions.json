@@ -12,6 +12,7 @@
     "empty": "No hay pendientes operativos aquí",
     "emptyBody": "El trabajo asignado aparece aquí y permanece hasta que un superior lo verifica o lo cancela con un motivo.",
     "venue": "Local",
+    "venueContext": "Local: {name}",
     "noVenue": "No tienes un local activo asignado",
     "noVenueBody": "Pide a la gerencia que te asigne un local activo para continuar.",
     "assignee": "Persona responsable",

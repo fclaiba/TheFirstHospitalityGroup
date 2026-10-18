@@ -12,6 +12,7 @@
     "empty": "No operational follow-up here",
     "emptyBody": "Assigned work appears here and stays until a superior verifies it or cancels it with a reason.",
     "venue": "Venue",
+    "venueContext": "Venue: {name}",
     "noVenue": "No active venue is assigned",
     "noVenueBody": "Ask management to assign an active venue before continuing.",
     "assignee": "Responsible person",

@@ -7,7 +7,7 @@ import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "@/lib/backend/hooks";
 import { useRun } from "@/lib/backend/run";
-import { useVenue, useCan, useMe } from "@/hooks/use-app";
+import { useVenue, useCan, useMe, canDo } from "@/hooks/use-app";
 import { useOnline } from "@/hooks/use-online";
 import { useLocale } from "@/lib/i18n-client";
 import { formatDateTime } from "@/lib/i18n";
@@ -68,6 +68,16 @@ function NoVenue() {
   return (
     <EmptyState title={t("actions.noVenue")} body={t("actions.noVenueBody")} />
   );
+}
+function VenueContext({ venueId }: { venueId: string }) {
+  const { t } = useLocale();
+  const { venues } = useVenue();
+  const venue = venues.find((item) => item.id === venueId);
+  return venue ? (
+    <p className="text-body font-semibold text-ink">
+      {t("actions.venueContext", { name: venue.name })}
+    </p>
+  ) : null;
 }
 function Pager({
   cursor,
@@ -221,18 +231,28 @@ export function ActionsScreen({ explicitVenue }: { explicitVenue?: string }) {
   if (!selected) return <NoVenue />;
   return (
     <ActionsList
-      key={`${me.id}:${selected}`}
+      key={`${me.id}:${selected}:${me.position}:${me.primaryPosition}`}
       venueId={selected as Id<"venues">}
+      canSupervise={canDo(me, "actions.supervise")}
+      canManage={canDo(me, "actions.manage")}
     />
   );
 }
-function ActionsList({ venueId }: { venueId: Id<"venues"> }) {
+function ActionsList({
+  venueId,
+  canSupervise,
+  canManage,
+}: {
+  venueId: Id<"venues">;
+  canSupervise: boolean;
+  canManage: boolean;
+}) {
   const { t, locale } = useLocale();
   const format = useDateLabel();
-  const canSupervise = useCan("actions.supervise"),
-    canManage = useCan("actions.manage");
   const online = useOnline();
-  const [scope, setScope] = useState<"mine" | "supervised">("mine"),
+  const [scope, setScope] = useState<"mine" | "supervised">(
+      canSupervise ? "supervised" : "mine",
+    ),
     [archive, setArchive] = useState(false),
     [cursor, setCursor] = useState<string | null>(null);
   const result = useQuery(api.actions.list, {
@@ -249,6 +269,7 @@ function ActionsList({ venueId }: { venueId: Id<"venues"> }) {
         back="/me"
       />
       <p className="text-body text-ink-muted">{t("actions.help")}</p>
+      <VenueContext venueId={venueId} />
       {!online ? <OfflineNote /> : null}
       <div className="grid gap-3 sm:grid-cols-2">
         <Field label={t("actions.title")}>
@@ -397,6 +418,7 @@ function NewActionForm({
         subtitle={t("actions.newBody")}
         back={`/actions?venue=${venueId}`}
       />
+      <VenueContext venueId={venueId} />
       {!online ? <OfflineNote /> : null}
       {sourceShiftId ? (
         source === undefined ? (
@@ -528,6 +550,7 @@ function ActionDetail({ item }: { item: ActionItem }) {
         back={`/actions?venue=${item.venueId}`}
         action={<State state={item.state} />}
       />
+      <VenueContext venueId={item.venueId} />
       <Card className="flex flex-col gap-3">
         <h2 className="text-title-sm font-semibold text-ink">
           {pickLocalized(item.instructions, locale)}
