@@ -46,6 +46,8 @@ import type * as tableNotes from "../tableNotes.js";
 import type * as tasks from "../tasks.js";
 import type * as tips from "../tips.js";
 import type * as today from "../today.js";
+import type * as training from "../training.js";
+import type * as trainingDefaults from "../trainingDefaults.js";
 import type * as warnings from "../warnings.js";
 
 import type {
@@ -93,6 +95,8 @@ declare const fullApi: ApiFromModules<{
   tasks: typeof tasks;
   tips: typeof tips;
   today: typeof today;
+  training: typeof training;
+  trainingDefaults: typeof trainingDefaults;
   warnings: typeof warnings;
 }>;
 

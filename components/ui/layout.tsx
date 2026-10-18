@@ -98,10 +98,10 @@ export function LinkRow({ href, ...props }: RowProps & { href: string }) {
   );
 }
 
-export function ButtonRow({ onClick, disabled, ...props }: RowProps & { onClick: () => void; disabled?: boolean }) {
+export function ButtonRow({ onClick, disabled, expanded, controls, ...props }: RowProps & { onClick: () => void; disabled?: boolean; expanded?: boolean; controls?: string }) {
   return (
     <li>
-      <button type="button" onClick={onClick} disabled={disabled} className={cn(rowCls, "pressable-row hover-surface transition-colors disabled:opacity-45", props.className)}>
+      <button type="button" onClick={onClick} disabled={disabled} aria-expanded={expanded} aria-controls={controls} className={cn(rowCls, "pressable-row hover-surface transition-colors disabled:opacity-45", props.className)}>
         <RowBody {...props} />
       </button>
     </li>

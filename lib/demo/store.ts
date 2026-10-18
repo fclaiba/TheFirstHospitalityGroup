@@ -48,17 +48,27 @@ export function getDemoState(): DemoState {
 
 /** Runs a mutation through the engine, keeps its writes, and arms what it scheduled (requests.escalate at 90 s). */
 export async function commit(name: string, args: unknown, opts: { seeding?: boolean } = {}): Promise<unknown> {
+  const initiatingSubject = useDemoStore.getState().session;
   // Wait before joining the queue so bootstrap can populate an empty store.
   if (!opts.seeding) await whenReady();
   // Each transaction reads the last committed state. Concurrent UI saves must not overwrite each other.
-  const next = pendingCommit.then(() => commitOne(name, args));
+  const next = pendingCommit.then(() => {
+    if (typeof navigator !== "undefined" && navigator.locks) {
+      return navigator.locks.request(`${KEY}-transaction`, async () => {
+        // Another tab may have committed while this one waited for the origin-wide lock.
+        if (!opts.seeding) await useDemoStore.persist.rehydrate();
+        return commitOne(name, args, initiatingSubject);
+      });
+    }
+    return commitOne(name, args, initiatingSubject);
+  });
   pendingCommit = next.catch(() => undefined);
   return next;
 }
 
-async function commitOne(name: string, args: unknown): Promise<unknown> {
+async function commitOne(name: string, args: unknown, initiatingSubject: string | null): Promise<unknown> {
   const { runMutation } = await loadEngine();
-  const { result, state, scheduled } = await runMutation(getDemoState(), name, args);
+  const { result, state, scheduled } = await runMutation({ ...getDemoState(), session: initiatingSubject }, name, args);
   // A sign-out or account switch while the handler awaited must remain effective.
   useDemoStore.setState({ ...state, session: useDemoStore.getState().session });
   for (const s of scheduled) {

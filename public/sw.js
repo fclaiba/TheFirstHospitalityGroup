@@ -4,7 +4,7 @@
  * - Navigations: network-first with the last good copy offline.
  * - Push: shows the notification and routes the click. Never caches API or Convex traffic.
  */
-const VERSION = "tf-v4";
+const VERSION = "tf-v5";
 const STATIC = `${VERSION}-static`;
 const PAGES = `${VERSION}-pages`;
 const PHOTOS = `${VERSION}-photos`;

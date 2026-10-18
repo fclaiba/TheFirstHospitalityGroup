@@ -191,7 +191,7 @@ export class FakeDb {
 
   async insert(table: string, value: Record<string, unknown>) {
     const _id = `${table}|${this.nextId()}`;
-    const doc = { ...strip(value), _id, _creationTime: Date.now() + Math.random() / 1000 } as Doc;
+    const doc = { ...strip(value), _id, _creationTime: Date.now() } as Doc;
     (this.tables[table] ??= []).push(doc);
     return _id;
   }

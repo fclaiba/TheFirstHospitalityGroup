@@ -4,6 +4,9 @@ import { areaOf, isAtLeast, layerOf } from "./positions";
 import type { Layer, Position } from "./types";
 
 export type Action =
+  | "training.own"
+  | "training.review"
+  | "training.manage"
   | "today.view"
   | "schedule.own"
   | "schedule.manage"
@@ -62,6 +65,7 @@ export type Action =
   | "org.chart";
 
 const STAFF: Action[] = [
+  "training.own",
   "today.view",
   "schedule.own",
   "menu.view",
@@ -76,6 +80,7 @@ const STAFF: Action[] = [
 ];
 
 const LEAD: Action[] = [
+  "training.review",
   ...STAFF,
   "menu.86",
   "preshift.publish",
@@ -115,6 +120,7 @@ const MANAGER: Action[] = [
 ];
 
 const CORPORATE: Action[] = [
+  "training.manage",
   ...MANAGER,
   "menu.edit",
   "menu.approve",
@@ -140,7 +146,7 @@ const EXTRA: Partial<Record<Position, Action[]>> = {
   host: ["floor.map"],
   expo: ["menu.86", "notes.allergy"],
   barback: ["bar.report", "requests.service"],
-  bartender: ["bar.report", "requests.service"],
+  bartender: ["bar.report", "requests.service", "training.review"],
   head_bartender: ["menu.propose", "bar.resolve", "requests.service"],
   sommelier: ["menu.propose", "requests.service"],
   line_cook: ["notes.allergy"],

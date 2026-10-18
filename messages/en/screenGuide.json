@@ -50,7 +50,10 @@
       "42": "Document the written policy and eligible positions. Managers cannot participate in the pool.",
       "43": "Choose a company rule set, edit both languages and publish a new version for confirmation.",
       "44": "Choose a configuration section. Review venue settings before asking staff to use them.",
-      "45": "Choose a venue to understand its state and the reasons that need follow-up."
+      "45": "Choose a venue to understand its state and the reasons that need follow-up.",
+      "training": "Choose a position, practice each criterion and request a supervisor observation.",
+      "trainingReview": "Read the request, observe the demonstration and record your decision with evidence.",
+      "trainingSetup": "Edit both languages and publish a new immutable version after reviewing every criterion."
     },
     "menuAccess": "Menu editing and approval follow your position permissions. You can still read the menu or manage venue availability when your role allows it."
   }

@@ -608,6 +608,10 @@ Client shells per group, data from Convex. Static: `/`, `/guide`, `/legal/*`. Th
 
 Preview reliability amendment (2026-10-18, ADR 0030): sample records remain shared in localStorage; identity is private to each tab in sessionStorage. Rehydrating shared records preserves the tab identity and does not write them back. Query results and errors belong to a function, arguments and identity; signed-out protected queries do not run. Every operational page provides localized contextual instructions through its page header. Demo entry presents named sample accounts before manual credentials, explains their role, and reports failures inline.
 
+Preview concurrency clarification (2026-10-18): transactions bind the initiating identity before waiting. Where the browser supports Web Locks, a shared origin lock protects rehydration plus mutation plus persistence across tabs. This prevents simultaneous demonstrations/reviews or preferences from losing a committed write. The existing promise queue remains the single-tab fallback for browsers without Web Locks; live cross-device transactions remain Convex's responsibility.
+
+Preview ordering clarification (2026-10-18): creation times use the real millisecond timestamp, with monotonically generated IDs breaking same-millisecond ties. Random timestamp jitter is not used: it reordered seed items and evidence, making unchanged shortage reports and their notification expectations nondeterministic. No existing preview records are rewritten.
+
 ### 6.4 Forms and validation
 Shared Zod schemas. Label above, error below. Photos compressed to ≤ 400 KB.
 
@@ -687,6 +691,9 @@ Every function: validators + Zod, `requireUser`, `requireVenue(ctx, venueId)`, `
 | notify | subscribe, deliver | m/action | user / queue | Push first, email fallback |
 | files | generateUploadUrl, attach, url | m/q | user | Images ≤ 5 MB; `url` checks access |
 | audit | list | query | owner | Filter by actor, entity, date |
+| training | mine, requestReview | q/m | learner | `{venueId, position?, version, stepKey, note?}`; primary/next position only; immutable criterion snapshot and evidence history |
+| training | queue, review, history | q/m/q | configured supervisor, learner for own history | Native pagination (1 to 50); review `{recordId, revision, decision: verified\|needs_practice, note}`; non-self ancestor of trained position; stale revision/version refused |
+| training | program, publish | q/m | director, owner | `{venueId, position, expectedVersion, title{en,es}, steps[{key,label{en,es},evidence{en,es}}]}`; 1 to 12 unique-key criteria; immutable company version |
 | seed | bootstrap, demo | internal | CLI | Company, 4 venues, owner, positions, rules, sample menu, floor plans, a demo week |
 
 **Error codes:** `UNAUTHENTICATED`, `FORBIDDEN`, `NOT_FOUND`, `INVALID_INPUT`, `RATE_LIMITED`, `INVALID_CREDENTIALS`, `ACCOUNT_LOCKED`, `INVALID_CODE`, `CODE_EXPIRED`, `VENUE_FORBIDDEN`, `NOT_ENABLED`, `SHIFT_NOT_OPEN`, `OTHER_SHIFT_OPEN`, `NOT_SCHEDULED`, `INVALID_TRANSITION`, `WEEK_NOT_PUBLISHED`, `VERSION_STALE`, `SWAP_CONFLICT`, `ALREADY_CLAIMED`, `RUNS_OPEN`, `PHOTO_REQUIRED`, `ACK_REQUIRED`, `RULE_REQUIRED`, `RULE_NOT_FOR_POSITION`, `TOO_LATE`, `REQUEST_CLOSED`, `FILE_TOO_LARGE`, `FILE_TYPE`, `NO_RECIPIENTS`.
@@ -730,6 +737,7 @@ Not applicable (ADR 0018).
 ## 8. Data
 
 ### 8.1 Model
+Training addition (2026-10-18, ADR 0031): `trainingPrograms` carries company, trained position, immutable version, bilingual title/criteria/demonstration, publisher and time. `trainingRecords` carries venue, person, trained position/version/criterion key, immutable criterion snapshot, current state, monotonic revision and update time. `trainingEvents` carries venue, record, actor, state/revision, observation and time; events are append-only. Current criterion reads are capped at 12, inline history at 20 and older criterion summaries at 50; complete event reads and review queues use bounded native pagination. Default v1 programs require no data rewrite or preview reseed.
 ```mermaid
 erDiagram
   companies ||--o{ venues : runs
@@ -811,6 +819,7 @@ erDiagram
 Additive schema first; data rewrites in `convex/migrations/` with a dry run and audit. `seed:bootstrap` and `seed:demo`. The 7shifts import has its own dry run.
 
 ### 8.4 Personal data
+Training requests and supervisor observations are employment-related operational records, visible only to the learner and authorized supervision chain. Their retention policy must be validated with the company's counsel before production; no automated employment decision is made from them.
 Name, username, optional email, preferences, push endpoints, schedule and attendance, availability and time-off dates (reason optional; no medical details), confirmations, side work, warnings with responses, position history. No date of birth, ID numbers, address, phone, pay or tips. Warnings count 30 days and are kept 3 years `(to be validated with NY counsel)`; attendance and schedules as employment records for the same period. Table notes have no guest contact details and are deleted after 30 days.
 
 ### 8.5 Backups
@@ -996,6 +1005,7 @@ Section 15 gates green with numbers in `docs/DEVLOG.md`; pilot metrics measured 
 Proposal in `docs/PROPUESTA-COMERCIAL.md` (Spanish): implementation fee plus a monthly license per venue, anchored on what 7shifts plus separate apps cost (≈ USD 205 per venue per month, `docs/research/ESTUDIO-DE-MERCADO.md`). Amounts `(to be validated)`. Acceptance criteria = section 15. Not included: hardware, POS and reservations integrations (P3 quote), menu photography.
 
 ## 18. Amendment log
+- **2026-10-18 (role playbooks and supervised training, ADR 0031):** Sections 2.5, 6, 7.2, 8.1 and 8.4 define 22 production role playbooks, 21 supervised programs, immutable bilingual program versions, private evidence and authorized human review through the configured chain. Three additive tables and seven registered handlers run locally without destructive reseeding or remote migration. Browser preview mutations retain the initiating identity, use a cross-tab transaction lock where available, and order inserts deterministically. The capability audit preserves the remaining full operating objective.
 - **2026-10-18 (preview access, didactic screens and original logo, ADR 0030):** Tab-local preview identities preserve shared sample records without cross-tab session replacement or storage feedback. Query results and errors are scoped to identity. Contextual EN/ES instructions explain the next action on operational screens; unavailable menu items explain the term 86. The owner commissions a new vector lion from scratch, replacing the neutral placeholder decisions below. Service acknowledgments appear without a fading transition to retain full text contrast.
 - **2026-10-18 (burgundy primary identity, ADR 0029):** The owner replaces martini green with burgundy. Section 4.1, the shared tokens, brand documentation, application controls and generated install icons follow the new palette. The final lion remains pending; delivery uses the single replaceable neutral mark. The host's existing Pre-shift tab reads notes without permission to publish or remove them, consistent with sections 2.4 and 6.1.1.
 - **2026-10-17 (frontend preview scope and brand delivery):** At the owner's request, this session works on the frontend and browser Convex mock only; no remote Convex or production deployment. The attached build blueprint section 0.7 supersedes the current lion drawing for delivery: use the THE FIRST wordmark and a neutral placeholder from `public/brand/mark.svg` until the final SVG is supplied. Existing lion artwork remains reference material. Browser mock mutations are serialized to preserve concurrent UI changes; failures roll back without blocking later saves.

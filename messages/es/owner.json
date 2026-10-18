@@ -96,7 +96,9 @@
       "import": "Importar desde 7shifts",
       "importHint": "Personas, puestos y el horario",
       "audit": "Registro de auditoría",
-      "auditHint": "Quién hizo qué y cuándo"
+      "auditHint": "Quién hizo qué y cuándo",
+      "training": "Estándares de formación",
+      "trainingHint": "Publica criterios y demostraciones requeridas por puesto."
     },
     "venues": {
       "title": "Locales y servicios",

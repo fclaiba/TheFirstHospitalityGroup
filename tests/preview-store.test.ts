@@ -30,6 +30,31 @@ afterAll(() => vi.unstubAllGlobals());
 const ana = () => store.getDemoState().tables.users!.find((u) => u.username === "ana.p")!;
 
 describe("browser preview transactions", () => {
+  it("merges the latest shared database while holding a cross-tab lock", async () => {
+    const saved = JSON.parse(localStorage.getItem("tfhg-preview-v1")!);
+    const user = saved.state.tables.users.find((u: { username: string }) => u.username === "ana.p");
+    user.largeText = true;
+    localStorage.setItem("tfhg-preview-v1", JSON.stringify(saved));
+    const request = vi.fn(async (_name: string, run: () => Promise<unknown>) => run());
+    const originalNavigator = globalThis.navigator;
+    vi.stubGlobal("navigator", { locks: { request } });
+    try {
+      await store.commit("me:updatePrefs", { theme: "dark" });
+      expect(request).toHaveBeenCalledOnce();
+      expect(ana()).toMatchObject({ largeText: true, theme: "dark" });
+    } finally {
+      vi.stubGlobal("navigator", originalNavigator);
+    }
+  });
+
+  it("keeps a queued save bound to the identity that initiated it", async () => {
+    const before = ana().largeText;
+    const save = store.commit("me:updatePrefs", { largeText: !before });
+    store.setSession("user|owner|0");
+    await save;
+    expect(ana().largeText).toBe(!before);
+    expect(store.getDemoState().session).toBe("user|owner|0");
+  });
   it("persists shared records without sharing the tab identity", () => {
     store.setSession("user|ana.p|0");
     const persisted = JSON.parse(localStorage.getItem("tfhg-preview-v1")!);

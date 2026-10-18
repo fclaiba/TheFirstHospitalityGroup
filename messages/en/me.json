@@ -72,7 +72,10 @@
       "company": "Company",
       "org": "Organization chart",
       "companySetup": "Company setup",
-      "guide": "Guide"
+      "guide": "Guide",
+      "training": "My training",
+      "trainingReview": "Review team training",
+      "trainingSetup": "Training standards"
     },
     "account": "Account",
     "signOutEverywhere": "Sign out other devices",

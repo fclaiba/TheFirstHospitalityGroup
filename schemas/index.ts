@@ -42,6 +42,20 @@ export const usernameSchema = z
   .regex(/^[a-z0-9._-]{3,24}$/);
 export const positionSchema = z.enum(POSITIONS);
 
+export const trainingStepInput = z.object({
+  key: z.string().regex(/^[a-z][a-z0-9_]{0,39}$/),
+  label: localizedReq(160),
+  evidence: localizedReq(500),
+});
+export const trainingProgramInput = z.object({
+  position: positionSchema.refine((p) => p !== "owner" && p !== "dev"),
+  expectedVersion: z.number().int().min(1),
+  title: localizedReq(120),
+  steps: z.array(trainingStepInput).min(1).max(12).refine((steps) => new Set(steps.map((s) => s.key)).size === steps.length),
+});
+export const trainingRequestInput = z.object({ position: positionSchema, version: z.number().int().min(1), stepKey: req(40), note: opt(text(500)) });
+export const trainingReviewInput = z.object({ revision: z.number().int().min(0), decision: z.enum(["verified", "needs_practice"]), note: z.string().trim().min(5).max(500) });
+
 /** Username (or a leader's verified email) + password (ADR 0003). */
 export const signInSchema = z.object({ login: usernameSchema.or(emailSchema), password: z.string().min(1).max(128) });
 export const newPasswordSchema = z.string().min(10).max(128);

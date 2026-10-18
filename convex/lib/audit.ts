@@ -3,6 +3,9 @@ import type { Id } from "../_generated/dataModel";
 import type { MutationCtx } from "../_generated/server";
 
 export type AuditAction =
+  | "training.requested"
+  | "training.reviewed"
+  | "training.published"
   | "auth.signed_in"
   | "auth.password_changed"
   | "auth.password_reset"

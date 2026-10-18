@@ -56,7 +56,7 @@ jobs:
         run: |
           npx next start -p 3000 &
           npx wait-on http://localhost:3000
-          node scripts/measure-budgets.mjs
+          node scripts/measure-budgets.mjs http://localhost:3000
       - name: Dependency audit
         if: steps.app.outputs.present == 'true'
         run: npm audit --audit-level=high --omit=dev

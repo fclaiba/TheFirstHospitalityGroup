@@ -10,14 +10,20 @@ const item = (w: World, name: string) => w.rows("barItems").find((b) => b.venueI
 describe("bar shortages", () => {
   it("a barback reports Low, the head bartender and manager hear it, the head bartender restocks it", async () => {
     const w = await World.create();
+    // Arrange a new item: demo history may already have an unchanged Low report for a seeded bottle.
+    await w.as("maria.m");
+    const { itemId } = await w.m<{ itemId: string }>("bar:upsertItem", { venueId: w.venue("v1")._id, name: "Service training bottle", kind: "bottle", active: true });
     await w.as("lucia.f");
-    const { shortageId } = await w.m<{ shortageId: string }>("bar:report", { shiftId: w.liveShift()._id, itemId: item(w, "Vodka")._id, level: "low" });
+    const { shortageId } = await w.m<{ shortageId: string }>("bar:report", { shiftId: w.liveShift()._id, itemId, level: "low" });
     for (const u of ["sam.r", "maria.m"]) expect(w.rows("outbound").some((o) => o.userId === w.user(u)._id && o.topic === "shortage")).toBe(true);
+    const notifications = w.rows("outbound").length;
+    expect(await w.m("bar:report", { shiftId: w.liveShift()._id, itemId, level: "low" })).toEqual({ shortageId, updated: false });
+    expect(w.rows("outbound")).toHaveLength(notifications);
     await w.as("zoe.a");
     const open = await w.q<{ open: Array<{ _id: string; level: string }> }>("bar:open", {});
     expect(open.open.map((s) => s._id)).toContain(shortageId);
     // Reporting again updates the same shortage.
-    const again = await w.m<{ shortageId: string; updated: boolean }>("bar:report", { shiftId: w.liveShift()._id, itemId: item(w, "Vodka")._id, level: "out" });
+    const again = await w.m<{ shortageId: string; updated: boolean }>("bar:report", { shiftId: w.liveShift()._id, itemId, level: "out" });
     expect(again).toEqual({ shortageId, updated: true });
     expect(await w.code("bar:resolve", { shortageId, status: "restocked" })).toBe("FORBIDDEN");
     await w.as("sam.r");

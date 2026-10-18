@@ -72,7 +72,10 @@
       "company": "Empresa",
       "org": "Organigrama",
       "companySetup": "Configuración de la empresa",
-      "guide": "Guía"
+      "guide": "Guía",
+      "training": "Mi formación",
+      "trainingReview": "Revisar formación del equipo",
+      "trainingSetup": "Estándares de formación"
     },
     "account": "Cuenta",
     "signOutEverywhere": "Cerrar sesión en otros dispositivos",

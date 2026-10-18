@@ -63,6 +63,24 @@ export const venueService = v.object({ key: service, weekdays: v.array(v.number(
 export const table = v.object({ number: v.string(), seats: v.number(), x: v.number(), y: v.number() });
 
 export default defineSchema({
+  // Human-reviewed training (ADR 0031). Immutable program versions and append-only observations.
+  trainingPrograms: defineTable({
+    companyId: v.id("companies"), position, version: v.number(), title: localized,
+    steps: v.array(v.object({ key: v.string(), label: localized, evidence: localized })),
+    publishedBy: v.id("users"), at: v.number(),
+  }).index("by_company_position_version", ["companyId", "position", "version"]),
+  trainingRecords: defineTable({
+    venueId: v.id("venues"), userId: v.id("users"), position, version: v.number(), stepKey: v.string(),
+    label: localized, evidence: localized,
+    state: v.union(v.literal("ready"), v.literal("needs_practice"), v.literal("verified")),
+    revision: v.number(), updatedAt: v.number(),
+  }).index("by_venue_user_position_version_step", ["venueId", "userId", "position", "version", "stepKey"])
+    .index("by_venue_state", ["venueId", "state"]),
+  trainingEvents: defineTable({
+    venueId: v.id("venues"), recordId: v.id("trainingRecords"), actorId: v.id("users"),
+    state: v.union(v.literal("ready"), v.literal("needs_practice"), v.literal("verified")),
+    revision: v.number(), note: v.string(), at: v.number(),
+  }).index("by_record", ["recordId"]),
   // Org
   companies: defineTable({
     name: v.string(),

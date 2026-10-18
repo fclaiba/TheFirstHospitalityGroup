@@ -1,0 +1,239 @@
+{
+  "training": {
+    "title": "Training",
+    "body": "Read the criterion, practice with your team, then request a supervisor observation. Reading alone does not verify a skill.",
+    "reviewTitle": "Training to review",
+    "reviewBody": "Observe the demonstration before deciding. You see only positions below you in this venue’s reporting chain.",
+    "setupTitle": "Training standards",
+    "setupBody": "Publish clear bilingual criteria. A new version preserves earlier evidence and requires new observations.",
+    "role": "Position to learn",
+    "version": "Program version {version}",
+    "defaultNote": "Starting program. Your company can replace these criteria with its approved procedures.",
+    "noCourse": "Your role governs the training system",
+    "noCourseBody": "Use the operating playbook, review team demonstrations or publish company standards. You do not certify your own work.",
+    "request": "I practiced; request review",
+    "requestNote": "What did you practice?",
+    "requestHelp": "Describe the work only. Do not include guest or private personal information.",
+    "requested": "Your request is waiting for a supervisor observation.",
+    "demonstrate": "What to demonstrate",
+    "history": "Evidence history",
+    "reviewNote": "Observed evidence or next practice step",
+    "reviewHelp": "At least 5 characters. Explain what you observed or exactly what to practice next.",
+    "verify": "Verify demonstration",
+    "practice": "Needs more practice",
+    "reviewed": "Observation recorded.",
+    "empty": "No demonstrations waiting",
+    "emptyBody": "Requests from your reporting chain appear here. New program versions require new requests.",
+    "more": "Load the next requests",
+    "previous": "Previous requests",
+    "current": "Current requests",
+    "learner": "Learner",
+    "reviewer": "Recorded by {name}",
+    "on": "{date} at {time}",
+    "archived": "Earlier program evidence",
+    "archivedBody": "Earlier evidence stays in history and does not verify the current version. The latest 50 records are shown.",
+    "noHistory": "No observations yet.",
+    "historyLimit": "Latest 20 events per criterion. Earlier observations are preserved.",
+    "publish": "Publish new program version",
+    "published": "New training version published.",
+    "programTitle": "Program title",
+    "criterion": "Criterion",
+    "evidence": "Required demonstration",
+    "add": "Add a criterion",
+    "remove": "Remove criterion",
+    "invalid": "Complete both languages for each title, criterion and demonstration.",
+    "key": "Stable criterion key",
+    "keyHelp": "Lowercase letters, numbers and underscores. Keep the key when the same skill is revised.",
+    "changed": "These changes will apply company-wide. Previous versions remain in history.",
+    "noAutomatic": "Verification records learning. It does not enable a position or approve a promotion.",
+    "defaultEvidence": "Demonstrate: {skill}. Follow the current house procedure; the supervisor records what they observed.",
+    "open": "Open my training",
+    "queue": "Review team training",
+    "manage": "Manage training standards",
+    "states": {
+      "not_started": "Practice first",
+      "ready": "Waiting for review",
+      "needs_practice": "Practice again",
+      "verified": "Verified"
+    },
+    "defaults": {
+      "chef_de_cuisine": {
+        "i1": "Publish accurate ingredients and allergens",
+        "i2": "Brief the kitchen on menu changes",
+        "i3": "Review a station demonstration with feedback",
+        "i4": "Hand over unresolved kitchen issues"
+      },
+      "floor_manager": {
+        "i1": "Open and prepare a service",
+        "i2": "Resolve a service request through its responsible role",
+        "i3": "Record attendance and handle a formal proposal",
+        "i4": "Review evidence and file a complete close"
+      },
+      "agm": {
+        "i1": "Build a week using positions and availability",
+        "i2": "Staff events and publish a reviewed schedule",
+        "i3": "Resolve a swap through colleague and manager steps",
+        "i4": "Review confirmations and handoff coverage gaps"
+      },
+      "gm": {
+        "i1": "Explain the venue state and its reasons",
+        "i2": "Review manager closes and unresolved issues",
+        "i3": "Propose a documented promotion through the chain",
+        "i4": "Coach a manager using observed evidence"
+      },
+      "director": {
+        "i1": "Review venue exceptions across the company",
+        "i2": "Publish a clear company standard in both languages",
+        "i3": "Review a promotion with its evidence and effective date",
+        "i4": "Coordinate corrective priorities through general managers"
+      }
+    },
+    "stale": "The program or observation changed. Reload the screen and review the current version before trying again.",
+    "handled": "This request has already been handled. Reload the screen to see the recorded decision."
+  },
+  "operations": {
+    "title": "Your operating playbook",
+    "role": "Explore a position",
+    "outcome": "Your responsibility",
+    "before": "Before service",
+    "during": "During service",
+    "after": "Close and hand over",
+    "reportsTo": "Reports to",
+    "governance": "Company governance",
+    "scope": "These steps guide your workflow. Published house rules and the manager’s service briefing define the exact procedure.",
+    "roles": {
+      "polisher": {
+        "outcome": "Keep service stations ready with clean, inspected equipment.",
+        "before": "Confirm your shift; inspect glassware and stock your station.",
+        "during": "Replace damaged pieces and follow the captain’s station priorities.",
+        "after": "Complete closing work and report missing or damaged supplies."
+      },
+      "busser": {
+        "outcome": "Keep your section clean and ready for each guest.",
+        "before": "Read your section assignment and prepare water and reset supplies.",
+        "during": "Handle water and clearing requests; coordinate resets with the captain.",
+        "after": "Reset stations, complete side work and report unresolved requests."
+      },
+      "runner": {
+        "outcome": "Deliver the correct dish to the correct table and seat.",
+        "before": "Review the menu, allergens, unavailable items and table numbers.",
+        "during": "Follow the expo’s handoff; stop and ask when a seat or allergy is unclear.",
+        "after": "Finish station work and report missing equipment to your lead."
+      },
+      "server": {
+        "outcome": "Guide your tables through an informed, coordinated service.",
+        "before": "Confirm changes, review your section and read pre-shift notes.",
+        "during": "Record table and seat allergy notes; coordinate support through requests.",
+        "after": "Complete side work and pass unresolved table issues to the captain."
+      },
+      "captain": {
+        "outcome": "Coordinate your section team and verify service standards.",
+        "before": "Review coverage, assign sections and brief your team.",
+        "during": "Resolve service requests, observe practice and escalate issues to the manager.",
+        "after": "Review unfinished work and send factual issues through the supervision chain."
+      },
+      "host": {
+        "outcome": "Welcome guests using the room’s current section plan.",
+        "before": "Read the floor plan, section assignments and pre-shift notes.",
+        "during": "Coordinate seating with the maître d’; use the venue’s reservation system separately.",
+        "after": "Hand over unresolved arrival issues and complete reception side work."
+      },
+      "maitre_d": {
+        "outcome": "Coordinate reception and the dining room as one service.",
+        "before": "Review sections and brief hosts and captains on the service plan.",
+        "during": "Balance room priorities, support captains and review training demonstrations.",
+        "after": "Report unresolved service issues and team needs to the manager."
+      },
+      "expo": {
+        "outcome": "Protect the handoff between the kitchen and dining room.",
+        "before": "Review allergy notes, seats, menu changes and unavailable items.",
+        "during": "Confirm allergy notes, verify plate handoffs and publish unavailable items promptly.",
+        "after": "Hand over unresolved allergy and availability issues to the chef and manager."
+      },
+      "barback": {
+        "outcome": "Keep the bar supplied and report shortages early.",
+        "before": "Prepare ice, glassware and garnish; read bar side work.",
+        "during": "Report items Low or Out and replenish under the bartender’s direction.",
+        "after": "Clean and restock; leave open shortages documented for the next service."
+      },
+      "bartender": {
+        "outcome": "Deliver consistent drinks and maintain a prepared bar.",
+        "before": "Read drinks changes, allergens and current shortages.",
+        "during": "Follow house specifications, report shortages and coach the barback’s practice.",
+        "after": "Complete bar closing work and flag unresolved shortages to the bar lead."
+      },
+      "head_bartender": {
+        "outcome": "Lead bar readiness, standards and coordinated replenishment.",
+        "before": "Review staffing, shortages and the drinks briefing.",
+        "during": "Support bartenders, update shortage decisions and propose menu changes.",
+        "after": "Verify closing duties and hand unresolved bar issues to the manager."
+      },
+      "sommelier": {
+        "outcome": "Make wine knowledge usable throughout the service team.",
+        "before": "Review wine availability, pairings and menu changes.",
+        "during": "Support wine service and propose updates through the approved menu workflow.",
+        "after": "Hand over availability concerns and training needs to the maître d’."
+      },
+      "dishwasher": {
+        "outcome": "Keep clean equipment and safe, orderly work areas available.",
+        "before": "Read station duties and check equipment using house instructions.",
+        "during": "Keep clean and used equipment separated; report defects to the sous chef.",
+        "after": "Complete cleaning evidence and report anything unsafe or unfinished."
+      },
+      "prep_cook": {
+        "outcome": "Prepare an organized station following the kitchen’s instructions.",
+        "before": "Read station duties, changes and the kitchen briefing.",
+        "during": "Follow the chef’s preparation instructions; escalate shortages and unclear allergen information.",
+        "after": "Complete cleaning and labeling duties; hand unresolved items to the sous chef."
+      },
+      "line_cook": {
+        "outcome": "Run your station consistently within the kitchen team.",
+        "before": "Review station readiness, menu changes and allergy notes.",
+        "during": "Follow the sous chef and expo; report unavailable items immediately.",
+        "after": "Complete station closing work and report unresolved equipment or preparation issues."
+      },
+      "sous_chef": {
+        "outcome": "Coordinate kitchen execution and develop station readiness.",
+        "before": "Review kitchen coverage, station work and pre-shift changes.",
+        "during": "Coordinate the line, confirm allergy handling and observe staff practice.",
+        "after": "Review unfinished work and hand kitchen issues to the chef de cuisine."
+      },
+      "chef_de_cuisine": {
+        "outcome": "Own kitchen standards and accurate menu information.",
+        "before": "Review coverage, menu changes, allergens and training needs.",
+        "during": "Support the sous chef, publish accurate menu content and verify kitchen standards.",
+        "after": "Hand kitchen exceptions and next-service priorities to the GM and duty manager."
+      },
+      "floor_manager": {
+        "outcome": "Run the service and leave a complete operational handoff.",
+        "before": "Review coverage and pending confirmations; open the service and assign sections.",
+        "during": "Support area leads, decide requests and record attendance and formal issues.",
+        "after": "Review open items, shortages and cleaning before filing the close."
+      },
+      "agm": {
+        "outcome": "Translate the venue plan into a staffed, confirmed week.",
+        "before": "Review availability, time off, event staffing and coverage.",
+        "during": "Publish reviewed schedules, resolve requests and support the duty manager.",
+        "after": "Review confirmations and closes; hand unresolved coverage needs to the GM."
+      },
+      "gm": {
+        "outcome": "Own venue standards, people decisions and unresolved exceptions.",
+        "before": "Review the venue state, its reasons, staffing and previous handoff.",
+        "during": "Support managers, review standards and propose justified personnel decisions.",
+        "after": "Review closes and unresolved issues; escalate venue needs to operations."
+      },
+      "director": {
+        "outcome": "Keep venue execution consistent with company standards.",
+        "before": "Review each venue’s state and identify decisions needing follow-up.",
+        "during": "Work through GMs, review promotions and publish clear company standards.",
+        "after": "Review unresolved venue exceptions and bring company decisions to the owner."
+      },
+      "owner": {
+        "outcome": "Govern company standards and hold operational leadership accountable.",
+        "before": "Review venue states, critical reasons and decisions awaiting authorization.",
+        "during": "Set company standards and configuration; direct follow-up through operations leadership.",
+        "after": "Review the decision history and confirm priorities with the director."
+      }
+    }
+  }
+}

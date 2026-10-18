@@ -24,6 +24,8 @@ import * as tableNotes from "../../convex/tableNotes";
 import * as tasks from "../../convex/tasks";
 import * as tips from "../../convex/tips";
 import * as today from "../../convex/today";
+import * as training from "../../convex/training";
+import * as trainingDefaults from "../../convex/trainingDefaults";
 import * as warnings from "../../convex/warnings";
 
 export const REGISTRY: Record<string, unknown> = {
@@ -52,5 +54,7 @@ export const REGISTRY: Record<string, unknown> = {
   "tasks": tasks,
   "tips": tips,
   "today": today,
+  "training": training,
+  "trainingDefaults": trainingDefaults,
   "warnings": warnings,
 };
