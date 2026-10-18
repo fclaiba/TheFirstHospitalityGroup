@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/states";
 import { ConfirmCard } from "@/components/app/confirm";
 import { ScreenGuide } from "@/components/app/screen-guide";
+import { MyActionsPreview } from "@/components/actions/screens";
 import type { Position } from "@/lib/domain/types";
 
 function greetingKey(now: number) {
@@ -136,6 +137,8 @@ export function TodayScreen() {
           </div>
         </Section>
       ) : null}
+
+      <MyActionsPreview venueId={venueId} />
 
       {data.myShift ? (
         <Card lift className="rise flex flex-col gap-4">

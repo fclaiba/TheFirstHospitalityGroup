@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { ConvexProviderWithAuth, ConvexReactClient } from "convex/react";
 import { AUTH_MODE, CONVEX_URL } from "./config";
+import { PreviewJobs } from "../demo/jobs";
 
 let client: ConvexReactClient | null = null;
 function getClient() {
@@ -43,7 +44,7 @@ function useSessionAuth() {
 
 /** Wraps the signed-in routes. Preview mode needs no provider: the hooks read the demo store. */
 export function BackendProvider({ children }: { children: ReactNode }) {
-  if (AUTH_MODE === "preview") return <>{children}</>;
+  if (AUTH_MODE === "preview") return <><PreviewJobs />{children}</>;
   return (
     <ConvexProviderWithAuth client={getClient()} useAuth={useSessionAuth}>
       {children}

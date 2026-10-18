@@ -5,6 +5,7 @@ import { CheckCircle, Lock, Plus, Trash } from "@phosphor-icons/react";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "@/lib/backend/hooks";
+import { useCan } from "@/hooks/use-app";
 import { useRun } from "@/lib/backend/run";
 import { useLocale } from "@/lib/i18n-client";
 import { dateKeyLabel, time } from "@/lib/format";
@@ -256,6 +257,7 @@ function CloseFormBody({ shiftId, d, initial }: { shiftId: Id<"shifts">; d: Draf
 
 /** A filed (or auto) close, read-only (BLUEPRINT 3.4: after the close, everything of the shift is read-only). */
 export function CloseReportView({ shiftId }: { shiftId: Id<"shifts"> }) {
+  const canAssign = useCan("actions.manage");
   const { t, locale } = useLocale();
   const d = useDraft(shiftId);
   const got = useQuery(api.close.get, { shiftId });
@@ -304,7 +306,7 @@ export function CloseReportView({ shiftId }: { shiftId: Id<"shifts"> }) {
         <Section title={t("close.openItems")}>
           <List>
             {report.openItems.map((item, i) => (
-              <Row key={i} title={item} />
+              canAssign && report.status === "submitted" ? <LinkRow key={i} title={item} subtitle={t("actions.convert")} href={`/actions/new?venue=${d.shift.venueId}&sourceShift=${shiftId}&item=${i}`} /> : <Row key={i} title={item} />
             ))}
           </List>
         </Section>

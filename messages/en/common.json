@@ -214,6 +214,7 @@
     "corporate": "Corporate"
   },
   "reasons": {
+    "actionsOverdue": "Operational follow-up is overdue",
     "closeMissing": "{count} closes missing",
     "autoClosed": "{count} shifts closed automatically, to review",
     "confirmationsLate": "{count} people have not confirmed the schedule after 24 hours",

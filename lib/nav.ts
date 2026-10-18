@@ -95,6 +95,7 @@ export function homeFor(position: Position): string {
 
 /** The tools list on /me: every screen a position can open that is not already a tab. */
 export const TOOLS: Array<{ key: string; href: string; action: Action }> = [
+  { key: "actions", href: "/actions", action: "actions.own" },
   { key: "training", href: "/training", action: "training.own" },
   { key: "trainingReview", href: "/lead/training", action: "training.review" },
   { key: "trainingSetup", href: "/company/setup/training", action: "training.manage" },

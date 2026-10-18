@@ -93,6 +93,7 @@ function Shortcuts() {
   return (
     <Section title={t("manage.shortcuts")}>
       <List>
+        <LinkRow href="/actions" title={t("actions.all")} />
         <LinkRow href="/lead/floor" title={t("manage.sections")} leading={<MapTrifold weight="bold" className="size-5" />} />
         <LinkRow href="/manage/bar" title={t("manage.shortages")} leading={<Wine weight="bold" className="size-5" />} />
         <LinkRow href="/manage/schedule" title={t("nav.manageSchedule")} leading={<CalendarBlank weight="bold" className="size-5" />} />

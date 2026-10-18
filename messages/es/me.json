@@ -45,6 +45,7 @@
     "pushActive": "Activadas",
     "tools": "Más",
     "tool": {
+      "actions": "Seguimiento operativo",
       "today": "Hoy",
       "messages": "Avisos",
       "tasks": "Mi trabajo del turno",

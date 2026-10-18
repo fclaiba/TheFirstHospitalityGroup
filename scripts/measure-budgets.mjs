@@ -16,6 +16,8 @@ const BUDGETS = [
   { path: "/section", label: "staff: section", kb: STAFF },
   { path: "/bar", label: "staff: bar", kb: STAFF },
   { path: "/training", label: "staff: training", kb: STAFF },
+  { path: "/actions", label: "staff: operational follow-up", kb: STAFF },
+  { path: "/actions/new", label: "manage: assign follow-up", kb: MANAGE },
   { path: "/guide", label: "staff: role playbook", kb: STAFF },
   { path: "/lead/training", label: "lead: training review", kb: STAFF },
   { path: "/company/setup/training", label: "company: training standards", kb: MANAGE },

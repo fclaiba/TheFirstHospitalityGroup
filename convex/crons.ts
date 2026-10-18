@@ -8,6 +8,7 @@ const crons = cronJobs();
 crons.hourly("schedule reminders", { minuteUTC: 0 }, internal.schedule.remind, {});
 crons.interval("shift reminders", { minutes: 15 }, internal.schedule.shiftReminder, {});
 crons.hourly("shift sweep", { minuteUTC: 5 }, internal.shifts.sweep, {});
+crons.hourly("operational follow-up", { minuteUTC: 15 }, internal.actions.sweep, {});
 crons.interval("late side work", { minutes: 15 }, internal.tasks.lateCheck, {});
 crons.hourly("warning escalations", { minuteUTC: 10 }, internal.warnings.escalate, {});
 crons.daily("warnings digest", { hourUTC: 14, minuteUTC: 0 }, internal.warnings.digest, {});

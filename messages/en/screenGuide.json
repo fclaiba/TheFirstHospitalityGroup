@@ -5,6 +5,8 @@
     "full": "Open the complete guide",
     "save": "Review the information before saving. Required fields are labeled. A success message confirms the change; if a field is invalid, correct the error and try again.",
     "routes": {
+      "actions": "Open your assignment, follow the instructions and submit evidence. Supervisors check the result and record what happens next.",
+      "actionsNew": "Choose one responsible person below you in the reporting chain, write clear bilingual instructions and set a New York deadline.",
       "0": "Review pending confirmations first, then your shift and tasks.",
       "1": "Open each shift to see its details. Confirm the published week when requested.",
       "2": "Choose a phase and complete your assigned work. Photo tasks ask for evidence before completion.",

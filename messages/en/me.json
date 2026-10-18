@@ -45,6 +45,7 @@
     "pushActive": "On",
     "tools": "More",
     "tool": {
+      "actions": "Operational follow-up",
       "today": "Today",
       "messages": "Announcements",
       "tasks": "My side work",

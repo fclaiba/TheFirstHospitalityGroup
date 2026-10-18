@@ -6,6 +6,7 @@ import type { Layer, Position } from "./types";
 export type Action =
   | "actions.own"
   | "actions.manage"
+  | "actions.supervise"
   | "training.own"
   | "training.review"
   | "training.manage"
@@ -83,6 +84,7 @@ const STAFF: Action[] = [
 ];
 
 const LEAD: Action[] = [
+  "actions.supervise",
   "training.review",
   ...STAFF,
   "menu.86",
@@ -150,7 +152,7 @@ const EXTRA: Partial<Record<Position, Action[]>> = {
   host: ["floor.map"],
   expo: ["menu.86", "notes.allergy"],
   barback: ["bar.report", "requests.service"],
-  bartender: ["bar.report", "requests.service", "training.review"],
+  bartender: ["bar.report", "requests.service", "training.review", "actions.supervise"],
   head_bartender: ["menu.propose", "bar.resolve", "requests.service"],
   sommelier: ["menu.propose", "requests.service"],
   line_cook: ["notes.allergy"],
