@@ -123,3 +123,27 @@ test("own queue explains empty state and disables writing while offline", async 
     page.getByRole("link", { name: /Revisa la bandeja de reemplazo/ }),
   ).toBeVisible();
 });
+
+test("supervisors start with their team and an action keeps its venue context across global venue changes", async ({ page }) => {
+  const url = await assign(page);
+  await expect(page.locator("main").getByText("Local: The First Midtown", {exact:true})).toBeVisible();
+  await page.goto("/actions");
+  await expect(page.getByLabel("Seguimiento operativo", {exact:true})).toHaveValue("supervised");
+  await expect(page.getByRole("link", { name: /Revisa la bandeja de reemplazo/ })).toBeVisible();
+  await page.getByLabel("Seguimiento operativo", {exact:true}).selectOption("mine");
+  await expect(page.getByRole("link", { name: /Revisa la bandeja de reemplazo/ })).not.toBeVisible();
+  await signInAs(page, /Alexandra Reyes/);
+  await page.goto("/actions");
+  await expect(page.getByLabel("Operational follow-up", {exact:true})).toHaveValue("supervised");
+  await expectAccessible(page);
+  await page.getByRole("banner").getByRole("button", {name:/The First Midtown/}).click();
+  await page.getByRole("option", {name:"The First Brooklyn",exact:true}).click();
+  await page.goto(url);
+  await expect(page.locator("main").getByText("Venue: The First Midtown", {exact:true})).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("button", {name:/The First Brooklyn/})).toBeVisible();
+  await page.locator('main a[href^="/actions?venue="]').click();
+  await expect(page.locator("main").getByText("Venue: The First Midtown", {exact:true})).toBeVisible();
+  await expect(page.getByRole("banner").getByRole("button", {name:/The First Brooklyn/})).toBeVisible();
+  await expect(page.getByRole("link", {name:/Inspect the replacement tray/})).toBeVisible();
+  await expectAccessible(page);
+});
